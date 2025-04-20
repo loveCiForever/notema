@@ -1,11 +1,15 @@
 <?php
 
-require '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Slim\Factory\AppFactory;
+use Middlewares\CORS;
 
 $app = AppFactory::create();
 
-require '../src/routes/routes.php';
+$app -> add(new CORS());
 
-$app->run();
+
+require '../src/routes/helloworld.php';
+
+$app -> run();
