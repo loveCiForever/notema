@@ -23,6 +23,10 @@ class ComposerStaticInit72f12453a35a612dd9af060b3b03391e
             'Slim\\Psr7\\' => 10,
             'Slim\\' => 5,
         ),
+        'R' => 
+        array (
+            'Routes\\' => 7,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -30,6 +34,10 @@ class ComposerStaticInit72f12453a35a612dd9af060b3b03391e
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'PhpOption\\' => 10,
+        ),
+        'M' => 
+        array (
+            'Middlewares\\' => 12,
         ),
         'G' => 
         array (
@@ -71,6 +79,10 @@ class ComposerStaticInit72f12453a35a612dd9af060b3b03391e
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
         ),
+        'Routes\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/routes',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
@@ -92,6 +104,10 @@ class ComposerStaticInit72f12453a35a612dd9af060b3b03391e
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
+        'Middlewares\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/middlewares',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (
