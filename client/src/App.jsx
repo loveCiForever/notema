@@ -18,8 +18,8 @@ function App() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
-      <p className="text-6xl font-semibold">{message}</p>
+    <div className="flex justify-center items-center w-full h-screen bg-gradient-to-bl from-[#8099df] to-[#021b30]">
+      <p className="text-8xl font-bold animate-pulse text-white">{message}</p>
     </div>
   );
 }
