@@ -1,7 +1,15 @@
+import NavBar from "../components/layout/NavBar";
+import { useTheme } from "../contexts/ThemeContext";
+
 const HomePage = () => {
+  const { theme } = useTheme();
   return (
-    <div className="flex w-full h-screen items-center justify-center text-5xl">
-      Home Page
+    <div
+      className={`w-full h-screen items-center justify-center ${
+        theme == "dark" ? "bg-black/90" : "bg-white"
+      }`}
+    >
+      <NavBar />
     </div>
   );
 };
