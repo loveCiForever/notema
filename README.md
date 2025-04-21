@@ -1,10 +1,10 @@
-# Note Mana
+# Notema
 
-Note Mana is a web application that allows users to manage their notes efficiently. This project consists of a Slim Framework backend and a React frontend styled with Tailwind CSS.
+Notema is a web application that allows users to manage their notes efficiently. This project consists of a Slim Framework backend and a React frontend styled with Tailwind CSS.
 
 ## Table of Contents
 
-- [Note Mana](#note-mana)
+- [Notema](#notema)
   - [Table of Contents](#table-of-contents)
   - [Requirements](#requirements)
     - [Backend (Slim Framework)](#backend-slim-framework)
