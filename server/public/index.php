@@ -9,7 +9,8 @@ $app = AppFactory::create();
 
 $app -> add(new CORS());
 
-
-require '../src/routes/helloworld.php';
+require '../src/routes/users.php';
+require '../src/routes/defaultpath.php';
+require '../src/configs/database.php';
 
 $app -> run();

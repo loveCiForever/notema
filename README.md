@@ -89,6 +89,14 @@ cd note-mana
    php artisan migrate
    ```
 
+5. **Run the Development Server**
+   Start the Slim development server:
+
+   ```bash
+   php -s localhost:8000
+   ```
+
+
 ### Frontend Setup
 
 1. **Navigate to the Frontend Directory**
