@@ -102,7 +102,7 @@ cd note-mana
 1. **Navigate to the Frontend Directory**
 
    ```bash
-   cd ../frontend
+   cd ../client
    ```
 
 2. **Install Frontend Dependencies**
