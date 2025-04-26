@@ -20,7 +20,7 @@ const Header = () => {
                 <button className="btn-hover-gray">Team</button>
                 <button className="btn-hover-gray">Individuals</button>
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-3">
                 <button className="btn-hover-gray">Log in</button>
                 <button className="btn-black">Sign up</button>
               </div>
@@ -36,9 +36,9 @@ const Header = () => {
           <div className="py-2 border-gray-300 border-y-1  cursor-pointer hover:bg-gray-100">Team</div> 
           <div className="py-2 border-gray-300 border-y-1  cursor-pointer hover:bg-gray-100">Individuals</div>
         </div>
-        <div className=" pt-4 flex flex-col px-4 w-full absolute  gap-1.5 border-gray-300 bg-white">
-          <div className=" btn-black text-center">Log in</div>
-          <div className=" btn-black-outline text-center">Sign up</div>
+        <div className=" pt-4 flex flex-col px-4 w-full  border-gray-300 bg-white gap-2">
+          <button className=" btn-black text-center">Log in</button>
+          <button className=" btn-black-outline text-center">Sign up</button>
         </div>
       </div>
       </header>
