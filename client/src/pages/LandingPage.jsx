@@ -2,11 +2,9 @@ import BackToTop from "../components/button/BackToTop";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import { useEffect, useRef, useState } from "react";
-import "../Style/transition.css"
+import "../Style/transition.css";
 const LandingPage = () => {
-  const imagesfake = [
-    
-  ];
+  const imagesfake = [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const timeoutRef = useRef(null);
 
@@ -32,9 +30,27 @@ const LandingPage = () => {
     };
   }, [currentIndex]);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <>
-      <Header />
+      <div
+        className={` ${
+          isScrolled ? "shadow-2xl" : ""
+        } relative sm:fixed w-full top-0 z-10 `}
+      >
+        <Header />
+      </div>
       <div
         className="relative flex bg-white overflow-hidden"
         style={{ height: "calc(100vh - 60px)" }}
@@ -69,21 +85,28 @@ const LandingPage = () => {
               </button>
             </div>
           </div>
-          <div >
-            <video className="fix-img" src="https://www.notion.com/front-static/pages/product/super-duper/hero/homepage-hero.mp4"></video>
+          <div>
+            <video
+              className="fix-img"
+              src="https://www.notion.com/front-static/pages/product/super-duper/hero/homepage-hero.mp4"
+            ></video>
           </div>
         </div>
         <div className="grid grid-cols-2 max-xl:grid-cols-1 gap-4 h-screen items-center">
           <div className="flex flex-col gap-5">
             <h1 className="text-[60px] font-bold leading-[64px] ">
-            Share your planning ideas with your friends.
+              Share your planning ideas with your friends.
             </h1>
             <p className="text-[18px] leading-[24px] text-[#78736f]">
-            Your friends can view your plans, interact with you, and make life more community-oriented.
+              Your friends can view your plans, interact with you, and make life
+              more community-oriented.
             </p>
           </div>
           <div>
-            <video className="fix-img" src="https://www.notion.com/front-static/pages/product/super-duper/write/write-screen-desktop.mp4"></video>
+            <video
+              className="fix-img"
+              src="https://www.notion.com/front-static/pages/product/super-duper/write/write-screen-desktop.mp4"
+            ></video>
           </div>
         </div>
       </div>

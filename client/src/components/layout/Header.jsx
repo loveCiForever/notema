@@ -8,7 +8,7 @@ const Header = () => {
   console
   return (
     <>
-      <header className="h-[60px] shadow-2xl sticky top-0 z-10 bg-white">
+      <header className="h-[60px] bg-white">
         <div className="flex w-full h-full px-4 ">
           <div className="flex items-center w-full max-lg:justify-between ">
             <div className="w-[100px] cursor-pointer">
