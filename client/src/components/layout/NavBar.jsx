@@ -1,8 +1,8 @@
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/ThemeContext";
 
-const NavBar = ({}) => {
+const NavBar = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const currentLocation = window.location.pathname;

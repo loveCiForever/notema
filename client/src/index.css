@@ -1,1 +1,25 @@
 @import "tailwindcss";
+@tailwind utilities;
+@layer utilities {
+  .btn-black {
+    @apply py-1 font-bold text-white bg-black cursor-pointer px-3 hover:bg-gray-800 active:bg-gray-950 rounded-[5px];
+  }
+  .btn-black-outline {
+    @apply py-1 font-bold border-2 border-black text-black cursor-pointer px-3 hover:bg-black hover:text-white active:bg-gray-900 rounded-[5px];
+  }
+  .center {
+    @apply flex items-center justify-center;
+  }
+  .btn-hover-gray{
+    @apply px-3 py-1 font-medium border-transparent cursor-pointer hover:rounded-[5px] hover:bg-gray-100  active:bg-gray-200;
+  }
+  .btn-primary {
+    @apply bg-blue-600 text-white  hover:bg-blue-500 font-bold cursor-pointer;
+  }
+  .btn-primary-outline {
+    @apply border border-blue-600 text-blue-600 bg-white hover:bg-blue-600 hover:text-white font-bold cursor-pointer;
+  }
+  .fix-img {
+    @apply w-full h-full object-cover;
+  }
+}
