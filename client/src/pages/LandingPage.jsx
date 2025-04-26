@@ -2,6 +2,7 @@ import BackToTop from "../components/button/BackToTop";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import { useEffect, useRef, useState } from "react";
+import "../Style/transition.css"
 const LandingPage = () => {
   const imagesfake = [
     "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj_oF67RvI-X9OiorV8JGZcHbGY37zwHk0uOIw7Caiy8ChFtvTJagYAY7zqryAdLJWUmiWFzGF3KHwSNw_7Rjr0NYNpULwPMvTU7gcCRJWiCIph59YmLVALVRbXjXQcsXcGEKcx58pbIUgR/s1200/naruto-llega-a-los-animes-del-canal-1.jpg",
