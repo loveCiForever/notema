@@ -2,7 +2,7 @@
 @tailwind utilities;
 @layer utilities {
   .btn-black {
-    @apply py-1 font-bold text-white bg-black cursor-pointer px-3 hover:bg-gray-800 active:bg-gray-950 rounded-[5px];
+    @apply py-1 font-bold text-white bg-black cursor-pointer px-4 hover:bg-gray-800 active:bg-gray-950 rounded-[5px];
   }
   .btn-black-outline {
     @apply py-1 font-bold border-2 border-black text-black cursor-pointer px-3 hover:bg-black hover:text-white active:bg-gray-900 rounded-[5px];
@@ -11,15 +11,15 @@
     @apply flex items-center justify-center;
   }
   .btn-hover-gray{
-    @apply px-3 py-1 font-medium border-transparent cursor-pointer hover:rounded-[5px] hover:bg-gray-200  active:bg-gray-200;
+    @apply px-4 py-1 font-medium border-transparent cursor-pointer hover:rounded-[5px] hover:bg-gray-200  active:bg-gray-200;
   }
   .btn-primary {
-    @apply bg-blue-600 text-white  hover:bg-blue-500 font-bold cursor-pointer;
+    @apply box-border px-5 font-bold text-white bg-blue-600 cursor-pointer hover:bg-blue-300;
   }
   .btn-primary-outline {
-    @apply border border-blue-600 text-blue-600 bg-white hover:bg-blue-600 hover:text-white font-bold cursor-pointer;
+    @apply box-border px-5 font-bold text-blue-600 bg-white border border-blue-600 cursor-pointer hover:border-blue-300 hover:text-blue-300;
   }
   .fix-img {
-    @apply w-full h-full object-cover;
+    @apply object-cover w-full h-full;
   }
 }

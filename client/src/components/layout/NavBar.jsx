@@ -12,7 +12,7 @@ const NavBar = () => {
     <div>
       {isLandingPage ? (
         <div
-          className={`flex fixed h-16 items-center justify-between bg-transparent px-4 lg:px-10 py-2 backdrop-blur-md w-full text-black`}
+          className={`flex fixed h-16 items-center justify-between bg-transparent  backdrop-blur-md w-full text-black px-4 sm:px-6 md:px-10`}
         >
           <button
             className="flex"
@@ -33,10 +33,9 @@ const NavBar = () => {
             >
               Login
             </button>
-
-            <div className="h-5 border-[1px]"></div>
+            <div className="h-5 border-[1px] hidden md:block"></div>
             <button
-              className={`px-4 py-1.5 rounded-md hover:bg-gray-200`}
+              className={`px-4 py-1.5 rounded-md hover:bg-gray-200 hidden md:block`}
               onClick={() => {
                 navigate("/register");
               }}
