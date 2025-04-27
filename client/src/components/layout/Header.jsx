@@ -2,10 +2,11 @@ import { useState } from "react";
 import logo from "../../assets/logo/logo.png";
 import menu from "../../assets/svg/menu.svg";
 import close from "../../assets/svg/close.svg";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isClickMenu, setIsClickMenu] = useState("false");
-  console;
+  const navigate = useNavigate();
   return (
     <>
       <header className="h-[70px] bg-white">
@@ -21,8 +22,8 @@ const Header = () => {
                 <button className="btn-hover-gray">Individuals</button>
               </div>
               <div className="flex gap-3">
-                <button className="btn-hover-gray">Log in</button>
-                <button className="btn-black">Sign up</button>
+                <button className="btn-hover-gray"onClick={()=>navigate("/login")}>Log in</button>
+                <button className="btn-black"onClick={()=>navigate("/register")}>Sign up</button>
               </div>
             </div>
             <div

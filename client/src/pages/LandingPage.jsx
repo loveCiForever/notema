@@ -4,12 +4,14 @@ import Header from "../components/layout/Header";
 import { useEffect, useRef, useState } from "react";
 import LandingPageImage1 from "../assets/videoframe_0.png";
 import LandingPageImage2 from "../assets/videoframe_2.png";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 10) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -39,10 +41,10 @@ const LandingPage = () => {
               smartly and get reminders whenever you forget.
             </p>
             <div className="flex gap-3">
-              <button className="px-4 py-2 font-bold rounded-lg btn-primary ">
+              <button className="px-4 py-2 font-bold rounded-lg btn-primary "onClick={()=>navigate("/register")}>
                 Sign up
               </button>
-              <button className="px-4 py-2 font-bold rounded-lg btn-primary-outline">
+              <button className="px-4 py-2 font-bold rounded-lg btn-primary-outline" onClick={()=>navigate("/login")}>
                 Log in
               </button>
             </div>

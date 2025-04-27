@@ -6,8 +6,10 @@ const Footer = () => {
         <img src={logo} alt="" className="w-2/3" />
         <h1 className="mt-6 ml-3 text-sm font-normal leading-6 tracking-wider">
           This open source website is our final project. <br />
-          (Course: Web Programming & Applications) <br />
-          Available on Github:{" "}
+          <h1 className="text-gray-600">
+            (Course: Web Programming & Applications)
+          </h1>{" "}
+          Contribute to out project on Github:{" "}
           <a
             href="https://github.com/loveCiForever/notema"
             className="font-bold cursor-pointer hover:text-blue-500"
