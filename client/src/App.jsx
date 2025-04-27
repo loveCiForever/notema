@@ -5,9 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
-
 import ScreenSizePanel from "./components/ui/ScreenSizePanel";
-
 function App() {
   return (
     <Router>
@@ -17,9 +15,9 @@ function App() {
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/home" element={<HomePage />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
+        <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
-      
-      <ScreenSizePanel position={"bottom-left"} />
+     { /*<ScreenSizePanel position={"top-left"}/> */}
     </Router>
   );
 }
