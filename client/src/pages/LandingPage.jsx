@@ -1,10 +1,11 @@
 import NavBar from "../components/layout/NavBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ScreenSizePanel from "../components/ui/ScreenSizePanel.jsx";
 const LandingPage = () => {
   return (
-    <div className="flex items-center justify-center w-full h-screen gap-2">
-      {/* <NavBar /> */}
+    <div className="w-full h-screen">
+      <NavBar />
     </div>
   );
 };

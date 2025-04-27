@@ -7,7 +7,7 @@ const HomePage = () => {
 
   return (
     <div
-      className={`w-full h-screen items-center justify-center ${
+      className={`text-3xl w-full h-screen items-center justify-center flex ${
         theme == "dark" ? "bg-black/90" : "bg-white"
       }`}
     >
