@@ -1,12 +1,15 @@
 import video_frame_login from "../assets/videoframe_login.png";
 import InputForm from "../components/Input/InputForm";
+
 import EmailIcon from "../assets/svg/email.svg";
 import LockIcon from "../assets/svg/lock.svg";
+
 import logo from "../assets/logo/logo.png";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
 import GithubLogo from "../assets/logo/githubLogo.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+
 import { validateEmailInput, validatePasswordInput } from "../utils/validate";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -59,6 +62,7 @@ const LoginPage = () => {
           );
         }
       });
+
   };
 
   return (
@@ -73,12 +77,17 @@ const LoginPage = () => {
                 alt="Video Frame"
               />
             </div>
-            <div className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//">
+
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//"
+            >
               <div className="flex w-full mb-6 items-center justify-start">
                 <img src={logo} alt="logo" className="w-[150px]" />
               </div>
               <InputForm
                 placeholder={"Email"}
+
                 icon={EmailIcon}
                 type={"email"}
                 name={email}
@@ -90,6 +99,7 @@ const LoginPage = () => {
                 icon={LockIcon}
                 type={"password"}
                 name={password}
+
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -117,6 +127,7 @@ const LoginPage = () => {
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
                   <img className="w-6" src={GithubLogo} alt="github.png" />
                   Github
+
                 </button>
               </div>
               <div className="flex items-center justify-center mt-4 gap-1">
@@ -125,12 +136,12 @@ const LoginPage = () => {
                 </p>
                 <button
                   onClick={() => navigate("/register")}
-                  className="ml-1 text-[14px] font-semibold text-black hover:underline active:scale-[.98] active:duration-75 transition-all"
+                  className=" cursor-pointer ml-1 text-[14px] font-semibold text-black hover:underline active:scale-[.98] active:duration-75 transition-all"
                 >
                   {"   Register one"}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
