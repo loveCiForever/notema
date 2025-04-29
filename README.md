@@ -93,7 +93,7 @@ cd note-mana
    Start the Slim development server:
 
    ```bash
-   php -s localhost:8000
+   php -S localhost:8000 -t public
    ```
 
 

@@ -9,8 +9,12 @@ $app = AppFactory::create();
 
 $app->add(new CORS());
 
-require '../src/routes/users.php';
-require '../src/routes/defaultpath.php';
+$app->options('/{routes:.+}', function ($request, $response) {
+    return $response;
+});
+
 require '../src/configs/database.php';
+require '../src/routes/AuthRoutes.php';
+require '../src/routes/DefaultPath.php';
 
 $app->run();
