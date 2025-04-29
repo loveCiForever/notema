@@ -7,6 +7,9 @@ import FacebookLogo from "../assets/logo/facebookLogo.svg";
 import AppleLogo from "../assets/logo/appleLogo.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import GoogleLogo from "../assets/logo/googleLogo.svg";
+import GithubLogo from "../assets/logo/githubLogo.svg";
+
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,18 +74,18 @@ const RegisterPage = () => {
               <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">
-                  Or
+                  Or sign up with
                 </p>
                 <div className="flex-1 h-px bg-gray-400"></div>
               </div>
               <div className="w-full flex gap-2">
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
-                  <img className="w-6" src={FacebookLogo} alt="gmail.png" />
-                  <h1>Facebook</h1>
+                  <img className="w-6" src={GoogleLogo} alt="gmail.png" />
+                  <h1>Google</h1>
                 </button>
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
-                  <img className="w-6" src={AppleLogo} alt="github.png" />
-                  <h1>Apple ID</h1>
+                  <img className="w-6" src={GithubLogo} alt="github.png" />
+                  <h1>Github</h1>
                 </button>
               </div>
               <div className="flex mt-4 gap-1">

@@ -65,7 +65,7 @@ const LoginPage = () => {
               <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">
-                  Or
+                  Or log in with
                 </p>
                 <div className="flex-1 h-px bg-gray-400"></div>
               </div>
