@@ -1,24 +1,66 @@
 import video_frame_login from "../assets/videoframe_login.png";
 import InputForm from "../components/Input/InputForm";
-import emailIcon from "../assets/svg/email.svg";
-import lockIcon from "../assets/svg/lock.svg";
+import EmailIcon from "../assets/svg/email.svg";
+import LockIcon from "../assets/svg/lock.svg";
+
 import logo from "../assets/logo/logo.png";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
 import GithubLogo from "../assets/logo/githubLogo.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { validateEmailInput, validatePasswordInput } from "../utils/validate";
+import { toast } from "react-toastify";
+import axios from "axios";
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Please fill in both fields!");
+    // console.log("Email:", email);
+    // console.log("Password: ", password);
+
+    const validateEmail = validateEmailInput(email);
+    const validatePassword = validatePasswordInput(password);
+
+    if (!validateEmail.valid) {
+      toast.error(validateEmail.message);
+      setEmail("");
       return;
     }
+
+    if (!validatePassword.valid) {
+      toast.error(validatePassword.message);
+      setPassword("");
+      return;
+    }
+
+    axios
+      .post("http://localhost:8000/api/login", {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          toast.success("Login Success !");
+          localStorage.setItem("access_token", response.data.token);
+          navigate("/home");
+        }
+      })
+      .catch((error) => {
+        // console.log(error.response.data.message)
+        if (error.status !== 200) {
+          toast.error(
+            !error.response.data.message
+              ? "Login failed"
+              : error.response.data.message
+          );
+        }
+      });
+
   };
 
   return (
@@ -43,23 +85,29 @@ const LoginPage = () => {
               </div>
               <InputForm
                 placeholder={"Email"}
-                icon={emailIcon}
+                icon={EmailIcon}
                 type={"email"}
+                name={email}
+
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <InputForm
                 placeholder={"Password"}
-                icon={lockIcon}
+                icon={LockIcon}
                 type={"password"}
+                name={password}
+
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <p className="cursor-pointer text-[14px] w-full text-right text-gray-500 hover:text-blue-600 active:scale-[.98] active:duration-75 transition-all">
                 Forgot password?
               </p>
-              {error ? <p className="text-red-600 text-[12px]">{error}</p> : ""}
-              <button className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all">
+              <button
+                onClick={handleSubmit}
+                className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all"
+              >
                 Log in
               </button>
               <div className="flex items-center w-full my-2">
@@ -72,11 +120,12 @@ const LoginPage = () => {
               <div className="w-full flex gap-2">
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
                   <img className="w-6" src={GoogleLogo} alt="gmail.png" />
-                  <h1>Google</h1>
+                  Google
                 </button>
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
                   <img className="w-6" src={GithubLogo} alt="github.png" />
-                  <h1>Github</h1>
+                  Github
+
                 </button>
               </div>
               <div className="flex items-center justify-center mt-4 gap-1">
