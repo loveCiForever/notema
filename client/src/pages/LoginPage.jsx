@@ -2,6 +2,7 @@ import video_frame_login from "../assets/videoframe_login.png";
 import InputForm from "../components/Input/InputForm";
 import EmailIcon from "../assets/svg/email.svg";
 import LockIcon from "../assets/svg/lock.svg";
+
 import logo from "../assets/logo/logo.png";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
 import GithubLogo from "../assets/logo/githubLogo.svg";
@@ -59,6 +60,7 @@ const LoginPage = () => {
           );
         }
       });
+
   };
 
   return (
@@ -86,6 +88,7 @@ const LoginPage = () => {
                 icon={EmailIcon}
                 type={"email"}
                 name={email}
+
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -94,6 +97,7 @@ const LoginPage = () => {
                 icon={LockIcon}
                 type={"password"}
                 name={password}
+
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -121,6 +125,7 @@ const LoginPage = () => {
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
                   <img className="w-6" src={GithubLogo} alt="github.png" />
                   Github
+
                 </button>
               </div>
               <div className="flex items-center justify-center mt-4 gap-1">
