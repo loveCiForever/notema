@@ -1,0 +1,7 @@
++----+-------------+--------------------------+--------------------------------------------------------------+-----------+---------------------+
+| id | username    | email                    | password                                                     | full_name | created_at          |
++----+-------------+--------------------------+--------------------------------------------------------------+-----------+---------------------+
+|  1 | quanghuy    | quanghuy123@gmail.com    | $2y$10$mnWUx5gATjjA3GK8dJSWceq6MrwbMYaRrvRYxF12dBQR3qBRLvuhC | NULL      | 2025-04-29 17:24:52 |
+|  2 | quangtruong | quangtruong123@gmail.com | $2y$10$Fse6zaQmdAhDdiKewU41AeEWMq67uLqB1is9u.GobtOO/.jSdWsLa | NULL      | 2025-04-29 20:54:44 |
+|  3 | tantai      | tantai123@gmail.com      | $2y$10$ByLcUNyiNqfOXqGUgcTFR.nrXYQtvSHcYSKkWieGDVVUFY/y/ggWq | NULL      | 2025-04-29 20:54:55 |
++----+-------------+--------------------------+--------------------------------------------------------------+-----------+---------------------+
