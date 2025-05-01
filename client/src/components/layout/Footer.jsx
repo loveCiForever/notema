@@ -8,17 +8,28 @@ const Footer = () => {
   return (
     <footer class="w-full bg-white shadow-sm text-sm md:text-base lg:text-lg text-black px-5 md:px-10 lg:px-20 xl:px-40 py-10 lg:py-10 border-t-[1px] border-gray-300">
       <div class="w-full max-w-screen-xl// md:py-8">
-        <div class="w-full sm:flex sm:items-center sm:justify-between">
-          <a
+        <div class="w-full xl:flex md:items-center xl:justify-between">
+          <div
             href=""
-            class="flex items-center mb-8 sm:mb-0 space-x-3 rtl:space-x-reverse"
+            class="flex flex-col items-start mb-8 xl:mb-0 space-x-3 rtl:space-x-reverse"
           >
-            {/* <img src={logo} class="h-8" alt="notema Logo" /> */}
-            <span className="font-bold text-3xl sm:text-xl lg:text-2xl tracking-wide">
-              Notema.
+            <img src={logo} class="h-10" alt="notema Logo" />
+            <span className="font-normal mt-4 ml-1 text-sm tracking-wider">
+              This website is out final project of Web Programming &
+              Applications. <br />
+              The open source can be found at{" "}
+              <a
+                href="https://github.com/loveCiForever/notema"
+                className="font-bold hover:underline"
+              >
+                notema
+              </a>
             </span>
-          </a>
-          <ul class="flex flex-wrap items-center mb-6 font-medium sm:mb-0 justify-between sm:gap-10">
+          </div>
+
+          <ul
+            class={`flex flex-wrap items-center mb-6 font-medium sm:mb-0 justify-between sm:gap-10 p-4 bg-gray-100 rounded-lg ml-1 xl:p-0 xl:bg-white xl:rounded-none`}
+          >
             <li>
               <a href="#" class="hover:underline me-4 md:me-6">
                 About
