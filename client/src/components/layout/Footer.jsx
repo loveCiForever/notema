@@ -1,49 +1,54 @@
+import { useEffect, useState } from "react";
 import logo from "../../assets/logo/logo.png";
 const Footer = () => {
+  const [currentWidth, setCurrentWidth] = useState();
+  useEffect(() => {
+    setCurrentWidth(innerWidth);
+  });
   return (
-    <footer className="flex items-center justify-start w-full gap-20 py-20 text-black bg-white border-gray-200 px-60 border-t-1">
-      <div className="flex flex-col items-start justify-start w-1/3">
-        <img src={logo} alt="" className="w-2/3" />
-        <h1 className="mt-6 ml-3 text-sm font-normal leading-6 tracking-wider">
-          This open source website is our final project. <br />
-          <h1 className="text-gray-600">
-            (Course: Web Programming & Applications)
-          </h1>{" "}
-          Contribute to out project on Github:{" "}
+    <footer class="bg-white shadow-sm dark:bg-black/90 text-sm lg:text-lg text-white md:px-10 lg:px-20 xl:px-40 py-4 lg:py-4">
+      <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
           <a
-            href="https://github.com/loveCiForever/notema"
-            className="font-bold cursor-pointer hover:text-blue-500"
+            href=""
+            class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
           >
-            Notema
+            {/* <img src={logo} class="h-8" alt="notema Logo" /> */}
+            <span className="font-bold text-3xl sm:text-xl lg:text-2xl tracking-wide">
+              Notema.
+            </span>
           </a>
-        </h1>
-      </div>
-
-      <div className="flex flex-col">
-        <div className="flex gap-60">
-          <div className="flex flex-col w-auto px-10">
-            <h2 className="text-base font-bold">About Us</h2>
-            <div className="flex flex-col gap-0.5 mt-1 text-base text-gray-700">
-              <a className="cursor-pointer hover:text-blue-600">Careers</a>
-              <a className="cursor-pointer hover:text-blue-600">Contributor</a>
-              <a className="cursor-pointer hover:text-blue-600">
-                Terms & Privacy
+          <ul class="flex flex-wrap items-center mb-6 font-medium sm:mb-0">
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">
+                About
               </a>
-            </div>
-          </div>
-          <div className="flex flex-col w-auto px-10">
-            <h2 className="text-base font-bold">Support</h2>
-            <div className="flex flex-col gap-0.5 mt-1 text-base text-gray-700">
-              <a className="cursor-pointer hover:text-blue-600">Feedback</a>
-              <a className="cursor-pointer hover:text-blue-600">FAQ</a>
-              <a className="cursor-pointer hover:text-blue-600">Submit Bug</a>
-            </div>
-          </div>
+            </li>
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline me-4 md:me-6">
+                Licensing
+              </a>
+            </li>
+            <li>
+              <a href="#" class="hover:underline">
+                Contact
+              </a>
+            </li>
+          </ul>
         </div>
-
-        {/* <h1 className="pl-10 mt-6 text-base font-bold">
-          This website is an open source. Available on Github
-        </h1> */}
+        <hr class="my-6 border-gray-400 sm:mx-auto lg:my-8" />
+        <span class="block sm:text-center">
+          © 2025{" "}
+          <a href="" class="hover:underline">
+            Notema™
+          </a>
+          . All Rights Reserved.
+        </span>
       </div>
     </footer>
   );

@@ -3,8 +3,6 @@ import InputForm from "../components/Input/InputForm";
 import emailIcon from "../assets/icons/black/email.svg";
 import lockIcon from "../assets/icons/black/lock.svg";
 import logo from "../assets/logo/logo.png";
-import FacebookLogo from "../assets/logo/facebookLogo.svg";
-import AppleLogo from "../assets/logo/appleLogo.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
