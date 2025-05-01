@@ -27,7 +27,7 @@ const LandingPage = () => {
       >
         <Header />
       </div>
-      <div className="flex flex-col pt-20 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 2xl:px-60">
+      <div className="flex flex-col pt-20 px-5 md:px-10 lg:px-20 xl:px-40">
         <div className="grid items-center min-h-screen grid-cols-1 lg:grid-cols-2 gap-10 py-10">
           <div className="flex flex-col gap-6">
             <h1 className="text-4xl sm:text-5xl lg:text-[70px] font-bold leading-tight">
