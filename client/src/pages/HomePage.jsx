@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/layout/NavBar";
 import { useTheme } from "../contexts/ThemeContext";
 import axios from "axios";
+
 const HomePage = () => {
   const { theme } = useTheme();
 
@@ -11,7 +12,6 @@ const HomePage = () => {
         theme == "dark" ? "bg-black/90" : "bg-white"
       }`}
     >
-      <NavBar />
     </div>
   );
 };
