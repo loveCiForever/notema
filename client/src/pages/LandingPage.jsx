@@ -27,10 +27,10 @@ const LandingPage = () => {
       >
         <Header />
       </div>
-      <div className="flex flex-col pt-20 px-5 md:px-10 lg:px-20 xl:px-40">
-        <div className="grid items-center min-h-screen grid-cols-1 lg:grid-cols-2 gap-10 py-10">
+      <div className="flex flex-col lg:pt-[70px] px-5 md:px-10 lg:px-20 xl:px-40 pt-20 pb-20">
+        <div className="grid items-center xl:min-h-screen grid-cols-1 xl:grid-cols-2 xl:gap-10">
           <div className="flex flex-col gap-6">
-            <h1 className="text-4xl sm:text-5xl lg:text-[70px] font-bold leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-[60px] font-bold leading-tight">
               The convenient working
             </h1>
             <p className="text-lg sm:text-xl text-black/70">
@@ -58,7 +58,7 @@ const LandingPage = () => {
             className="w-full h-auto object-contain"
           />
         </div>
-        <div className="grid items-center min-h-screen grid-cols-1 lg:grid-cols-2 gap-10 py-10">
+        <div className="grid items-center xl:min-h-screen grid-cols-1 xl:grid-cols-2 xl:gap-10 pt-20">
           <div className="flex flex-col gap-5">
             <h1 className="text-3xl sm:text-5xl lg:text-[60px] font-bold leading-tight">
               Share your planning ideas with your friends.
