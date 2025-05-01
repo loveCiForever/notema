@@ -1,7 +1,7 @@
-import video_frame_login from "../assets/videoframe_login.png";
+import video_frame_login from "../assets/images/login.png";
 import InputForm from "../components/Input/InputForm";
-import EmailIcon from "../assets/svg/email.svg";
-import LockIcon from "../assets/svg/lock.svg";
+import EmailIcon from "../assets/icons/black/email.svg";
+import LockIcon from "../assets/icons/black/lock.svg";
 
 import logo from "../assets/logo/logo.png";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
@@ -60,7 +60,6 @@ const LoginPage = () => {
           );
         }
       });
-
   };
 
   return (
@@ -76,10 +75,7 @@ const LoginPage = () => {
               />
             </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//"
-            >
+            <div className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//">
               <div className="flex w-full mb-6 items-center justify-start">
                 <img src={logo} alt="logo" className="w-[150px]" />
               </div>
@@ -88,7 +84,6 @@ const LoginPage = () => {
                 icon={EmailIcon}
                 type={"email"}
                 name={email}
-
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -97,7 +92,6 @@ const LoginPage = () => {
                 icon={LockIcon}
                 type={"password"}
                 name={password}
-
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -125,7 +119,6 @@ const LoginPage = () => {
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
                   <img className="w-6" src={GithubLogo} alt="github.png" />
                   Github
-
                 </button>
               </div>
               <div className="flex items-center justify-center mt-4 gap-1">
@@ -139,7 +132,7 @@ const LoginPage = () => {
                   {"   Register one"}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,8 @@
-import video_frame_login from "../assets/videoframe_login.png";
+import video_frame_login from "../assets/images/login.png";
 import InputForm from "../components/Input/InputForm";
-import emailIcon from "../assets/svg/email.svg";
-import lockIcon from "../assets/svg/lock.svg";
+import emailIcon from "../assets/icons/black/email.svg";
+import lockIcon from "../assets/icons/black/lock.svg";
 import logo from "../assets/logo/logo.png";
-import FacebookLogo from "../assets/logo/facebookLogo.svg";
-import AppleLogo from "../assets/logo/appleLogo.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
@@ -15,6 +13,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password || !confirmPassword) {
@@ -39,10 +38,7 @@ const RegisterPage = () => {
                 alt="Video Frame"
               />
             </div>
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//"
-            >
+            <div className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//">
               <div className="flex w-full mb-6 items-center justify-start">
                 <img src={logo} alt="logo" className="w-[150px]" />
               </div>
@@ -99,7 +95,7 @@ const RegisterPage = () => {
                   {"Log in"}
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

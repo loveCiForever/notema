@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import HomeIcon from "../assets/home.png";
+import WhiteHomeIcon from "../assets/icons/white/home.svg";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const NotFoundPage = () => {
               className="flex items-center justify-center w-[80%] lg:w-1/2 px-5 py-3 text-white transition-colors duration-200 bg-blue-500 rounded-lg gap-x-2 hover:bg-blue-400"
               aria-label="Go to home page"
             >
-              <img src={HomeIcon} alt="homeicon" className="w-5 mb-1" />
+              <img src={WhiteHomeIcon} alt="home icon" className="w-5 mb-1" />
               Take me home
             </button>
           </div>
