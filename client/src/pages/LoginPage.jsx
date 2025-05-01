@@ -65,7 +65,7 @@ const LoginPage = () => {
   return (
     <>
       <div className="bg-gray-100 center h-screen flex items-center justify-center">
-        <div className="rounded-xl overflow-hidden shadow-md bg-white p-10 w-full mx-10 md:mx-40 lg:py-20 xl:py-10 lg:mx-60 xl:w-auto xl:min-w-[1000px]">
+        <div className="rounded-xl shadow-md bg-white p-8 sm:p-10 w-full mx-5 sm:mx-10 md:mx-40 lg:py-20 xl:py-10 lg:mx-60 xl:w-auto xl:min-w-[1000px]">
           <div className="grid xl:grid-cols-2 gap-4 w-full max-w-4xl h-auto">
             <div className="justify-center items-center p-4 hidden xl:block">
               <img
@@ -121,7 +121,7 @@ const LoginPage = () => {
                   Github
                 </button>
               </div>
-              <div className="flex items-center justify-center mt-4 gap-1">
+              <div className="flex items-center justify-center mt-4 gap-1 w-full px-1">
                 <p className="text-[14px] text-gray-800">
                   Don't have an account ?
                 </p>
