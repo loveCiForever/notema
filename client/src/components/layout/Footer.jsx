@@ -28,7 +28,7 @@ const Footer = () => {
           </div>
 
           <ul
-            class={`flex flex-wrap items-center mb-6 font-medium sm:mb-0 justify-between sm:gap-10 p-4 bg-gray-100 rounded-lg ml-1 xl:p-0 xl:bg-white xl:rounded-none`}
+            class={`flex flex-wrap items-center mb-0 font-medium sm:mb-0 justify-between sm:gap-10 p-4 bg-gray-100 rounded-lg ml-1 xl:p-0 xl:bg-white xl:rounded-none`}
           >
             <li>
               <a href="#" class="hover:underline me-4 md:me-6">

@@ -27,11 +27,11 @@ const LandingPage = () => {
       >
         <Header />
       </div>
-      <div className="flex flex-col lg:pt-[70px] px-5 md:px-10 lg:px-20 xl:px-40 pt-20 pb-20">
-        <div className="grid items-center xl:min-h-screen grid-cols-1 xl:grid-cols-2 xl:gap-10">
+      <div className="flex flex-col lg:pt-[70px] px-5 md:px-10 lg:px-20 xl:px-40 pt-10 sm:pt-30 pb-20">
+        <div className="grid items-center xl:min-h-screen grid-cols-1 xl:grid-cols-2 xl:gap-10  bg-green-200//">
           <div className="flex flex-col gap-6">
             <h1 className="text-4xl sm:text-5xl lg:text-[60px] font-bold leading-tight">
-              The convenient working
+              The super convenient working space
             </h1>
             <p className="text-lg sm:text-xl text-black/70">
               Are you afraid of forgetting important tasks? Create your plan
@@ -58,8 +58,8 @@ const LandingPage = () => {
             className="w-full h-auto object-contain"
           />
         </div>
-        <div className="grid items-center xl:min-h-screen grid-cols-1 xl:grid-cols-2 xl:gap-10 pt-20">
-          <div className="flex flex-col gap-5">
+        <div className="grid items-center xl:min-h-screen grid-cols-1 xl:grid-cols-2 xl:gap-10 pt-30 sm:pt-60// bg-red-200//">
+          <div className="flex flex-col gap-5 mb-8">
             <h1 className="text-3xl sm:text-5xl lg:text-[60px] font-bold leading-tight">
               Share your planning ideas with your friends.
             </h1>
