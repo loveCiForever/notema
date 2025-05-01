@@ -19,7 +19,7 @@ function App() {
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
-      {/* <ScreenSizePanel position={"top-left"} /> */}
+      <ScreenSizePanel position={"top-left"} />
       <ToastContainer />
     </Router>
   );
