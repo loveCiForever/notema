@@ -6,9 +6,9 @@ const Footer = () => {
     setCurrentWidth(innerWidth);
   });
   return (
-    <footer class="bg-white shadow-sm text-sm md:text-base lg:text-lg text-black px-5 md:px-10 lg:px-20 xl:px-40 py-10 lg:py-10 border-t-[1px] border-gray-300">
-      <div class="w-full max-w-screen-xl md:py-8">
-        <div class="sm:flex sm:items-center sm:justify-between">
+    <footer class="w-full bg-white shadow-sm text-sm md:text-base lg:text-lg text-black px-5 md:px-10 lg:px-20 xl:px-40 py-10 lg:py-10 border-t-[1px] border-gray-300">
+      <div class="w-full max-w-screen-xl// md:py-8">
+        <div class="w-full sm:flex sm:items-center sm:justify-between">
           <a
             href=""
             class="flex items-center mb-8 sm:mb-0 space-x-3 rtl:space-x-reverse"
