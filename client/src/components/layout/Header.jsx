@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const [isClickMenu, setIsClickMenu] = useState("false");
   const navigate = useNavigate();
+
   return (
     <>
       <header className="h-[70px] bg-white">
@@ -49,24 +50,34 @@ const Header = () => {
           </div>
         </div>
         <div
-          className={`hidden absolute w-[200px] h-[240px] right-0 rounded-b-2xl bg-white z-10 ${
+          className={`hidden absolute w-[200px] h-auto py-4 top-16 right-6 rounded-2xl border-[0.5px] border-gray-300 shadow-2xl bg-white z-10 ${
             isClickMenu ? "hidden " : "max-lg:block"
           }  `}
         >
-          <div className="px-4 font-bold ">
-            <div className="py-2 border-gray-300 cursor-pointer border-y-1 hover:bg-gray-100">
+          <div className="px-4 font-semibold ">
+            <div className="py-2 border-gray-300 cursor-pointer hover:bg-gray-100">
               Product
             </div>
-            <div className="py-2 border-gray-300 cursor-pointer border-y-1 hover:bg-gray-100">
+            <div className="py-2 border-gray-300 cursor-pointer border-t-1 hover:bg-gray-100">
               Team
             </div>
-            <div className="py-2 border-gray-300 cursor-pointer border-y-1 hover:bg-gray-100">
+            <div className="py-2 border-gray-300 cursor-pointer border-t-1 hover:bg-gray-100">
               Individuals
             </div>
           </div>
           <div className="flex flex-col w-full gap-2 px-4 pt-4 bg-white border-gray-300 ">
-            <button className="text-center btn-black">Log in</button>
-            <button className="text-center btn-black-outline">Sign up</button>
+            <button
+              className="text-center btn-black"
+              onClick={() => navigate("/login")}
+            >
+              Log in
+            </button>
+            <button
+              className="text-center btn-black-outline"
+              onClick={() => navigate("/register")}
+            >
+              Sign up
+            </button>
           </div>
         </div>
       </header>

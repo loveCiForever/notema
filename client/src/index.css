@@ -2,10 +2,10 @@
 @tailwind utilities;
 @layer utilities {
   .btn-black {
-    @apply py-1 font-bold text-white bg-black cursor-pointer px-4 hover:bg-gray-800 active:bg-gray-950 rounded-[5px];
+    @apply py-1 font-bold text-white bg-black cursor-pointer px-4 hover:bg-gray-500 active:bg-gray-950 rounded-[5px];
   }
   .btn-black-outline {
-    @apply py-1 font-bold border-2 border-black text-black cursor-pointer px-3 hover:bg-black hover:text-white active:bg-gray-900 rounded-[5px];
+    @apply py-1 font-bold border-1 border-black text-black cursor-pointer px-3 hover:text-black/50 hover:border-black/50 active:bg-gray-900 rounded-[5px];
   }
   .center {
     @apply flex items-center justify-center;
