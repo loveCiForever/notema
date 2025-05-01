@@ -2,8 +2,8 @@ import BackToTop from "../components/button/BackToTop";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import { useEffect, useRef, useState } from "react";
-import LandingPageImage1 from "../assets/videoframe_0.png";
-import LandingPageImage2 from "../assets/videoframe_2.png";
+import LandingPageImage1 from "../assets/images/landing_1.png";
+import LandingPageImage2 from "../assets/images/landing_2.png";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
@@ -41,10 +41,16 @@ const LandingPage = () => {
               smartly and get reminders whenever you forget.
             </p>
             <div className="flex gap-3">
-              <button className="px-4 py-2 font-bold rounded-lg btn-primary "onClick={()=>navigate("/register")}>
+              <button
+                className="px-4 py-2 font-bold rounded-lg btn-primary "
+                onClick={() => navigate("/register")}
+              >
                 Sign up
               </button>
-              <button className="px-4 py-2 font-bold rounded-lg btn-primary-outline" onClick={()=>navigate("/login")}>
+              <button
+                className="px-4 py-2 font-bold rounded-lg btn-primary-outline"
+                onClick={() => navigate("/login")}
+              >
                 Log in
               </button>
             </div>

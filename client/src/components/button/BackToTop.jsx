@@ -1,9 +1,9 @@
-import top from "../../assets/svg/top.svg";
+import top from "../../assets/icons/white/top.svg";
 const BackToTop = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth', 
+      behavior: "smooth",
     });
   };
   return (
