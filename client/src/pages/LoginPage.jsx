@@ -88,7 +88,6 @@ const LoginPage = () => {
                 icon={EmailIcon}
                 type={"email"}
                 name={email}
-
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
