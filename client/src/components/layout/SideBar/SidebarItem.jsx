@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarNoteItem from "./SidebarNoteItem";
 import {
   ChevronDown,
@@ -14,7 +14,7 @@ import {
   Settings,
   Search,
 } from "lucide-react";
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
   const {

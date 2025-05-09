@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
-import DragHandle from "../ui/DragHandle";
+import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
@@ -11,8 +11,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
-import SwitchTheme from "../button/SwitchTheme";
+import { ThemeProvider, useTheme } from "../../../contexts/ThemeContext";
+import SwitchTheme from "../../button/SwitchTheme";
 const Sidebar = () => {
   const {
     isOpen,

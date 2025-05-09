@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
-import Sidebar from "./SideBar";
+import Sidebar from "./SideBar/Sidebar";
 import Headers from "./Header";
 import { SidebarProvider } from "../../contexts/SidebarContext";
 import { useTheme } from "../../contexts/ThemeContext";
