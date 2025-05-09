@@ -2,13 +2,16 @@ import video_frame_login from "../assets/images/login.png";
 import InputForm from "../components/Input/InputForm";
 import emailIcon from "../assets/icons/black/email.svg";
 import lockIcon from "../assets/icons/black/lock.svg";
+import userIcon from "../assets/icons/black/user.svg";
 import logo from "../assets/logo/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
 import GithubLogo from "../assets/logo/githubLogo.svg";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
+  const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,8 +19,9 @@ const RegisterPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!email || !password || !confirmPassword) {
+    if (!fullname || !email || !password || !confirmPassword) {
       setError("Please fill in all fields!");
+      toast.error("Please fill in all fields!");
       return;
     }
     if (password !== confirmPassword) {
@@ -43,6 +47,13 @@ const RegisterPage = () => {
                 <img src={logo} alt="logo" className="w-[150px]" />
               </div>
               <InputForm
+                placeholder={"Full Name"}
+                icon={userIcon}
+                type={"text"}
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
+              />
+              <InputForm
                 placeholder={"Email"}
                 icon={emailIcon}
                 type={"email"}
@@ -63,8 +74,11 @@ const RegisterPage = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {error ? <p className="text-red-600 text-[12px]">{error}</p> : ""}
-              <button className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all">
+              {/* {error ? <p className="text-red-600 text-[12px]">{error}</p> : ""} */}
+              <button
+                className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all"
+                onClick={handleSubmit}
+              >
                 Sign up
               </button>
               <div className="flex items-center w-full my-2">
