@@ -14,7 +14,7 @@ $app->options('/{routes:.+}', function ($request, $response) {
 });
 
 require __DIR__ . '/src/configs/database.php';
-require __DIR__ . '/src/routes/LandingRoute.php';
+require __DIR__ . '/src/routes/BaseRoute.php';
 require __DIR__ . '/src/routes/AuthRoute.php';
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
