@@ -7,9 +7,10 @@ use Firebase\JWT\JWT;
 use GrahamCampbell\ResultType\Success;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 
-$app->post('/api/login', function (Request $request, Response $response) use ($pdo) {
+$app->post('/login', function (Request $request, Response $response) use ($pdo) {
     try {
         $body = $request->getBody();
         $data = json_decode($body, true);
@@ -69,7 +70,7 @@ $app->post('/api/login', function (Request $request, Response $response) use ($p
     }
 });
 
-$app->post('/api/register', function (Request $request, Response $response) use ($pdo) {
+$app->post('/register', function (Request $request, Response $response) use ($pdo) {
     try {
         $body = $request->getBody();
         $data = json_decode($body, true);
@@ -109,10 +110,10 @@ $app->post('/api/register', function (Request $request, Response $response) use 
         $stmt->execute([$fullname, $email, $hashedPassword]);
 
         $token = bin2hex(random_bytes(16));
-        $stmt = $pdo->prepare("UPDATE users SET confirmation_token = ? WHERE email = ?");
+        $stmt = $pdo->prepare("UPDATE users SET verification_token = ? WHERE email = ?");
         $success = $stmt->execute([$token, $email]);
 
-        $sent = sendConfirmationEmail($email, $token);
+        $sent = sendVerificationEmail($email, $token);
 
         if ($success && $sent === true) {
             $payload = ['success' => true, 'message' => 'Registration Successfully'];
@@ -142,26 +143,35 @@ $app->post('/api/register', function (Request $request, Response $response) use 
 });
 
 
-function sendConfirmationEmail($toEmail, $token)
+function sendVerificationEmail($toEmail, $token)
 {
     $mail = new PHPMailer(true);
+    $host = $_ENV['SMTP_HOST'];
+    $username = $_ENV['SMTP_USERNAME'];
+    $password = $_ENV['SMTP_PASSWORD'];
+    $port = $_ENV['SMTP_PORT'];
 
     try {
         $mail->isSMTP();
-        $mail->Host       = "********";
+        $mail->Host       = $host;
         $mail->SMTPAuth   = true;
-        $mail->Username   = "********";
-        $mail->Password   = "********";
+        $mail->Username   = $username;
+        $mail->Password   = $password;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port       = 465;
+        $mail->Port       = $port;
 
-        $mail->setFrom('********', 'Notema');
+        // $mail->SMTPDebug  = SMTP::DEBUG_SERVER;
+        // $mail->Debugoutput = 'html';
+
+        // var_dump($_ENV['SMTP_USERNAME'], $_ENV['SMTP_PASSWORD'], $_ENV['SMTP_HOST'], $_ENV['SMTP_PORT']);
+
+        $mail->setFrom($username, 'Notema');
         $mail->addAddress($toEmail);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Confirm your account';
+        $mail->Subject = 'Verify your account';
 
-        $confirmationLink = "https://notema.io.vn/verify?token=$token";
+        $verification_link = "http://localhost:5173/verify?token=$token";
 
         $mail->Body = '
             <table align="center" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 40px 0;">
@@ -171,12 +181,12 @@ function sendConfirmationEmail($toEmail, $token)
                     <tr>
                         <td style="padding: 30px;">
                         <h2 style="color: #333;">Thank you for registering with <strong>Notema</strong>!</h2>
-                        <p style="font-size: 16px; color: #555;">Please confirm your email address by clicking the button below:</p>
+                        <p style="font-size: 16px; color: #555;">Please verify your email address by clicking the button below:</p>
             
                         <div style="text-align: center; margin: 30px 0;">
-                            <a href="' . $confirmationLink . '" 
+                            <a href="' . $verification_link . '" 
                             style="background-color: #000000; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-                            Confirm Email
+                            Verify Email
                             </a>
                         </div>
 
@@ -216,3 +226,49 @@ function sendConfirmationEmail($toEmail, $token)
         return $errorMessage;
     }
 }
+
+$app->get('/verify', function (Request $request, Response $response) use ($pdo) {
+    $params = $request->getQueryParams();
+    $token  = $params['token'] ?? '';
+
+    if (empty($token)) {
+        $payload = ['success' => false, 'message' => 'Verification token is missing.'];
+        $response->getBody()->write(json_encode($payload));
+        return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+    }
+
+    try {
+        $stmt = $pdo->prepare('SELECT id, is_verified FROM users WHERE verification_token = ? LIMIT 1');
+        $stmt->execute([$token]);
+        $user = $stmt->fetch();
+
+        if (!$user) {
+            $payload = ['success' => false, 'message' => 'Invalid or expired token.'];
+            $response->getBody()->write(json_encode($payload));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+        }
+
+        if ($user['is_verified']) {
+            $payload = ['success' => true, 'message' => 'Your email is already verified.'];
+            $response->getBody()->write(json_encode($payload));
+            return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        }
+
+        $update = $pdo->prepare('
+            UPDATE users
+               SET is_verified = 1,
+                   verified_at = NOW()
+             WHERE id = ?
+        ');
+        $update->execute([$user['id']]);
+
+        $payload = ['success' => true, 'message' => 'Email successfully verified!'];
+        $response->getBody()->write(json_encode($payload));
+        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+    } catch (Exception $e) {
+        error_log('Verify API error: ' . $e->getMessage());
+        $payload = ['success' => false, 'message' => 'Server error during verification.'];
+        $response->getBody()->write(json_encode($payload));
+        return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+    }
+});
