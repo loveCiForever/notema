@@ -148,14 +148,14 @@ function sendConfirmationEmail($toEmail, $token)
 
     try {
         $mail->isSMTP();
-        $mail->Host       = '**********';
+        $mail->Host       = "mail.notema.io.vn";
         $mail->SMTPAuth   = true;
-        $mail->Username   = '**********';
-        $mail->Password   = '**********';
+        $mail->Username   = "support@notema.io.vn";
+        $mail->Password   = 'congphaTDTU2023';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
-        $mail->setFrom('**********', 'Notema');
+        $mail->setFrom('support@notema.io.vn', 'Notema');
         $mail->addAddress($toEmail);
 
         $mail->isHTML(true);
