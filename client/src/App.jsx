@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ScreenSizePanel from "./components/ui/ScreenSizePanel";
+import ConfirmPage from "./pages/ConfirmPage";
 import { ToastContainer, toast } from "react-toastify";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/home" element={<HomePage />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
+        <Route path="/verify" element={<ConfirmPage />}></Route>
       </Routes>
       {/* <ScreenSizePanel position={"top-left"} /> */}
       <ToastContainer />
