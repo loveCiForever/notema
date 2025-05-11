@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import { SidebarProvider } from "../../contexts/SidebarContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useSidebar } from "../../contexts/SidebarContext";
@@ -14,7 +14,7 @@ const MainContent = () => {
     <div className="flex">
       <Sidebar />
       <main className="flex-1" style={{ marginLeft: `${sidebarWidth}px` }}>
-        {/* <Outlet /> */}
+        <Outlet />
       </main>
     </div>
   );
@@ -24,14 +24,13 @@ const MainLayout = () => {
   const { theme } = useTheme();
 
   return (
-    <SidebarProvider>
-      <div
-        className={`min-h-screen ${theme == "dark" ? "bg-black" : "bg-white"}`}
-      >
-        <MainContent />
-      </div>
-    </SidebarProvider>
+      <SidebarProvider>
+        <div className={`min-h-screen ${theme == "dark" ? "bg-black" : "bg-white"}`}>
+          <MainContent />
+        </div>
+      </SidebarProvider>
   );
 };
 
 export default MainLayout;
+

@@ -9,7 +9,6 @@ const defaultMenuItems = [
   { id: "private", type: "notes", label: "Private Notes", icon: "lock", notes: [] },
   { id: "public", type: "notes", label: "Public Notes", icon: "globe", notes: [] },
   { id: "trash", type: "trash", label: "Trash", icon: "trash", notes: [] },
-  { id: "settings", type: "link", label: "Settings", icon: "settings" },
 ]
 
 // Sample notes data
@@ -208,7 +207,18 @@ export const SidebarProvider = ({ children }) => {
       }),
     )
   }
-
+  // Set when sidebar closed
+  const openAndExpand = (sectionId) => {
+  setIsOpen(true);
+  setCollapsedSections(prev => {
+    const newState = {};
+    Object.keys(prev).forEach(id => {
+      newState[id] = id !== sectionId; 
+      // sectionId → false (mở), còn lại → true (đóng)
+    });
+    return newState;
+  });
+};
   // Sort notes
   const sortNotes = (sectionId, order) => {
     setSortOrder(order)
@@ -267,6 +277,7 @@ export const SidebarProvider = ({ children }) => {
     deleteForever,
     formatTimestamp,
     isMobile,
+    openAndExpand,
   }
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>

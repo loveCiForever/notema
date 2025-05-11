@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState } from "react"
-import { useSidebar } from "../../contexts/SidebarContext"
+import { useSidebar } from "../../../contexts/SidebarContext"
 import { MoreHorizontal, Star, StarOff, Copy, Link, Trash, RefreshCw, X, Edit } from "lucide-react"
-import { useTheme } from "../../contexts/ThemeContext";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 const SidebarNoteItem = ({ note, sectionId }) => {
   const { toggleFavorite, moveToTrash, restoreFromTrash, deleteForever, formatTimestamp } = useSidebar();
