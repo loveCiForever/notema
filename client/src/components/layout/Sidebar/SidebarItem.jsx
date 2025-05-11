@@ -99,8 +99,8 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
       return (
         <>
           {/* Nút hiển thị Modal */}
-          
-          { !isOpen ? (
+
+          {!isOpen ? (
             <div
               className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50`}
               onClick={() => {
@@ -111,8 +111,9 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
             >
               <Search className="h-4 w-4" />
             </div>
-          ) : (<div
-            className={`flex justify-round items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/70 gap-2 bg-zinc-200/30 text-left rounded-md text-sm  transition-colors`} 
+          ) : (
+            <div
+              className={`flex justify-round items-center py-3 cursor-pointer rounded-lg hover:bg-gray-200 gap-2 bg-gray-200/70 text-left text-sm  transition-colors`}
               onClick={() => {
                 // khi collapse: mở sidebar luôn nếu cần
                 if (!isOpen) setIsOpen(true);
@@ -121,7 +122,8 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
             >
               <Search className="h-4 w-4 ml-3" />
               <span>Search notes...</span>
-          </div>)}
+            </div>
+          )}
           {/* Modal */}
           <SearchModal
             open={showSearchModal}

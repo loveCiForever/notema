@@ -89,107 +89,116 @@ const Sidebar = () => {
         ref={sidebarRef}
         className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${
           theme === "dark"
-            ? "bg-black/80 border-white/50 text-white"
-            : "bg-white border-black/20 text-black"
+            ? "bg-black/80 border-gray-200 text-white"
+            : "bg-white border-gray-200 shadow-xl text-black"
         }`}
         initial={isOpen ? "open" : "closed"}
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
       >
-          {/* Header */}
-          <div className={`p-2 border-b flex items-center ${!isOpen ? "justify-between" : "justify-center"} w-full`}>
-            <div
-              className={`flex items-center ${isOpen ? "flex-1 min-w-0" : ""}`}>
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center shadow-sm border-1 ${isOpen ? "mr-2" : "ml-2"}`}>
-                <User className="h-3 w-3" />
+        {/* Header */}
+        <div
+          className={`header px-4 py-4 flex items-center justify-center w-full`}
+        >
+          <div
+            className={`flex items-center gap-4 ${
+              isOpen ? "flex-1 min-w-0" : ""
+            }`}
+          >
+            <div className="my-2 w-6 h-6 aspect-square rounded-md bg-red-200" />
+
+            {/* <AnimatePresence> */}
+            {isOpen && (
+              <div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 min-w-0"
+              >
+                <div className="username font-medium truncate">Quang Huy</div>
               </div>
-              <AnimatePresence>
-                {isOpen && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex-1 min-w-0"
-                  >
-                    <div className="font-medium truncate">John Doe</div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-            <AnimatePresence>
-              {isOpen && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center"
-                >
-                  <button
-                    className="p-2 rounded-md mr-1 cursor-pointer"
-                    title="Home"
-                  >
-                    <Home className="h-4 w-4" />
-                  </button>
-                  <button
-                    className="p-2 rounded-md"
-                    title="Lock Sidebar"
-                    onClick={toggleLock}
-                  >
-                    <Lock
-                      className={`h-4 w-4 cursor-pointer ${`${
-                        isLocked
-                          ? theme === "dark"
-                            ? "text-white"
-                            : "text-black"
-                          : theme === "dark"
-                          ? "text-white/50"
-                          : "text-black/50"
-                      }`}`}
-                    />
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            )}
+            {/* </AnimatePresence> */}
           </div>
 
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-2">
-            {menuItems.map((item, index) => (
-              <div key={item.id} className="relative">
-                {dropIndicator.show && dropIndicator.index === index && (
-                  <div className="absolute top-0 left-0 right-0 h-0.5 z-10 " />
-                )}
-                <SidebarItem
-                  item={item}
-                  index={index}
-                  onDragStart={handleDragStart}
-                  onDragOver={(e) => handleDragOver(e, index)}
-                  onDragEnd={handleDragEnd}
-                  isOpen={isOpen}
-                  className={`mb-1 ${!isOpen ? "sidebar-collapsed" : ""}`}
-                />
-              </div>
-            ))}
-          </div>
-          {/* Resize handle */}
-          {isOpen && <DragHandle />}
-          
-          {/* Footer */}
-          <div
-            className={`
-                        sticky bottom-0 border-t px-3 py-2
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center justify-center gap-2"
+              >
+                <button
+                  className="p-2 hover:bg-gray-200 rounded-md cursor-pointer"
+                  title="Home"
+                >
+                  <Home className="w-4 h-4" color="black" />
+                </button>
+                <button
+                  className="rounded-md p-2 hover:bg-gray-200"
+                  title="Lock Sidebar"
+                  onClick={toggleLock}
+                >
+                  <Lock
+                    className={`w-4 h-4 cursor-pointer ${`${
+                      isLocked
+                        ? theme === "dark"
+                          ? "text-white"
+                          : "text-black"
+                        : theme === "dark"
+                        ? "text-white/50"
+                        : "text-black/50"
+                    }`}`}
+                    color="black"
+                  />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-2">
+          {menuItems.map((item, index) => (
+            <div key={item.id} className="relative">
+              {dropIndicator.show && dropIndicator.index === index && (
+                <div className="absolute top-0 left-0 right-0 h-0.5 z-10 " />
+              )}
+              <SidebarItem
+                item={item}
+                index={index}
+                onDragStart={handleDragStart}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragEnd={handleDragEnd}
+                isOpen={isOpen}
+                className={`mb-1 ${!isOpen ? "sidebar-collapsed" : ""}`}
+              />
+            </div>
+          ))}
+        </div>
+        {/* Resize handle */}
+        {isOpen && <DragHandle />}
+
+        {/* Footer */}
+        <div
+          className={`
+                        sticky bottom-0 border-t border-gray-200 px-3 py-3
                         flex
                         ${
-                        isOpen
+                          isOpen
                             ? "justify-between" /* mở sidebar: nằm ngang */
                             : "flex-col-reverse items-center gap-3 "
                         }  
                     `}
-                    >
-                
-                <Settings className="h-5 w-5 p-lg-1 cursor-pointer" />
-                <SwitchTheme width={isOpen ? 48 : 24} height={24} className="h-5 w-5 cursor-pointer" />
-          </div>
+        >
+          <Settings className="h-5 w-5 p-lg-1 cursor-pointer" />
+          <SwitchTheme
+            width={isOpen ? 48 : 24}
+            height={24}
+            className="h-5 w-5 cursor-pointer"
+          />
+        </div>
 
         {/* Toggle button */}
         <button
@@ -200,7 +209,6 @@ const Sidebar = () => {
             manualToggleRef.current = true;
             setIsOpen(!isOpen);
             setTimeout(() => (manualToggleRef.current = false), 500);
-
           }}
         >
           {isOpen ? (
