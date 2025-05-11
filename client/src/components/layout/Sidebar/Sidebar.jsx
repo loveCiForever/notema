@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
-import DragHandle from "../ui/DragHandle";
+import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
@@ -11,8 +11,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
-import SwitchTheme from "../button/SwitchTheme";
+import { useTheme } from "../../../contexts/ThemeContext";
+import SwitchTheme from "../../button/SwitchTheme";
 const Sidebar = () => {
   const {
     isOpen,
@@ -26,7 +26,7 @@ const Sidebar = () => {
   } = useSidebar();
 
   const [draggedItem, setDraggedItem] = useState(null);
-  const [showTooltip, setShowTooltip] = useState(false);
+  // const [showTooltip, setShowTooltip] = useState(false);
   const sidebarRef = useRef(null);
   const [dropIndicator, setDropIndicator] = useState({
     show: false,
@@ -79,7 +79,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {contextIsMobile && isOpen && (
+      {!isLocked && isOpen && (
         <div
           className="flex flex-col fixed inset-0 bg-black/50 z-40"
           onClick={() => setIsOpen(false)}
@@ -193,7 +193,7 @@ const Sidebar = () => {
         {/* Toggle button */}
         <button
           className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-50 cursor-pointer ${
-            theme === "dark" ? "bg-white/90 text-black" : "bg-black/5"
+            theme === "dark" ? "bg-white/90 text-black" : "bg-white"
           }`}
           onClick={() => {
             manualToggleRef.current = true;

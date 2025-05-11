@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-import sunIcon from "../../assets/svg/sun.svg";
-import moonIcon from "../../assets/svg/moon.svg";
+import sunIcon from "../../assets/icons/black/sun.svg";
+import moonIcon from "../../assets/icons/black/moon.svg";
 
 const SwitchTheme = ({ width, height}) => {
   const { theme, toggleTheme } = useTheme();
