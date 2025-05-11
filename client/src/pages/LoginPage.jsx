@@ -17,10 +17,13 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log("Email:", email);
     // console.log("Password: ", password);
+
 
     const validateEmail = validateEmailInput(email);
     const validatePassword = validatePasswordInput(password);
@@ -38,16 +41,16 @@ const LoginPage = () => {
     }
 
     axios
-      .post("http://localhost:8000/api/login", {
+      .post(`${BASE_URL}/login`, {
         email: email,
         password: password,
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response.data.data);
         if (response.status === 200) {
           toast.success("Login Success !");
-          localStorage.setItem("access_token", response.data.token);
-          navigate("/home");
+          localStorage.setItem("access_token", response.data.data.access_token);
+          // navigate("/home");
         }
       })
       .catch((error) => {

@@ -9,6 +9,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
+$jwtMiddleware = require __DIR__ . '../../middlewares/JWT.php';
 
 $app->post('/login', function (Request $request, Response $response) use ($pdo) {
     try {
@@ -40,22 +41,32 @@ $app->post('/login', function (Request $request, Response $response) use ($pdo) 
             return $response->withStatus(401)->withHeader('Content-Type', 'application/json');
         }
 
+        if ($user['is_logged_in'] == 1) {
+            $payload = ['success' => false, 'message' => 'Account is already logged in'];
+            $response->getBody()->write(json_encode($payload));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        }
+
+        $stmt  = $pdo->prepare("UPDATE users SET is_logged_in = 1 WHERE email = ?");
+        $stmt->execute([$email]);
+
         unset($user['password']);
+
 
         $payload = [
             'id' => $user['id'],
             'email' => $user['email'],
             'exp' => time() + (60 * 60 * 24)
         ];
-        $jwt = JWT::encode($payload, 'HeheheThisIsAPrivateKey', 'HS256');
+        $jwt = JWT::encode($payload, $_ENV['JWT_PRIVATE_KEY'], 'HS256');
 
 
         $responseData = [
-            'success' => false,
+            'success' => true,
             'message' => 'Login Successfully',
             'data' => [
                 'user' => $user,
-                'token' => $jwt,
+                'access_token' => $jwt,
             ],
         ];
 
@@ -78,6 +89,7 @@ $app->post('/register', function (Request $request, Response $response) use ($pd
         $email = $data['email'] ?? '';
         $password = $data['password'] ?? '';
 
+        // input validation
         if (empty($fullname)) {
             $payload = ['success' => false, 'message' => 'Fullname field is null'];
             $response->getBody()->write(json_encode($payload));
@@ -96,6 +108,7 @@ $app->post('/register', function (Request $request, Response $response) use ($pd
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
 
+        // check mail is exist or not
         $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
         $stmt->execute([$email]);
         if ($stmt->fetch()) {
@@ -104,6 +117,7 @@ $app->post('/register', function (Request $request, Response $response) use ($pd
             return $response->withStatus(409)->withHeader('Content-Type', 'application/json');
         }
 
+        // create users
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
 
         $stmt = $pdo->prepare('INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)');
@@ -251,7 +265,7 @@ $app->get('/verify', function (Request $request, Response $response) use ($pdo) 
         if ($user['is_verified']) {
             $payload = ['success' => true, 'message' => 'Your email is already verified.'];
             $response->getBody()->write(json_encode($payload));
-            return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
 
         $update = $pdo->prepare('
@@ -272,3 +286,42 @@ $app->get('/verify', function (Request $request, Response $response) use ($pdo) 
         return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
     }
 });
+
+$app->post('/logout', function (Request $request, Response $response) use ($pdo) {
+    $decoded = $request->getAttribute('jwt');
+    $email   = $decoded->email ?? '';
+
+    try {
+        $stmt = $pdo->prepare('SELECT is_logged_in FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+
+        if (!$user) {
+            $payload = ['success' => false, 'message' => 'Invalid email'];
+            $response->getBody()->write(json_encode($payload));
+            return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+        }
+
+        if ($user['is_logged_in'] == 0) {
+            $payload = ['success' => false, 'message' => 'Account is already logout'];
+            $response->getBody()->write(json_encode($payload));
+            return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        }
+
+        $stmt = $pdo->prepare('UPDATE users SET is_logged_in = 0 WHERE email = ?');
+        $stmt->execute([$email]);
+
+        $payload = ['success' => true, 'message' => 'Logout successfully'];
+        $response->getBody()->write(json_encode($payload));
+        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+    } catch (Exception $e) {
+        $payload = ['success' => false, 'message' => 'Server error during logout.'];
+        $response->getBody()->write(json_encode($payload));
+        return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+    }
+})->add($jwtMiddleware);;
+
+
+// $app->get('/logout', function (Request $request, Response $response) use ($pdo) {\
+
+// }
