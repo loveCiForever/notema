@@ -81,7 +81,7 @@ const Sidebar = () => {
     <>
       {!isLocked && isOpen && (
         <div
-          className="flex flex-col fixed inset-0 bg-black/50 z-40"
+          className="flex flex-col fixed inset-0 z-40"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -165,6 +165,7 @@ const Sidebar = () => {
                   onDragStart={handleDragStart}
                   onDragOver={(e) => handleDragOver(e, index)}
                   onDragEnd={handleDragEnd}
+                  isOpen={isOpen}
                   className={`mb-1 ${!isOpen ? "sidebar-collapsed" : ""}`}
                 />
               </div>
@@ -192,13 +193,14 @@ const Sidebar = () => {
 
         {/* Toggle button */}
         <button
-          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-50 cursor-pointer ${
+          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${
             theme === "dark" ? "bg-white/90 text-black" : "bg-white"
           }`}
           onClick={() => {
             manualToggleRef.current = true;
             setIsOpen(!isOpen);
             setTimeout(() => (manualToggleRef.current = false), 500);
+
           }}
         >
           {isOpen ? (
