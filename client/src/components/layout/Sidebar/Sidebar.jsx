@@ -33,6 +33,7 @@ const Sidebar = () => {
     index: -1,
   });
   const manualToggleRef = useRef(false);
+  const {isDark ,theme} = useTheme();
 
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
@@ -68,17 +69,16 @@ const Sidebar = () => {
   const sidebarVariants = {
     open: {
       width: `${width}px`,
-      transition: { duration: 0 },
+      transition: { duration: 0 , ease: "easeOut" },
     },
     closed: {
       width: "60px",
-      transition: { duration: 0.3 },
+      transition: { duration: 0.28 , ease: "easeOut" },
     },
   };
-  const { theme } = useTheme();
 
   return (
-    <div>
+    <aside>
       {!isLocked && isOpen && !contextIsMobile && (
         <div
           className="flex flex-col fixed inset-0 z-40"
@@ -87,7 +87,7 @@ const Sidebar = () => {
       )}
       <motion.div
         ref={sidebarRef}
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container transition-colors ${
           theme === "dark"
             ? "bg-black/80 border-white/50 text-white"
             : "bg-zinc-50/50 border-black/20 text-black"
@@ -214,7 +214,7 @@ const Sidebar = () => {
           )}
         </button>
       </motion.div>
-    </div>
+    </aside>
   );
 };
 export default Sidebar;

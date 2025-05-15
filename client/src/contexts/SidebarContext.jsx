@@ -100,9 +100,9 @@ export const SidebarProvider = ({ children }) => {
     return acc;
   }, {});
   // Sidebar state
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
-  const [width, setWidth] = useState(280) // Default width
+  const [width, setWidth] = useState(250) // Default width
   const [menuItems, setMenuItems] = useState(defaultMenuItems)
   const [notes, setNotes] = useState([])
   const [collapsedSections, setCollapsedSections] = useState(defaultCollapsed)

@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@editorjs/code": "^2.9.3",
+    "@editorjs/editorjs": "^2.30.8",
+    "@editorjs/header": "^2.8.8",
+    "@editorjs/list": "^2.0.8",
+    "@editorjs/quote": "^2.7.6",
     "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.8.4",
+    "framer-motion": "^12.11.3",
     "lucide-react": "^0.503.0",
     "next": "^15.3.1",
     "react": "^19.0.0",
