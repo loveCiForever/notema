@@ -11,7 +11,7 @@ use PHPMailer\PHPMailer\SMTP;
 
 $jwtMiddleware = require __DIR__ . '../../middlewares/JWT.php';
 
-$app->post('/login', function (Request $request, Response $response) use ($pdo) {
+$app->post('/auth/login', function (Request $request, Response $response) use ($pdo) {
     try {
         $body = $request->getBody();
         $data = json_decode($body, true);
@@ -287,7 +287,7 @@ $app->get('/verify', function (Request $request, Response $response) use ($pdo) 
     }
 });
 
-$app->post('/logout', function (Request $request, Response $response) use ($pdo) {
+$app->get('/logout', function (Request $request, Response $response) use ($pdo) {
     $decoded = $request->getAttribute('jwt');
     $email   = $decoded->email ?? '';
 
@@ -320,8 +320,3 @@ $app->post('/logout', function (Request $request, Response $response) use ($pdo)
         return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
     }
 })->add($jwtMiddleware);;
-
-
-// $app->get('/logout', function (Request $request, Response $response) use ($pdo) {\
-
-// }

@@ -11,11 +11,14 @@ import { useState } from "react";
 import { validateEmailInput, validatePasswordInput } from "../utils/validate";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user, accessToken, login, logout } = useAuth();
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -23,7 +26,6 @@ const LoginPage = () => {
     e.preventDefault();
     // console.log("Email:", email);
     // console.log("Password: ", password);
-
 
     const validateEmail = validateEmailInput(email);
     const validatePassword = validatePasswordInput(password);
@@ -40,29 +42,15 @@ const LoginPage = () => {
       return;
     }
 
-    axios
-      .post(`${BASE_URL}/login`, {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        // console.log(response.data.data);
-        if (response.status === 200) {
-          toast.success("Login Success !");
-          localStorage.setItem("access_token", response.data.data.access_token);
-          // navigate("/home");
-        }
-      })
-      .catch((error) => {
-        // console.log(error.response.data.message)
-        if (error.status !== 200) {
-          toast.error(
-            !error.response.data.message
-              ? "Login failed"
-              : error.response.data.message
-          );
-        }
-      });
+    try {
+      await login(email, password);
+
+      toast.success("Login successful!");
+      navigate("/home");
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message;
+      toast.error(msg);
+    }
   };
 
   return (
@@ -107,7 +95,7 @@ const LoginPage = () => {
               >
                 Log in
               </button>
-              <div className="flex items-center w-full my-2">
+              {/* <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">
                   Or log in with
@@ -123,7 +111,7 @@ const LoginPage = () => {
                   <img className="w-6" src={GithubLogo} alt="github.png" />
                   Github
                 </button>
-              </div>
+              </div> */}
               <div className="flex items-center justify-center mt-4 gap-1 w-full px-1">
                 <p className="text-[14px] text-gray-800">
                   Don't have an account ?
