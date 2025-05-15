@@ -11,11 +11,14 @@ import { useState } from "react";
 import { validateEmailInput, validatePasswordInput } from "../utils/validate";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user, accessToken, login, logout } = useAuth();
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -37,6 +40,16 @@ const LoginPage = () => {
       toast.error(validatePassword.message);
       setPassword("");
       return;
+    }
+
+    try {
+      await login(email, password);
+
+      toast.success("Login successful!");
+      navigate("/home");
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message;
+      toast.error(msg);
     }
   };
 
@@ -82,7 +95,7 @@ const LoginPage = () => {
               >
                 Log in
               </button>
-              <div className="flex items-center w-full my-2">
+              {/* <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">
                   Or log in with
@@ -98,7 +111,7 @@ const LoginPage = () => {
                   <img className="w-6" src={GithubLogo} alt="github.png" />
                   Github
                 </button>
-              </div>
+              </div> */}
               <div className="flex items-center justify-center mt-4 gap-1 w-full px-1">
                 <p className="text-[14px] text-gray-800">
                   Don't have an account ?

@@ -1,6 +1,6 @@
 import BackToTop from "../components/button/BackToTop";
-import Footer from "../components/layout/Footer";
-import Header from "../components/layout/Header";
+import Footer from "../components/layout/footer/Footer";
+import Header from "../components/layout/header/Header";
 import { useEffect, useState } from "react";
 import LandingPageImage1 from "../assets/images/landing_1.png";
 import LandingPageImage2 from "../assets/images/landing_2.png";
