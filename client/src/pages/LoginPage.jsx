@@ -24,7 +24,6 @@ const LoginPage = () => {
     // console.log("Email:", email);
     // console.log("Password: ", password);
 
-
     const validateEmail = validateEmailInput(email);
     const validatePassword = validatePasswordInput(password);
 
@@ -39,30 +38,6 @@ const LoginPage = () => {
       setPassword("");
       return;
     }
-
-    axios
-      .post(`${BASE_URL}/login`, {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        // console.log(response.data.data);
-        if (response.status === 200) {
-          toast.success("Login Success !");
-          localStorage.setItem("access_token", response.data.data.access_token);
-          // navigate("/home");
-        }
-      })
-      .catch((error) => {
-        // console.log(error.response.data.message)
-        if (error.status !== 200) {
-          toast.error(
-            !error.response.data.message
-              ? "Login failed"
-              : error.response.data.message
-          );
-        }
-      });
   };
 
   return (
