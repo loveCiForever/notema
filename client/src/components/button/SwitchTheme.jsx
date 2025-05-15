@@ -9,7 +9,7 @@ const SwitchTheme = ({ width, height}) => {
     width: `${width}px`,
     height: `${height}px`,
     backgroundColor: theme === 'dark' ? '#52525b' : '#f0f4f6',
-    boxShadow: theme === 'light' ? '0 4px 4px rgba(0,0,0,0.1)' : 'none',
+    boxShadow: theme === 'light' ? '0 1px 4px rgba(0,0,0,0.1)' : 'none',
     borderRadius: `${height / 2}px`,
     transition: 'background-color 0.3s',
     title: "Click here to change theme"

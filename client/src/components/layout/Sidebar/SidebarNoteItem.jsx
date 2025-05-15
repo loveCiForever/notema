@@ -44,7 +44,7 @@ const SidebarNoteItem = ({ note, sectionId }) => {
   const {theme} = useTheme();
   
   return (
-    <div className={`relative flex items-center my-2 py-1 px-2 rounded-md group cursor-pointer ${theme === "dark" ? "border-white text-white hover:bg-white/10" : "bg-white border-black/20 text-black hover:bg-zinc-100"}`}>
+    <div className={`relative flex items-center my-2 py-1 px-2 rounded-md group cursor-pointer ${theme === "dark" ? "border-white text-white hover:bg-white/10" : "border-black/20 text-black hover:bg-zinc-100"}`}>
       <div className="flex items-center flex-1 min-w-0">
         <div className="mr-2">{getIcon()}</div>
         <span className="truncate text-sm">{note.title}</span>

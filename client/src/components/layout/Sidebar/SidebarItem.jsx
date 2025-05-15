@@ -13,6 +13,7 @@ import {
   Trash,
   Settings,
   Search,
+  Home,
 } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import PropTypes from "prop-types";
@@ -82,7 +83,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
   };
   const renderContent = () => {
     // Nếu đóng sidebar và không phải là search
-    if (!isOpen && item.type !== "search") {
+    if (!isOpen && item.type !== "search" && item.type !== "home") {
       return (
         <div
           className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50`}
@@ -94,25 +95,51 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
         </div>
       );
     }
-    // Nếu là search
+    // Nếu là home
+    if (item.type === 'home') {
+      return (
+        <>
+          {!isOpen ? (
+        <div
+          className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50`}
+          onClick={() => {
+            window.location.href = "/home";
+          }}
+        >
+          <Home className="h-4 w-4" />
+        </div>
+          ) : (
+        <div
+          className={`flex justify-round items-center py-2 cursor-pointer rounded-md hover:bg-gray-200/70 gap-2 text-left rounded-md text-sm  transition-colors`} 
+          onClick={() => {
+            window.location.href = "/home";
+          }}
+        >
+          <Home className="h-4 w-4 ml-3" />
+          <span>Home</span>
+        </div>
+          )}
+        </>
+      )
+    }
+    
     if (item.type === "search") {
       return (
         <>
           {/* Nút hiển thị Modal */}
-          
           { !isOpen ? (
             <div
               className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50`}
               onClick={() => {
                 // khi collapse: mở sidebar luôn nếu cần
-                if (!isOpen) setIsOpen(true);
                 setShowSearchModal(true);
               }}
             >
               <Search className="h-4 w-4" />
             </div>
-          ) : (<div
-            className={`flex justify-round items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/70 gap-2 bg-zinc-200/30 text-left rounded-md text-sm  transition-colors`} 
+          ) : (
+          <div
+            className={`flex justify-round items-center py-2 cursor-pointer rounded-md hover:bg-gray-200/70 gap-2 bg-zinc-200/30 text-left rounded-md text-sm  transition-colors`} 
               onClick={() => {
                 // khi collapse: mở sidebar luôn nếu cần
                 if (!isOpen) setIsOpen(true);
@@ -130,6 +157,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
         </>
       );
     }
+
     // là Note hoặc Trash
     if (item.type === "notes" || item.type === "trash") {
       return (
@@ -237,7 +265,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
                   <input
                     type="text"
                     placeholder="Search in trash..."
-                    className="w-full px-3 py-1.5 pl-7 bg-gray-100 text-zinc-400 outline-none rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-black border"
+                    className="w-full px-3 py-1 pl-7 bg-gray-100 text-zinc-400 outline-none rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-black border"
                   />
                   <Search className="absolute left-2 top-1.5 h-3.5 w-3.5 text-gray-400" />
                 </div>

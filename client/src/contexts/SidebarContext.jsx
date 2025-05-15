@@ -5,6 +5,8 @@ import { createContext, useContext, useState, useEffect } from "react"
 // Default sidebar menu items
 const defaultMenuItems = [
   { id: "search", type: "search", label: "Search", icon: "search" },
+  { id: "home", type: "home", label: "Home", icon: "home" },
+  
   { id: "favorite", type: "notes", label: "Favorite Notes", icon: "star", notes: [] },
   { id: "private", type: "notes", label: "Private Notes", icon: "lock", notes: [] },
   { id: "public", type: "notes", label: "Public Notes", icon: "globe", notes: [] },
@@ -277,7 +279,7 @@ export const SidebarProvider = ({ children }) => {
     deleteForever,
     formatTimestamp,
     isMobile,
-    openAndExpand,
+    openAndExpand
   }
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>

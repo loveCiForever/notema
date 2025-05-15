@@ -45,7 +45,7 @@ const DragHandle = () => {
 
     return (
         <div
-            className={`absolute right-0 top-0 w-1 h-full cursor-col-resize group z-50 ${isDragging ? "bg-primary/50" : "hover:bg-primary/20"
+            className={`absolute right-0 top-0 w-1 h-full cursor-col-resize group z-30 ${isDragging ? "bg-primary/50" : "hover:bg-primary/20"
                 }`}
             onMouseDown={startDragging}
             onTouchStart={startDragging}
