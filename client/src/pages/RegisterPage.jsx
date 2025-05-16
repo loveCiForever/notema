@@ -10,15 +10,16 @@ import GoogleLogo from "../assets/logo/googleLogo.svg";
 import GithubLogo from "../assets/logo/githubLogo.svg";
 import { toast } from "react-toastify";
 import axios from "axios";
-
+import { useAuth } from "../contexts/AuthContext";
 const RegisterPage = () => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const { user, register } = useAuth();
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,53 +33,8 @@ const RegisterPage = () => {
       return;
     }
 
-    await axios
-      .post(`${BASE_URL}/register`, {
-        fullname: fullname,
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 201) {
-          toast.success(
-            "Registration Success. Check your mail (spam) to verify your account !"
-          );
-
-          axios
-            .post(`${BASE_URL}/login`, {
-              email: email,
-              password: password,
-            })
-            .then((response) => {
-              // console.log(response);
-              localStorage.setItem(
-                "access_token",
-                response.data.data.access_token
-              );
-              navigate("/home");
-            })
-            .catch((error) => {
-              if (error.status !== 200) {
-                toast.error(
-                  !error.response.data.message
-                    ? "Login failed"
-                    : error.response.data.message
-                );
-              }
-            });
-        }
-      })
-      .catch((error) => {
-        // console.log(error.response.data.message)
-        if (error.status !== 200) {
-          toast.error(
-            !error.response.data.message
-              ? "Registration failed"
-              : error.response.data.message
-          );
-        }
-      });
+    await register(fullname, email, password, confirmPassword);
+    navigate("/home");
   };
   const navigate = useNavigate();
   return (

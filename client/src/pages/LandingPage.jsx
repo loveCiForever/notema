@@ -5,10 +5,19 @@ import { useEffect, useState } from "react";
 import LandingPageImage1 from "../assets/images/landing_1.png";
 import LandingPageImage2 from "../assets/images/landing_2.png";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../contexts/AuthContext";
 const LandingPage = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user } = useAuth();
+
+  const handleLoginButton = () => {
+    if (user) {
+      navigate("/home");
+    } else {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +55,7 @@ const LandingPage = () => {
               </button>
               <button
                 className="px-4 py-2 font-bold rounded-lg btn-primary-outline"
-                onClick={() => navigate("/login")}
+                onClick={handleLoginButton}
               >
                 Log in
               </button>

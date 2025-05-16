@@ -2,33 +2,35 @@ import { useState, useRef, useEffect } from "react";
 import InputForm from "../../Input/InputForm";
 import userIcon from "../../../assets/icons/black/user.svg";
 import emailIcon from "../../../assets/icons/black/email.svg";
+import lockIcon from "../../../assets/icons/black/lock.svg";
 import avtDefault from "../../../assets/logo/logo-main.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
 
-const UserProfile = ({ onClose, onSave, userInfo }) => {
+const UserProfile = ({ onClose }) => {
   const navigate = useNavigate();
   const fileInputRef = useRef();
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const { updateUser } = useAuth();
-  const [tempAvatar, setTempAvatar] = useState(userInfo.avatar || "");
-  const [tempName, setTempName] = useState(userInfo.fullname || "");
-  const [tempEmail, setTempEmail] = useState(userInfo.email || "");
-  const [tempGender, setTempGender] = useState(userInfo.gender || "other");
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
+  const { user, updateUser } = useAuth();
+  const [tempAvatar, setTempAvatar] = useState(user.avatar || "");
+  const [tempName, setTempName] = useState(user.fullname || "");
+  const [tempEmail, setTempEmail] = useState(user.email || "");
+  const [tempGender, setTempGender] = useState(user.gender || "other");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [toggleChangePassword, setToggleChangePassword] = useState(false);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setTempAvatar(imageUrl);
-    }
+  const handleToggleChangePassword = () => {
+    setToggleChangePassword(!toggleChangePassword);
   };
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+  const handleChangePassword = () => {
+    console.log("old password: ", oldPassword);
+    console.log("new password: ", newPassword);
+  };
+
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("fullname", tempName);
@@ -41,7 +43,7 @@ const UserProfile = ({ onClose, onSave, userInfo }) => {
 
     try {
       const res = await axios.post(
-        `${BASE_URL}/users/${userInfo.id}/profile`,
+        `${BASE_URL}/users/${user.id}/profile`,
         formData,
         {
           headers: {
@@ -49,18 +51,9 @@ const UserProfile = ({ onClose, onSave, userInfo }) => {
           },
         }
       );
-      console.log(res.data.data.avatar);
-      const newAvatarUrl = res.data.data.avatar;
-      const fullname = res.data.data.fullname;
-      const email = res.data.data.email;
-      const gender = res.data.data.gender;
 
-      updateUser({
-        avatar: newAvatarUrl,
-        fullname: fullname,
-        email: email,
-        gender: gender,
-      });
+      const { user: updatedUser } = res.data.data;
+      updateUser(updatedUser);
       toast.success(res.data.message);
       onClose();
     } catch (err) {
@@ -69,9 +62,20 @@ const UserProfile = ({ onClose, onSave, userInfo }) => {
     }
   };
 
-  const handleChangePassword = () => {
-    navigate("/change-password");
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setTempAvatar(imageUrl);
+    }
   };
+
+  useEffect(() => {
+    setTempAvatar(user.avatar || "");
+    setTempName(user.fullname || "");
+    setTempEmail(user.email || "");
+    setTempGender(user.gender || "other");
+  }, [user]);
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -88,7 +92,7 @@ const UserProfile = ({ onClose, onSave, userInfo }) => {
 
         <div className="relative w-28 h-28 mx-auto mb-5">
           <img
-            src={userInfo.avatar ? `${userInfo.avatar}` : avtDefault}
+            src={user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault}
             className="w-full h-full object-cover rounded-full border"
             alt="avatar"
           />
@@ -159,19 +163,53 @@ const UserProfile = ({ onClose, onSave, userInfo }) => {
           </div>
         </div>
 
-        <div className="flex justify-between mt-6">
+        {toggleChangePassword && (
+          <>
+            <div className="flex justify-between mt-6">
+              <InputForm
+                icon={lockIcon}
+                placeholder="Old password"
+                name="password"
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-between mt-2">
+              <InputForm
+                icon={lockIcon}
+                placeholder="New password"
+                name="password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+          </>
+        )}
+
+        <div className="flex justify-between mt-4">
           <button
-            onClick={handleChangePassword}
-            className="text-sm border px-5 py-2 rounded-lg hover:bg-black hover:text-white transition cursor-pointer"
+            onClick={
+              !toggleChangePassword
+                ? handleToggleChangePassword
+                : handleChangePassword
+            }
+            className={`${
+              toggleChangePassword && "w-full bg-black text-white"
+            } text-sm border px-5 py-2 rounded-lg hover:bg-black  font-bold hover:text-white transition cursor-pointer`}
           >
-            Change Password
+            {toggleChangePassword ? "Confirm password" : "Change Password"}
           </button>
-          <button
-            onClick={handleSave}
-            className="bg-black text-white px-6 py-2 rounded-lg text-sm hover:bg-black/80 transition cursor-pointer"
-          >
-            Save Changes
-          </button>
+
+          {!toggleChangePassword && (
+            <button
+              onClick={handleSave}
+              className="bg-black text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-black/80 transition cursor-pointer"
+            >
+              Save Changes
+            </button>
+          )}
         </div>
       </div>
     </div>

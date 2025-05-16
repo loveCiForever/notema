@@ -3,10 +3,19 @@ import logo from "../../../assets/logo/logo.png";
 import menu from "../../../assets/icons/black/menu.svg";
 import close from "../../../assets/icons/black/close.svg";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../../contexts/AuthContext";
 const Header = () => {
   const [isClickMenu, setIsClickMenu] = useState("false");
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleLoginButton = () => {
+    if (user) {
+      navigate("/home");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <>
@@ -23,10 +32,7 @@ const Header = () => {
                 <button className="btn-hover-gray">Individuals</button>
               </div>
               <div className="flex gap-3">
-                <button
-                  className="btn-hover-gray"
-                  onClick={() => navigate("/login")}
-                >
+                <button className="btn-hover-gray" onClick={handleLoginButton}>
                   Log in
                 </button>
                 <button
@@ -68,7 +74,7 @@ const Header = () => {
           <div className="flex flex-col w-full gap-2 px-4 pt-4 bg-white border-gray-300 ">
             <button
               className="text-center btn-black"
-              onClick={() => navigate("/login")}
+              onClick={handleLoginButton}
             >
               Log in
             </button>

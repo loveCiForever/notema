@@ -101,16 +101,6 @@ function HomePage() {
           </div>
         </div>
 
-        {/* Upcoming Events */}
-        <div>
-          <div className="flex items-center gap-2 mb-4 text-gray-500">
-            <Calendar className="w-4 h-4" />
-            <h2 className="font-medium">Upcoming events</h2>
-          </div>
-          <div className="border rounded-lg p-6 flex items-center justify-center h-40 text-gray-400">
-            <p>No upcoming events</p>
-          </div>
-        </div>
       </main>
     </div>
   );

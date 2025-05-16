@@ -3,33 +3,32 @@ import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home,
-  User,
-  Lock,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Home, Settings, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";
 import UserProfile from "./UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
-
+import avtDefault from "../../../assets/logo/logo-main.png";
 const Sidebar = () => {
   const {
     isOpen,
     setIsOpen,
     isLocked,
-    toggleLock,
     width,
     menuItems,
     setMenuItems,
     isMobile: contextIsMobile,
   } = useSidebar();
+
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { user, accessToken, login, logout } = useAuth();
+
+  // useEffect(() => {
+  //   console.log(`${BASE_URL}/public${user.user.avatar}`);
+  // }, [user]);
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
 
   const [toggleUserProfile, setToggleUserProfile] = useState(false);
 
@@ -41,9 +40,6 @@ const Sidebar = () => {
   const manualToggleRef = useRef(false);
   const {isDark ,theme} = useTheme();
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = "move";
@@ -56,18 +52,6 @@ const Sidebar = () => {
 
   const handleToggleUserProfile = () => {
     setToggleUserProfile(!toggleUserProfile);
-  };
-
-  const [userInfo, setUserInfo] = useState({
-    name: "TBOI",
-    email: "tboi@gmail.com",
-    phone: "0898672065",
-    address: "Ho Chi Minh city",
-    avatar: null,
-  });
-
-  const handleSaveProfile = (newInfo) => {
-    setUserInfo(newInfo);
   };
 
   const handleDragOver = (e, index) => {
@@ -177,7 +161,6 @@ const Sidebar = () => {
             </AnimatePresence>
           </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-2">
           {menuItems.map((item, index) => (
             <div key={item.id} className="relative">
@@ -196,10 +179,9 @@ const Sidebar = () => {
             </div>
           ))}
         </div>
-        {/* Resize handle */}
+
         {isOpen && <DragHandle />}
 
-        {/* Footer */}
         <div
           className={`
                         sticky bottom-0 border-t px-3 py-2
@@ -221,7 +203,6 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Toggle button */}
         <button
           className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-40 cursor-pointer ${
             theme === "dark" ? "bg-white/90 text-black" : "bg-white"
