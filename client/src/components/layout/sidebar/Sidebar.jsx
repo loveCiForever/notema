@@ -10,6 +10,10 @@ import UserProfile from "./UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
 import avtDefault from "../../../assets/logo/logo-main.png";
+import {
+  Lock,
+  User,
+} from "lucide-react";
 const Sidebar = () => {
   const {
     isOpen,
@@ -19,10 +23,14 @@ const Sidebar = () => {
     menuItems,
     setMenuItems,
     isMobile: contextIsMobile,
+    toggleLock,
+    setIsMobile,
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isSidebarLocked,
   } = useSidebar();
 
   const navigate = useNavigate();
-  const { theme } = useTheme();
   const { user, accessToken, login, logout } = useAuth();
 
   // useEffect(() => {
@@ -39,7 +47,7 @@ const Sidebar = () => {
   });
   const manualToggleRef = useRef(false);
   const {isDark ,theme} = useTheme();
-
+  const sidebarRef = useRef(null);
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = "move";
@@ -91,7 +99,7 @@ const Sidebar = () => {
       {!isLocked && isOpen && !contextIsMobile && (
         <div
           className="flex flex-col fixed inset-0 z-40"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(false)}
         />
       )}
       <motion.div
