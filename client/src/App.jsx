@@ -13,13 +13,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />}></Route>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/register" element={<RegisterPage />}></Route>
-        <Route path="/home" element={<HomePage />}></Route>
-        <Route path="*" element={<NotFoundPage />}></Route>
-        <Route path="*" element={<NotFoundPage />}></Route>
-        <Route path="/verify" element={<ConfirmPage />}></Route>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/verify" element={<ConfirmPage />} />
       </Routes>
       {/* <ScreenSizePanel position={"top-left"} /> */}
       <ToastContainer />
