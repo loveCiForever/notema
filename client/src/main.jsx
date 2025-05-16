@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App.jsx";
 import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import { AuthProvider } from "./contexts/AuthContext.jsx";
+import { SidebarProvider } from "./contexts/SidebarContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <ThemeProvider>
-      <App />
+      <SidebarProvider>
+        <App />
+      </SidebarProvider>
     </ThemeProvider>
   </AuthProvider>
 );

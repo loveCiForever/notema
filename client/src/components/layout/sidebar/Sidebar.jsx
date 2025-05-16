@@ -201,14 +201,17 @@ const Sidebar = () => {
                         }  
                     `}
         >
-
-          <div className="mt-1">
-            <SwitchTheme
-              width={isOpen ? 40 : 24}
-              height={24}
-              className="h-4 w-4 cursor-pointer "
-            />
-          </div>
+          <button
+            className="px-4 py-1 rounded-lg font-bold bg-black/90 hover:bg-black/60 text-white "
+            onClick={logout}
+          >
+            Log out
+          </button>
+          <SwitchTheme
+            width={isOpen ? 48 : 24}
+            height={24}
+            className="h-5 w-5 cursor-pointer"
+          />
         </div>
 
         <button

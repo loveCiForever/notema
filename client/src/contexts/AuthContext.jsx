@@ -87,7 +87,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await axios.get(`${BASE_URL}/auth/logout`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
     setUser(null);
     setAccessToken(null);
     localStorage.removeItem("user");
