@@ -44,7 +44,7 @@ const RegisterPage = () => {
           toast.success(
             "Registration Success. Check your mail (spam) to verify your account !"
           );
-          
+
           axios
             .post(`${BASE_URL}/login`, {
               email: email,
@@ -52,8 +52,11 @@ const RegisterPage = () => {
             })
             .then((response) => {
               // console.log(response);
-              localStorage.setItem("access_token", response.data.data.access_token);
-              navigate('/home');
+              localStorage.setItem(
+                "access_token",
+                response.data.data.access_token
+              );
+              navigate("/home");
             })
             .catch((error) => {
               if (error.status !== 200) {
@@ -129,7 +132,7 @@ const RegisterPage = () => {
               >
                 Sign up
               </button>
-              <div className="flex items-center w-full my-2">
+              {/* <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">
                   Or sign up with
@@ -145,7 +148,7 @@ const RegisterPage = () => {
                   <img className="w-6" src={GithubLogo} alt="github.png" />
                   <h1>Github</h1>
                 </button>
-              </div>
+              </div> */}
               <div className="flex mt-4 gap-1">
                 <p className="text-[14px] text-gray-800">
                   Already have an account?
