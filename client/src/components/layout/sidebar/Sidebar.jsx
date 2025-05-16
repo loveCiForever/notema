@@ -16,10 +16,7 @@ import UserProfile from "./UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
 import avtDefault from "../../../assets/logo/logo-main.png";
-import {
-  Lock,
-  User,
-} from "lucide-react";
+
 const Sidebar = () => {
   const {
     isOpen,
