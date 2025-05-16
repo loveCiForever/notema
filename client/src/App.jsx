@@ -11,6 +11,7 @@ import ConfirmPage from "./pages/ConfirmPage";
 import MainLayout from "./components/layout/MainLayout";
 // eslint-disable-next-line no-unused-vars
 import { ToastContainer, toast } from "react-toastify";
+import MainLayoutPage from "./components/layout/MainLayout";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
         <Route path="/verify" element={<ConfirmPage />}></Route>
-        <Route path="/home" element={<MainLayout />}>
+        <Route path="/home" element={<MainLayoutPage />}>
           {/* Khi /home => render trang home */}
           <Route index element={<HomePage />} />
           {/* Khi /home/note => render trang note */}

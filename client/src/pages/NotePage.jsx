@@ -11,18 +11,16 @@ import {
     Smile,
     ImageIcon,
     MessageCircle,
-    Bot,
-    Video,
-    Database,
-    FileText,
-    PaintBucket,
-    MoreVertical,
 } from "lucide-react";
+import React from "react";
+import EditorComponent from "../components/editor/EditorComponent";
+import useEditor from "../hooks/useEditor";
 
 const NotePageContent = () => {
     const { id } = useParams();
     // console.log("Note ID:", id);
     const isDark = useTheme();
+    const { content, status, onChange } = useEditor(id);
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
@@ -52,30 +50,10 @@ const NotePageContent = () => {
                 </div>
             </header>
 
-            <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-10">
-                {/* Action buttons */}
-                <div className="flex items-center gap-4 mb-4 text-zinc-400">
-                    <button className="flex items-center gap-2 hover:text-zinc-500">
-                        <Smile className="w-5 h-5" />
-                        <span>Add icon</span>
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-zinc-500">
-                        <ImageIcon className="w-5 h-5" />
-                        <span>Add cover</span>
-                    </button>
-                    <button className="flex items-center gap-2 hover:text-zinc-500">
-                        <MessageCircle className="w-5 h-5" />
-                        <span>Add comment</span>
-                    </button>
-                </div>
-
-                {/* Page title with cursor */}
-                <div className="mt-4 mb-20 relative">
-                    <h1 className="text-5xl font-bold text-zinc-200">New page</h1>
-                </div>
-
-            </main>
-
+            <div className="editor-wrapper">
+                {content && <EditorComponent data={content} onChange={onChange} />}
+            </div>
+            <div className="save-status">{status}</div>
         </div>
     );
 };

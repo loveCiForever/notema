@@ -7,7 +7,6 @@ import {
   Home,
   User,
   Lock,
-  Settings,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -40,6 +39,7 @@ const Sidebar = () => {
   });
   const manualToggleRef = useRef(false);
   const {isDark ,theme} = useTheme();
+  const sidebarRef = useRef(null);
 
   // useEffect(() => {
   //   console.log(user);
@@ -107,7 +107,7 @@ const Sidebar = () => {
       {!isLocked && isOpen && !contextIsMobile && (
         <div
           className="flex flex-col fixed inset-0 z-40"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(false)}
         />
       )}
       <motion.div
