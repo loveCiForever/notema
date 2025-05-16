@@ -4,6 +4,7 @@ import { SidebarProvider, useSidebar } from "../../contexts/SidebarContext";
 import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
 import Sidebar from "./Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
+import React from "react";
 
 function MainLayout() {
   const { isOpen, width, isMobile } = useSidebar();
@@ -26,7 +27,7 @@ function MainLayout() {
 } 
 
 // This wrapper ensures both contexts are provided
-export default function HomePage() {
+export default function MainLayoutPage() {
   return (
     <ThemeProvider>
       <SidebarProvider>

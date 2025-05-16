@@ -3,7 +3,13 @@ import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Settings, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Home,
+  User,
+  Lock,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";
 import UserProfile from "./UserProfile";
@@ -48,6 +54,10 @@ const Sidebar = () => {
   const manualToggleRef = useRef(false);
   const {isDark ,theme} = useTheme();
   const sidebarRef = useRef(null);
+
+  // useEffect(() => {
+  //   console.log(user);
+  // }, [user]);
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = "move";
