@@ -186,7 +186,12 @@ const Sidebar = () => {
                         }  
                     `}
         >
-          <Settings className="h-5 w-5 p-lg-1 cursor-pointer" />
+          <button
+            className="px-4 py-1 rounded-lg font-bold bg-black/90 hover:bg-black/60 text-white "
+            onClick={logout}
+          >
+            Log out
+          </button>
           <SwitchTheme
             width={isOpen ? 48 : 24}
             height={24}
