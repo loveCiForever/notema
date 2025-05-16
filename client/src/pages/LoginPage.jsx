@@ -20,8 +20,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const { user, accessToken, login, logout } = useAuth();
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log("Email:", email);
