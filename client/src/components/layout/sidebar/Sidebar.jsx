@@ -3,33 +3,32 @@ import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home,
-  User,
-  Lock,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Home, Settings, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";
 import UserProfile from "./UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
-
+import avtDefault from "../../../assets/logo/logo-main.png";
 const Sidebar = () => {
   const {
     isOpen,
     setIsOpen,
     isLocked,
-    toggleLock,
     width,
     menuItems,
     setMenuItems,
     isMobile: contextIsMobile,
   } = useSidebar();
+
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { user, accessToken, login, logout } = useAuth();
+
+  // useEffect(() => {
+  //   console.log(`${BASE_URL}/public${user.user.avatar}`);
+  // }, [user]);
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
 
   const [toggleUserProfile, setToggleUserProfile] = useState(false);
 
@@ -39,9 +38,6 @@ const Sidebar = () => {
     index: -1,
   });
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = "move";
@@ -54,18 +50,6 @@ const Sidebar = () => {
 
   const handleToggleUserProfile = () => {
     setToggleUserProfile(!toggleUserProfile);
-  };
-
-  const [userInfo, setUserInfo] = useState({
-    name: "TBOI",
-    email: "tboi@gmail.com",
-    phone: "0898672065",
-    address: "Ho Chi Minh city",
-    avatar: null,
-  });
-
-  const handleSaveProfile = (newInfo) => {
-    setUserInfo(newInfo);
   };
 
   const handleDragOver = (e, index) => {
@@ -99,7 +83,6 @@ const Sidebar = () => {
       transition: { duration: 0.1 },
     },
   };
-  const { theme } = useTheme();
 
   return (
     <>
@@ -112,16 +95,15 @@ const Sidebar = () => {
       <motion.div
         className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${
           theme === "dark"
-            ? "bg-black/80 border-gray-200 text-white"
+            ? "bg-black/70 border-gray-200 text-white"
             : "bg-white border-gray-200 shadow-xl text-black"
         }`}
         initial={isOpen ? "open" : "closed"}
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
       >
-        {/* Header */}
         <div
-          className={`header px-2 py-4 flex items-center justify-between gap-2 w-full`}
+          className={`header px-2 py-4 flex items-center justify-center gap-2 w-full`}
         >
           <div
             className={`flex items-center gap-4 ${
@@ -129,10 +111,15 @@ const Sidebar = () => {
             }`}
           >
             <button
-              className="flex items-center justify-start py-1 rounded-md gap-2 hover:bg-gray-200 w-full"
+              className="flex items-center justify-center py-1 rounded-md gap-2 hover:bg-gray-200 w-full"
               onClick={handleToggleUserProfile}
             >
-              <div className=" w-6 h-6 aspect-square rounded-md bg-red-200" />
+              <img
+                className=" w-8 h-8 aspect-square rounded-md"
+                src={
+                  user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault
+                }
+              />
               {isOpen && (
                 <div
                   initial={{ opacity: 0 }}
@@ -140,7 +127,7 @@ const Sidebar = () => {
                   exit={{ opacity: 0 }}
                   className="flex-1 min-w-0"
                 >
-                  <div className="text-start username font-medium truncate">
+                  <div className="text-start username font-medium truncate text-md">
                     {user.fullname}
                   </div>
                 </div>
@@ -149,11 +136,7 @@ const Sidebar = () => {
           </div>
 
           {toggleUserProfile && (
-            <UserProfile
-              onClose={handleToggleUserProfile}
-              onSave={handleSaveProfile}
-              userInfo={user}
-            />
+            <UserProfile onClose={handleToggleUserProfile} userInfo={user} />
           )}
 
           {isOpen && (
@@ -171,7 +154,6 @@ const Sidebar = () => {
           )}
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-2">
           {menuItems.map((item, index) => (
             <div key={item.id} className="relative">
@@ -190,10 +172,9 @@ const Sidebar = () => {
             </div>
           ))}
         </div>
-        {/* Resize handle */}
+
         {isOpen && <DragHandle />}
 
-        {/* Footer */}
         <div
           className={`
                         sticky bottom-0 border-t border-gray-200 px-3 py-3
@@ -213,7 +194,6 @@ const Sidebar = () => {
           />
         </div>
 
-        {/* Toggle button */}
         <button
           className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${
             theme === "dark" ? "bg-white/90 text-black" : "bg-white"

@@ -1,20 +1,23 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
   });
+
   const [accessToken, setAccessToken] = useState(
     () => localStorage.getItem("accessToken") || null
   );
+
   const [loading, setLoading] = useState(true);
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
 
   useEffect(() => {
     if (accessToken) {
@@ -25,14 +28,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${BASE_URL}/auth/login`, {
+      const { data: resp } = await axios.post(`${BASE_URL}/auth/login`, {
         email,
         password,
       });
-      const { success, message, data } = response.data;
+
+      const { success, message, data } = resp;
       if (!success) {
+        toast.error(message);
         throw new Error(message);
       }
+
       const { user: fetchedUser, access_token } = data;
       setUser(fetchedUser);
       setAccessToken(access_token);
@@ -45,6 +51,42 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const register = async (fullname, email, password, confirmPassword) => {
+    if (!fullname || !email || !password || !confirmPassword) {
+      const msg = "Please fill in all fields!";
+      toast.error(msg);
+      throw new Error(msg);
+    }
+    if (password !== confirmPassword) {
+      const msg = "Passwords do not match";
+      toast.error(msg);
+      throw new Error(msg);
+    }
+
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/register`, {
+        fullname,
+        email,
+        password,
+      });
+
+      if (response.status === 201) {
+        toast.success(
+          "Registration success. Check your mail (spam) to verify your account!"
+        );
+        await login(email, password);
+      } else {
+        const errMsg = response.data?.message || "Registration failed";
+        toast.error(errMsg);
+        throw new Error(errMsg);
+      }
+    } catch (error) {
+      const errMsg = error.response?.data?.message || error.message;
+      toast.error(errMsg);
+      throw error;
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setAccessToken(null);
@@ -53,21 +95,18 @@ export const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common["Authorization"];
   };
 
-  const updateUser = (updates) => {
-    const merged = { ...user, ...updates };
-    setUser(merged);
-    localStorage.setItem("user", JSON.stringify(merged));
+  const updateUser = (fullUser) => {
+    setUser(fullUser);
+    localStorage.setItem("user", JSON.stringify(fullUser));
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, login, logout, updateUser }}
+      value={{ user, accessToken, login, register, logout, updateUser }}
     >
       {!loading && children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

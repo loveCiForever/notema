@@ -1,0 +1,18 @@
+use notemaio_main_database;
+
+CREATE TABLE `users` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `fullname` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `verification_token` VARCHAR(32),
+  `is_verified` TINYINT(1) NOT NULL DEFAULT 0,
+  `verified_at` DATETIME,
+  `is_logged_in` TINYINT(1) NOT NULL DEFAULT 0,
+  `gender` ENUM('male','female','other') NOT NULL DEFAULT 'other',
+  `avatar` VARCHAR(255),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;

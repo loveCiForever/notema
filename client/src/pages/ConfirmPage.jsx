@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const ConfirmPage = () => {
   const navigate = useNavigate();
-
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
   const [status, setStatus] = useState({
     loading: true,
     success: null,
@@ -24,7 +24,7 @@ const ConfirmPage = () => {
       return;
     }
 
-    fetch(`http://localhost:8000/verify?token=${token}`)
+    fetch(`${BASE_URL}/auth/verify?token=${token}`)
       .then(async (res) => {
         const data = await res.json();
         setStatus({

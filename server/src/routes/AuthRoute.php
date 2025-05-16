@@ -42,7 +42,7 @@ $app->post('/auth/login', function (Request $request, Response $response) use ($
         }
 
         if ($user['is_logged_in'] == 1) {
-            $payload = ['success' => false, 'message' => 'Account is already logged in'];
+            $payload = ['success' => false, 'message' => 'Account is logged in another place'];
             $response->getBody()->write(json_encode($payload));
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
@@ -81,7 +81,7 @@ $app->post('/auth/login', function (Request $request, Response $response) use ($
     }
 });
 
-$app->post('/register', function (Request $request, Response $response) use ($pdo) {
+$app->post('/auth/register', function (Request $request, Response $response) use ($pdo) {
     try {
         $body = $request->getBody();
         $data = json_decode($body, true);
@@ -91,7 +91,7 @@ $app->post('/register', function (Request $request, Response $response) use ($pd
 
         // input validation
         if (empty($fullname)) {
-            $payload = ['success' => false, 'message' => 'Fullname field is null'];
+            $payload = ['success' => false, 'message' => 'Fullname is null'];
             $response->getBody()->write(json_encode($payload));
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
@@ -103,7 +103,7 @@ $app->post('/register', function (Request $request, Response $response) use ($pd
         }
 
         if (empty($password)) {
-            $payload = ['success' => false, 'message' => 'Password field is null'];
+            $payload = ['success' => false, 'message' => 'Password is null'];
             $response->getBody()->write(json_encode($payload));
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
@@ -130,7 +130,7 @@ $app->post('/register', function (Request $request, Response $response) use ($pd
         $sent = sendVerificationEmail($email, $token);
 
         if ($success && $sent === true) {
-            $payload = ['success' => true, 'message' => 'Registration Successfully'];
+            $payload = ['success' => true, 'message' => 'Registration Successfully. Check mail to verify account'];
         } else {
             $payload = [
                 'success' => false,
@@ -241,7 +241,7 @@ function sendVerificationEmail($toEmail, $token)
     }
 }
 
-$app->get('/verify', function (Request $request, Response $response) use ($pdo) {
+$app->get('/auth/verify', function (Request $request, Response $response) use ($pdo) {
     $params = $request->getQueryParams();
     $token  = $params['token'] ?? '';
 
@@ -287,7 +287,7 @@ $app->get('/verify', function (Request $request, Response $response) use ($pdo) 
     }
 });
 
-$app->get('/logout', function (Request $request, Response $response) use ($pdo) {
+$app->get('/auth/logout', function (Request $request, Response $response) use ($pdo) {
     $decoded = $request->getAttribute('jwt');
     $email   = $decoded->email ?? '';
 
