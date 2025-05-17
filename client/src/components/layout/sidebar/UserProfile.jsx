@@ -88,7 +88,7 @@ const UserProfile = ({ onClose }) => {
         }`}
         onClick={onClose}
       />
-      <div className={`${isDark ? "bg-zinc-900 text-white shadow-xl shadow-white " : "bg-white shadow-sm shadow-black"} p-8 rounded-2xl w-[420px] relative`}>
+      <div className={`${isDark ? "bg-zinc-900 text-white shadow-sm shadow-white " : "bg-white shadow-sm shadow-black"} p-8 rounded-2xl w-[420px] relative`}>
         <button
           onClick={onClose}
           className={`absolute top-4 right-4 ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-500 hover:text-black"} text-2xl cursor-pointer`}
