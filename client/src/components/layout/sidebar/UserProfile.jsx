@@ -40,14 +40,13 @@ const UserProfile = ({ onClose }) => {
         newPassword: newPassword,
       });
 
-      console.log(res)
-      if (res.data.status !== 200) {
+      if (res.status !== 200) {
         toast.error("Change password failed");
       }
 
-      toast.success("Change password successfully");
+      toast.success(res.data.message);
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data.message);
     }
   };
 
@@ -256,7 +255,7 @@ const UserProfile = ({ onClose }) => {
           </>
         )}
 
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between gap-2 mt-6">
           <button
             onClick={
               !toggleChangePassword
@@ -266,7 +265,7 @@ const UserProfile = ({ onClose }) => {
             className={`${
               toggleChangePassword
                 ? "w-full bg-zinc-800 text-white hover:bg-zinc-700"
-                : `text-sm border `
+                : `text-sm border-[1px] border-gray-300 `
             } px-5 py-2 rounded-lg font-bold transition cursor-pointer ${
               isDark
                 ? "bg-zinc-800 border-zinc-100 text-zinc-300 hover:bg-zinc-700"
@@ -275,6 +274,16 @@ const UserProfile = ({ onClose }) => {
           >
             {toggleChangePassword ? "Confirm password" : "Change Password"}
           </button>
+          {toggleChangePassword && (
+            <button
+              className={`px-5 py-2 rounded-lg font-bold transition cursor-pointer hover:bg-gray-200 ${
+                isDark && "hover:bg-gray-50 hover:text-black"
+              } `}
+              onClick={handleToggleChangePassword}
+            >
+              Cancel
+            </button>
+          )}
 
           {!toggleChangePassword && (
             <button
