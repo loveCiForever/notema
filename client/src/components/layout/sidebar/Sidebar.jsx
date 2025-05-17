@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Home, Settings, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";

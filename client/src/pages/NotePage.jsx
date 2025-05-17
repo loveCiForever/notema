@@ -9,11 +9,10 @@ import EditorComponent from "../components/editor/EditorComponent";
 import useEditor from "../hooks/useEditor";
 
 const NotePage = () => {
-    const { id } = useParams();
+    const { id, title } = useParams();
     // console.log("Note ID:", id);
     const { isDark }  = useTheme();
     const { content, status, onChange } = useEditor(id);
-    console.log(isDark)
 
     return (
         <div className={`min-h-screen ${isDark ? 'bg-zinc-900' : 'bg-white'} flex flex-col`}>
@@ -47,6 +46,10 @@ const NotePage = () => {
                 {content && <EditorComponent data={content} onChange={onChange} />}
             </div>
             <div className={`save-status ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{status}</div> */}
+            <div className={`flex-1 flex ${isDark ? 'text-white' : 'text-zinc-800'}`}>
+                Đây là nội dung của note với ID: {id}
+                title: {content?.title}
+            </div>
         </div>
     );
 };
