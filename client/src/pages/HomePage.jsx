@@ -23,6 +23,7 @@ function HomePage() {
   const [greeting, setGreeting] = useState("Hello ");
   const { user } = useAuth();
   const navigate = useNavigate();
+  
 
   const handleGreetingChange = () => {
     const time = new Date().getHours();
