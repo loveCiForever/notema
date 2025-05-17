@@ -134,7 +134,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
             </div>
           ) : (
             <div
-              className={`flex justify-round items-center py-2 cursor-pointer rounded-md hover:bg-gray-200/70 gap-2 bg-zinc-200/30 text-left rounded-md text-sm  transition-colors`}
+              className={`flex justify-round items-center py-2 cursor-pointer hover:bg-gray-200/70 gap-2 bg-zinc-200/30 text-left rounded-md text-sm  transition-colors`}
               onClick={() => {
                 // khi collapse: mở sidebar luôn nếu cần
                 if (!isOpen) setIsOpen(true);
