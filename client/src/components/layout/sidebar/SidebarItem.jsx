@@ -85,6 +85,23 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
   };
 
   const renderContent = () => {
+    if (item.type === "home") {
+      return (
+        <>
+          {!isOpen && (
+            <div
+              className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50 transition-colors`}
+              onClick={() => {
+                navigate("/home");
+              }}
+            >
+              <Home className="h-4 w-4" />
+            </div>
+          )}
+        </>
+      );
+    }
+
     // Nếu đóng sidebar và không phải là search
     if (!isOpen && item.type !== "search" && item.type !== "home") {
       return (
@@ -99,32 +116,6 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
       );
     }
     // Nếu là home
-    if (item.type === "home") {
-      return (
-        <>
-          {!isOpen ? (
-            <div
-              className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50 transition-colors`}
-              onClick={() => {
-                navigate("/home");
-              }}
-            >
-              <Home className="h-4 w-4" />
-            </div>
-          ) : (
-            <div
-              className={`flex justify-round items-center py-2 cursor-pointer rounded-md hover:bg-gray-200/70 gap-2 text-left rounded-md text-sm  transition-colors`}
-              onClick={() => {
-                navigate("/home");
-              }}
-            >
-              <Home className="h-4 w-4 ml-3" />
-              <span>Home</span>
-            </div>
-          )}
-        </>
-      );
-    }
 
     if (item.type === "search") {
       return (
