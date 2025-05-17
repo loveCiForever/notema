@@ -3,7 +3,7 @@ import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Settings, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, Settings, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";
 import UserProfile from "./UserProfile";
@@ -99,29 +99,27 @@ const Sidebar = () => {
         />
       )} */}
       <motion.div
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${
-          isDark
-            ? "bg-white/5 border-gray-200 text-white"
-            : "bg-white border-gray-200 shadow-xl text-black"
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${isDark
+          ? "bg-white/5 border-gray-200 text-white"
+          : "bg-white border-gray-200 shadow-xl text-black"
+          }`}
         initial={isOpen ? "open" : "closed"}
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
       >
         <div
-          className={`header px-2 py-4 flex items-center justify-center gap-2 w-full`}
+          className={`header px-2 pt-3 pb-2 flex items-center justify-center gap-2 w-full`}
         >
           <div
-            className={`flex items-center gap-4 ${
-              isOpen ? "flex-1 min-w-0" : ""
-            }`}
+            className={`flex items-center gap-4 ${isOpen ? "flex-1 min-w-0" : ""
+              }`}
           >
             <button
-              className="flex items-center justify-center py-1 cursor-pointer rounded-md gap-2 hover:bg-gray-200 w-full"
+              className={`flex items-center justify-center py-2 cursor-pointer rounded-md gap-2 w-full ${isDark ? "hover:bg-gray-200/70" : "hover:bg-gray-200/90"}`}
               onClick={handleToggleUserProfile}
             >
               <img
-                className="w-8 aspect-square object-cover rounded-md mx-2"
+                className={`w-8 aspect-square object-cover rounded-md mr-2 ${isOpen ? "ml-3" : "ml-2"}`}
                 src={
                   user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault
                 }
@@ -182,46 +180,49 @@ const Sidebar = () => {
         {isOpen && <DragHandle />}
 
         <div
-          className={`
-                        sticky bottom-0 border-t border-gray-200 px-3 py-3
-                        flex
-                        ${
-                          isOpen
-                            ? "justify-between"
-                            : "flex-col-reverse items-center gap-3 "
-                        }  
-                    `}
-        >
-          <button
-            className="px-4 cursor-pointer py-1 rounded-lg font-bold bg-black/90 hover:bg-black/60 text-white "
-            onClick={() => {
-              logout();
-              navigate("/");
-              toast.success("Logged out successfully", {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-            }}
-            title="Log out"
+            className={`
+              sticky bottom-0 border-t
+              ${isDark ? 'border-zinc-800' : 'border-zinc-200'}
+              px-3
+              ${isOpen 
+                ? 'flex justify-between items-center py-2' 
+                : 'flex flex-col-reverse items-center gap-2 py-3'}
+            `}
           >
-            Log out
-          </button>
-          <SwitchTheme
-            width={isOpen ? 48 : 24}
-            height={24}
-            className="h-5 w-5 cursor-pointer"
-          />
-        </div>
+            <button
+              className={`
+                cursor-pointer font-bold rounded-full p-2 transition-colors
+                ${!isOpen ? 'mb-1' : ''}
+                ${isDark 
+                  ? 'text-zinc-300 hover:bg-zinc-800' 
+                  : 'text-zinc-700 hover:bg-zinc-100'}
+              `}
+              onClick={() => {
+                logout();
+                navigate('/');
+                toast.success('Logged out successfully', {
+                  position: 'top-right',
+                  autoClose: 2000,
+                });
+              }}
+              title="Log out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+
+            <SwitchTheme
+              width={isOpen ? 48 : 24}
+              height={24}
+              className={`
+                cursor-pointer
+                ${!isOpen ? 'mt-1' : ''}
+              `}
+            />
+          </div>
 
         <button
-          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${
-            isDark ? "bg-white/90 text-black" : "bg-white"
-          }`}
+          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${isDark ? "bg-white/90 text-black" : "bg-white"
+            }`}
           onClick={() => {
             setIsOpen(!isOpen);
           }}

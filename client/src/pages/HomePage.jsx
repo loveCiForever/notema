@@ -4,7 +4,7 @@ import { SidebarProvider, useSidebar } from "../contexts/SidebarContext";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import Sidebar from "../components/layout/sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
-import { Clock, FileText, CheckCircle, ListTodo, Calendar, Paperclip, AtSign, ChevronDown, ChevronUp, MoreHorizontal } from 'lucide-react';
+import { Clock, MoreHorizontal, Pin, Globe , Lock} from 'lucide-react';
 import { useState, useEffect } from "react";
 
 function HomePage() {
@@ -25,7 +25,7 @@ function HomePage() {
   useEffect(() => {
     handleGreetingChange();
   }, []);
-  
+
   return (
     <div className={`${isDark ? 'bg-zinc-900' : 'bg-white'} w-full min-h-screen transition-colors`}>
       {/* Header */}
@@ -58,36 +58,111 @@ function HomePage() {
             <Clock className="w-4 h-4" />
             <h2 className="font-medium">Recently visited</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            <div className={`${isDark ? 'border-zinc-700 hover:bg-zinc-800' : 'border hover:bg-zinc-50'} rounded-lg p-4 cursor-pointer`}>
-              <div className="h-10 mb-4 flex items-center">
-                <FileText className={`w-6 h-6 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {/* Note 1 - Regular note */}
+            <div className={`
+      ${isDark ? 'bg-yellow-800/20 shadow-zinc-900/50' : 'bg-yellow-100 shadow-zinc-300/50'} 
+      rounded-lg p-4 cursor-pointer transform hover:-translate-y-1 transition-all duration-200
+      relative overflow-hidden shadow-lg rotate-1
+    `}>
+              <div className="absolute -top-1 -right-1 rotate-12">
+                <Pin className="w-8 h-8 text-red-500 opacity-70" />
               </div>
-              <p className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>New page</p>
+              <div className="mb-2 flex justify-between items-start">
+                <h3 className={`font-medium text-lg ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>Meeting Notes</h3>
+                <div className="flex gap-1 mt-1">
+                  <Globe className="w-4 h-4 text-blue-500" />
+                </div>
+              </div>
+              <div className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'} text-sm`}>
+                <p className="relative">
+                  Today we discussed the project timeline and...
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-yellow-100 opacity-0"></span>
+                </p>
+              </div>
             </div>
-            <div className={`${isDark ? 'border-zinc-700 hover:bg-zinc-800' : 'border hover:bg-zinc-50'} rounded-lg p-4 cursor-pointer`}>
-              <div className="h-10 mb-4 flex items-center">
-                <FileText className={`w-6 h-6 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
+
+            {/* Note 2 - Locked note */}
+            <div className={`
+      ${isDark ? 'bg-blue-800/20 shadow-zinc-900/50' : 'bg-blue-100 shadow-zinc-300/50'} 
+      rounded-lg p-4 cursor-pointer transform hover:-translate-y-1 transition-all duration-200
+      relative overflow-hidden shadow-lg -rotate-1 blur-[1px]
+    `}>
+              <div className="absolute top-2 right-2">
+                <Lock className="w-4 h-4 text-zinc-500" />
               </div>
-              <p className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>New page</p>
+              <div className="mb-2">
+                <h3 className={`font-medium text-lg ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>Private Tasks</h3>
+              </div>
+              <div className={`${isDark ? 'text-zinc-400' : 'text-zinc-500'} text-sm opacity-70`}>
+                <p className="relative">
+                  1. Call John 2. Review proposal 3...
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-blue-100 opacity-60"></span>
+                </p>
+              </div>
             </div>
-            <div className={`${isDark ? 'border-zinc-700 bg-green-900/20' : 'border bg-green-50'} rounded-lg p-4 hover:${isDark ? 'bg-zinc-800' : 'bg-zinc-50'} cursor-pointer`}>
-              <div className="h-10 mb-4 flex items-center">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+
+            {/* Note 3 - Pinned note */}
+            <div className={`
+      ${isDark ? 'bg-green-800/20 shadow-zinc-900/50' : 'bg-green-100 shadow-zinc-300/50'} 
+      rounded-lg p-4 cursor-pointer transform hover:-translate-y-1 transition-all duration-200
+      relative overflow-hidden shadow-lg rotate-2
+    `}>
+              <div className="absolute -top-1 -right-1 rotate-12">
+                <Pin className="w-8 h-8 text-red-500 opacity-70" />
               </div>
-              <p className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>Tasks Tracker</p>
+              <div className="mb-2">
+                <h3 className={`font-medium text-lg ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>Project Ideas</h3>
+              </div>
+              <div className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'} text-sm`}>
+                <p className="relative">
+                  Create a mobile app for tracking daily...
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-green-100 opacity-0"></span>
+                </p>
+              </div>
             </div>
-            <div className={`${isDark ? 'border-zinc-700 hover:bg-zinc-800' : 'border hover:bg-zinc-50'} rounded-lg p-4 cursor-pointer`}>
-              <div className="h-10 mb-4 flex items-center">
-                <FileText className={`w-6 h-6 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
+
+            {/* Note 4 - Global note */}
+            <div className={`
+      ${isDark ? 'bg-pink-800/20 shadow-zinc-900/50' : 'bg-pink-100 shadow-zinc-300/50'} 
+      rounded-lg p-4 cursor-pointer transform hover:-translate-y-1 transition-all duration-200
+      relative overflow-hidden shadow-lg -rotate-1
+    `}>
+              <div className="mb-2 flex justify-between items-start">
+                <h3 className={`font-medium text-lg ${isDark ? 'text-zinc-200' : 'text-zinc-800'}`}>Team Updates</h3>
+                <div className="flex gap-1">
+                  <Globe className="w-4 h-4 text-blue-500" />
+                </div>
               </div>
-              <p className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>addd</p>
+              <div className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'} text-sm`}>
+                <p className="relative">
+                  New team members will be joining next...
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-pink-100 opacity-0"></span>
+                </p>
+              </div>
             </div>
-            <div className={`${isDark ? 'border-zinc-700 hover:bg-zinc-800' : 'border hover:bg-zinc-50'} rounded-lg p-4 cursor-pointer`}>
-              <div className="h-10 mb-4 flex items-center">
-                <ListTodo className={`w-6 h-6 ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`} />
+
+            {/* Note 5 - Locked and Pinned note */}
+            <div className={`
+      ${isDark ? 'bg-purple-800/20 shadow-zinc-900/50' : 'bg-purple-100 shadow-zinc-300/50'} 
+      rounded-lg p-4 cursor-pointer transform hover:-translate-y-1 transition-all duration-200
+      relative overflow-hidden shadow-lg rotate-1 blur-[1px]
+    `}>
+              <div className="absolute -top-1 -right-1 rotate-12">
+                <Pin className="w-8 h-8 text-red-500 opacity-70" />
               </div>
-              <p className={`${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>Project Planning</p>
+              <div className="absolute top-2 right-2">
+                <Lock className="w-4 h-4 text-zinc-500" />
+              </div>
+              <div className="mb-2">
+                <h3 className={`font-medium text-lg ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>Secret Project</h3>
+              </div>
+              <div className={`${isDark ? 'text-zinc-400' : 'text-zinc-500'} text-sm opacity-70`}>
+                <p className="relative">
+                  The launch date is set for next...
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-purple-100 opacity-60"></span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
