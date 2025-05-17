@@ -2,8 +2,14 @@ import { useState, useRef, useEffect } from "react";
 import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
-import { motion } from "framer-motion";
-import { Home, Settings, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Home,
+  Settings,
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+} from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";
 import UserProfile from "./UserProfile";
@@ -11,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
 import avtDefault from "../../../assets/logo/logo-main.png";
 import { toast } from "react-toastify";
+
 const Sidebar = () => {
   const {
     isOpen,
@@ -112,15 +119,22 @@ const Sidebar = () => {
           className={`header px-2 pt-3 pb-2 flex items-center justify-center gap-2 w-full`}
         >
           <div
-            className={`flex items-center gap-4 ${isOpen ? "flex-1 min-w-0" : ""
-              }`}
+            className={`flex items-center gap-6 ${
+              isOpen ? "flex-1 min-w-0" : ""
+            }`}
           >
             <button
-              className={`flex items-center justify-center py-2 cursor-pointer rounded-md gap-2 w-full ${isDark ? "hover:bg-gray-200/70" : "hover:bg-gray-200/90"}`}
+              className={`flex items-center justify-center py-2 cursor-pointer rounded-md gap-2 w-full ${
+                isDark
+                  ? "text-zinc-300 hover:bg-zinc-700"
+                  : "text-zinc-700 hover:bg-zinc-200"
+              }`}
               onClick={handleToggleUserProfile}
             >
               <img
-                className={`w-8 aspect-square object-cover rounded-md mr-2 ${isOpen ? "ml-3" : "ml-2"}`}
+                className={`w-8 aspect-square object-cover rounded-md mr-2 ${
+                  isOpen ? "ml-3" : "ml-2"
+                }`}
                 src={
                   user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault
                 }
@@ -145,15 +159,21 @@ const Sidebar = () => {
           )}
 
           {isOpen && (
-            <div className="flex items-center justify-center gap-2">
+            <div
+              className={`flex items-center justify-center gap-2 rounded-md ${
+                isDark
+                  ? "text-zinc-300 hover:bg-zinc-700"
+                  : "text-zinc-700 hover:bg-zinc-200"
+              }`}
+            >
               <button
                 onClick={() => {
                   navigate("/home");
                 }}
-                className="p-2 hover:bg-gray-200 rounded-md cursor-pointer"
+                className="p-2 cursor-pointer"
                 title="Home"
               >
-                <Home className="w-4 h-4" color="black" />
+                <Home className="w-5 h-5" />
               </button>
             </div>
           )}
@@ -181,49 +201,54 @@ const Sidebar = () => {
         {isOpen && <DragHandle />}
 
         <div
-            className={`
+          className={`
               sticky bottom-0 border-t
-              ${isDark ? 'border-zinc-800' : 'border-zinc-200'}
+              ${isDark ? "border-zinc-800" : "border-zinc-200"}
               px-3
-              ${isOpen 
-                ? 'flex justify-between items-center py-2' 
-                : 'flex flex-col-reverse items-center gap-2 py-3'}
+              ${
+                isOpen
+                  ? "flex justify-between items-center py-2"
+                  : "flex flex-col-reverse items-center gap-2 py-3"
+              }
             `}
-          >
-            <button
-              className={`
+        >
+          <button
+            className={`
                 cursor-pointer font-bold rounded-full p-2 transition-colors
-                ${!isOpen ? 'mb-1' : ''}
-                ${isDark 
-                  ? 'text-zinc-300 hover:bg-zinc-800' 
-                  : 'text-zinc-700 hover:bg-zinc-100'}
+                ${!isOpen ? "mb-1" : ""}
+                ${
+                  isDark
+                    ? "text-zinc-300 hover:bg-zinc-800"
+                    : "text-zinc-700 hover:bg-zinc-100"
+                }
               `}
-              onClick={() => {
-                logout();
-                navigate('/');
-                toast.success('Logged out successfully', {
-                  position: 'top-right',
-                  autoClose: 2000,
-                });
-              }}
-              title="Log out"
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
+            onClick={() => {
+              logout();
+              navigate("/");
+              toast.success("Logged out successfully", {
+                position: "top-right",
+                autoClose: 2000,
+              });
+            }}
+            title="Log out"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
 
-            <SwitchTheme
-              width={isOpen ? 48 : 24}
-              height={24}
-              className={`
+          <SwitchTheme
+            width={isOpen ? 48 : 24}
+            height={24}
+            className={`
                 cursor-pointer
-                ${!isOpen ? 'mt-1' : ''}
+                ${!isOpen ? "mt-1" : ""}
               `}
-            />
-          </div>
+          />
+        </div>
 
         <button
-          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${isDark ? "bg-white/90 text-black" : "bg-white"
-            }`}
+          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${
+            isDark ? "bg-white/90 text-black" : "bg-white"
+          }`}
           onClick={() => {
             setIsOpen(!isOpen);
           }}

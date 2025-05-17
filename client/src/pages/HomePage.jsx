@@ -37,6 +37,11 @@ function HomePage() {
     handleGreetingChange();
   }, []);
 
+  if (!user) {
+    toast.error("You must be logged in first");
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div
       className={`${isDark ? "bg-zinc-900" : "bg-white"

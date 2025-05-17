@@ -25,13 +25,29 @@ const UserProfile = ({ onClose }) => {
   const [newPassword, setNewPassword] = useState("");
   const [toggleChangePassword, setToggleChangePassword] = useState(false);
   const { isDark } = useTheme();
+
   const handleToggleChangePassword = () => {
     setToggleChangePassword(!toggleChangePassword);
   };
 
-  const handleChangePassword = () => {
-    console.log("old password: ", oldPassword);
-    console.log("new password: ", newPassword);
+  const handleChangePassword = async () => {
+    // console.log("old password: ", oldPassword);
+    // console.log("new password: ", newPassword);
+
+    try {
+      const res = await axios.post(`${BASE_URL}/users/${user.id}/password`, {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      });
+
+      if (res.status !== 200) {
+        toast.error("Change password failed");
+      }
+
+      toast.success(res.data.message);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
   };
 
   const handleSave = async () => {
@@ -88,14 +104,28 @@ const UserProfile = ({ onClose }) => {
         }`}
         onClick={onClose}
       />
-      <div className={`${isDark ? "bg-zinc-900 text-white shadow-sm shadow-white " : "bg-white shadow-sm shadow-black"} p-8 rounded-2xl w-[420px] relative`}>
+      <div
+        className={`${
+          isDark
+            ? "bg-zinc-900 text-white shadow-sm shadow-white "
+            : "bg-white shadow-sm shadow-black"
+        } p-8 rounded-2xl w-[420px] relative`}
+      >
         <button
           onClick={onClose}
-          className={`absolute top-4 right-4 ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-500 hover:text-black"} text-2xl cursor-pointer`}
+          className={`absolute top-4 right-4 ${
+            isDark
+              ? "text-zinc-400 hover:text-white"
+              : "text-zinc-500 hover:text-black"
+          } text-2xl cursor-pointer`}
         >
           ×
         </button>
-        <h2 className={`text-2xl font-semibold text-center mb-6 ${isDark ? "text-white" : "text-black"}`}>
+        <h2
+          className={`text-2xl font-semibold text-center mb-6 ${
+            isDark ? "text-white" : "text-black"
+          }`}
+        >
           Profile
         </h2>
 
@@ -139,7 +169,13 @@ const UserProfile = ({ onClose }) => {
             onChange={(e) => setTempEmail(e.target.value)}
           />
           <div className="flex items-center gap-4 mt-2 ml-1">
-            <label className={`text-sm font-medium ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Gender:</label>
+            <label
+              className={`text-sm font-medium ${
+                isDark ? "text-zinc-300" : "text-zinc-700"
+              }`}
+            >
+              Gender:
+            </label>
             <label className="flex items-center gap-1 cursor-pointer">
               <input
                 type="radio"
@@ -149,7 +185,13 @@ const UserProfile = ({ onClose }) => {
                 className="mt-1 cursor-pointer"
                 onChange={() => setTempGender("male")}
               />
-              <span className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Male</span>
+              <span
+                className={`text-sm ${
+                  isDark ? "text-zinc-300" : "text-zinc-700"
+                }`}
+              >
+                Male
+              </span>
             </label>
             <label className="flex items-center gap-1 cursor-pointer">
               <input
@@ -160,7 +202,13 @@ const UserProfile = ({ onClose }) => {
                 className="mt-1 cursor-pointer"
                 onChange={() => setTempGender("female")}
               />
-              <span className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Female</span>
+              <span
+                className={`text-sm ${
+                  isDark ? "text-zinc-300" : "text-zinc-700"
+                }`}
+              >
+                Female
+              </span>
             </label>
             <label className="flex items-center gap-1 cursor-pointer">
               <input
@@ -171,7 +219,13 @@ const UserProfile = ({ onClose }) => {
                 className="mt-1  cursor-pointer"
                 onChange={() => setTempGender("other")}
               />
-              <span className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Other</span>
+              <span
+                className={`text-sm ${
+                  isDark ? "text-zinc-300" : "text-zinc-700"
+                }`}
+              >
+                Other
+              </span>
             </label>
           </div>
         </div>
@@ -201,7 +255,7 @@ const UserProfile = ({ onClose }) => {
           </>
         )}
 
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between gap-2 mt-6">
           <button
             onClick={
               !toggleChangePassword
@@ -209,18 +263,36 @@ const UserProfile = ({ onClose }) => {
                 : handleChangePassword
             }
             className={`${
-              toggleChangePassword 
-                ? "w-full bg-zinc-800 text-white hover:bg-zinc-700" 
-                : `text-sm border `
-            } px-5 py-2 rounded-lg font-bold transition cursor-pointer ${isDark ? "bg-zinc-800 border-zinc-100 text-zinc-300 hover:bg-zinc-700" : "hover:bg-gray-200"}`}
+              toggleChangePassword
+                ? "w-full bg-zinc-800 text-white hover:bg-zinc-700"
+                : `text-sm border-[1px] border-gray-300 `
+            } px-5 py-2 rounded-lg font-bold transition cursor-pointer ${
+              isDark
+                ? "bg-zinc-800 border-zinc-100 text-zinc-300 hover:bg-zinc-700"
+                : "hover:bg-gray-200"
+            }`}
           >
             {toggleChangePassword ? "Confirm password" : "Change Password"}
           </button>
+          {toggleChangePassword && (
+            <button
+              className={`px-5 py-2 rounded-lg font-bold transition cursor-pointer hover:bg-gray-200 ${
+                isDark && "hover:bg-gray-50 hover:text-black"
+              } `}
+              onClick={handleToggleChangePassword}
+            >
+              Cancel
+            </button>
+          )}
 
           {!toggleChangePassword && (
             <button
               onClick={handleSave}
-              className={`${isDark ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-black/90"} px-6 py-2 rounded-lg font-bold text-sm transition cursor-pointer`}
+              className={`${
+                isDark
+                  ? "bg-white text-black hover:bg-gray-200"
+                  : "bg-black text-white hover:bg-black/90"
+              } px-6 py-2 rounded-lg font-bold text-sm transition cursor-pointer`}
             >
               Save Changes
             </button>

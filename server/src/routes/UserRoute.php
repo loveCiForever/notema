@@ -104,7 +104,7 @@ $app->post('/users/{id}/password', function (Request $request, Response $respons
     if (!password_verify($old, $user['password'])) {
         $response->getBody()->write(json_encode([
             'success' => false,
-            'message' => 'Current password is incorrect.'
+            'message' => 'Old password is incorrect'
         ]));
         return $response
             ->withStatus(401)

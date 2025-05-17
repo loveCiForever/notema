@@ -5,26 +5,38 @@ import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
 import Sidebar from "./sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 import React from "react";
-
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
 function MainLayout() {
   const { isOpen, width, isMobile } = useSidebar();
   const { theme, isDark } = useTheme();
   const sidebarWidth = isMobile ? 0 : isOpen ? width : 60;
-  
+  const { user } = useAuth();
+
+  if (!user) {
+    toast.error("You must be logged in first");
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className={`min-h-screen ${isDark ? "bg-zinc-900" : "bg-zinc-50"}`}>
       <div className="flex">
         <Sidebar />
         <main
-          className={`flex flex-col flex-1 ${!isOpen ? "transition-all duration-300 ease-out" : "transition-property: none;"}`}
-          style={{ marginLeft: `${sidebarWidth}px`}}
+          className={`flex flex-col flex-1 ${
+            !isOpen
+              ? "transition-all duration-300 ease-out"
+              : "transition-property: none;"
+          }`}
+          style={{ marginLeft: `${sidebarWidth}px` }}
         >
           <Outlet />
         </main>
       </div>
     </div>
   );
-} 
+}
 
 // This wrapper ensures both contexts are provided
 export default function MainLayoutPage() {
