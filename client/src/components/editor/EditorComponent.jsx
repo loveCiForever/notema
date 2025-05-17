@@ -62,9 +62,8 @@ export default function EditorComponent({ data, onChange }) {
 
     return (
         <div
-            className="bg-black"
             id="editorjs"
-            style={{ minHeight: "300px", background: "white", padding: "1rem" }}
+            style={{ minHeight: "300px", padding: "1rem" }}
         />
     );
 }
