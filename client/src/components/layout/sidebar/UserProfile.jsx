@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
-
+import { useTheme } from "../../../contexts/ThemeContext.jsx";
 const UserProfile = ({ onClose }) => {
   const navigate = useNavigate();
   const fileInputRef = useRef();
@@ -21,7 +21,7 @@ const UserProfile = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [toggleChangePassword, setToggleChangePassword] = useState(false);
-
+  const { isDark } = useTheme();
   const handleToggleChangePassword = () => {
     setToggleChangePassword(!toggleChangePassword);
   };
@@ -79,21 +79,27 @@ const UserProfile = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-2xl w-[420px] relative shadow-xl">
+      <div
+        className={`absolute inset-0 backdrop-blur-[2px] ${
+          isDark ? "bg-black/50" : "bg-black/30"
+        }`}
+        onClick={onClose}
+      />
+      <div className={`${isDark ? "bg-zinc-900 text-white shadow-xl shadow-white " : "bg-white shadow-sm shadow-black"} p-8 rounded-2xl w-[420px] relative`}>
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl cursor-pointer"
+          className={`absolute top-4 right-4 ${isDark ? "text-zinc-400 hover:text-white" : "text-zinc-500 hover:text-black"} text-2xl cursor-pointer`}
         >
           ×
         </button>
-        <h2 className="text-2xl font-semibold text-center mb-6 text-black">
+        <h2 className={`text-2xl font-semibold text-center mb-6 ${isDark ? "text-white" : "text-black"}`}>
           Profile
         </h2>
 
         <div className="relative w-28 h-28 mx-auto mb-5">
           <img
             src={user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault}
-            className="w-full h-full object-cover rounded-full border"
+            className="w-full h-full object-cover rounded-full border border-zinc-300 dark:border-zinc-700"
             alt="avatar"
           />
           <div
@@ -117,6 +123,7 @@ const UserProfile = ({ onClose }) => {
             placeholder="Full Name"
             name="name"
             type="text"
+            className="width-auto"
             value={tempName}
             onChange={(e) => setTempName(e.target.value)}
           />
@@ -129,36 +136,39 @@ const UserProfile = ({ onClose }) => {
             onChange={(e) => setTempEmail(e.target.value)}
           />
           <div className="flex items-center gap-4 mt-2 ml-1">
-            <label className="text-sm font-medium text-gray-700">Gender:</label>
-            <label className="flex items-center gap-1">
+            <label className={`text-sm font-medium ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Gender:</label>
+            <label className="flex items-center gap-1 cursor-pointer">
               <input
                 type="radio"
                 name="gender"
                 value="male"
                 checked={tempGender === "male"}
+                className="mt-1 cursor-pointer"
                 onChange={() => setTempGender("male")}
               />
-              <span className="text-sm">Male</span>
+              <span className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Male</span>
             </label>
-            <label className="flex items-center gap-1">
+            <label className="flex items-center gap-1 cursor-pointer">
               <input
                 type="radio"
                 name="gender"
                 value="female"
                 checked={tempGender === "female"}
+                className="mt-1 cursor-pointer"
                 onChange={() => setTempGender("female")}
               />
-              <span className="text-sm">Female</span>
+              <span className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Female</span>
             </label>
-            <label className="flex items-center gap-1">
+            <label className="flex items-center gap-1 cursor-pointer">
               <input
                 type="radio"
                 name="gender"
                 value="other"
                 checked={tempGender === "other"}
+                className="mt-1  cursor-pointer"
                 onChange={() => setTempGender("other")}
               />
-              <span className="text-sm">Other</span>
+              <span className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>Other</span>
             </label>
           </div>
         </div>
@@ -196,8 +206,10 @@ const UserProfile = ({ onClose }) => {
                 : handleChangePassword
             }
             className={`${
-              toggleChangePassword && "w-full bg-black text-white"
-            } text-sm border px-5 py-2 rounded-lg hover:bg-black  font-bold hover:text-white transition cursor-pointer`}
+              toggleChangePassword 
+                ? "w-full bg-zinc-800 text-white hover:bg-zinc-700" 
+                : `text-sm border `
+            } px-5 py-2 rounded-lg font-bold transition cursor-pointer ${isDark ? "bg-zinc-800 border-zinc-100 text-zinc-300 hover:bg-zinc-700" : "hover:bg-gray-200"}`}
           >
             {toggleChangePassword ? "Confirm password" : "Change Password"}
           </button>
@@ -205,7 +217,7 @@ const UserProfile = ({ onClose }) => {
           {!toggleChangePassword && (
             <button
               onClick={handleSave}
-              className="bg-black text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-black/80 transition cursor-pointer"
+              className={`${isDark ? "bg-white text-black hover:bg-gray-200" : "bg-black text-white hover:bg-black/90"} px-6 py-2 rounded-lg font-bold text-sm transition cursor-pointer`}
             >
               Save Changes
             </button>

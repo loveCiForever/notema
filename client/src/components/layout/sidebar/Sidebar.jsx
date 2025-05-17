@@ -3,20 +3,13 @@ import { useSidebar } from "../../../contexts/SidebarContext";
 import SidebarItem from "./SidebarItem";
 import DragHandle from "../../ui/DragHandle";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home,
-  User,
-  Lock,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Home, Settings, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import SwitchTheme from "../../button/SwitchTheme";
 import UserProfile from "./UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
 import avtDefault from "../../../assets/logo/logo-main.png";
-
 const Sidebar = () => {
   const {
     isOpen,
@@ -34,12 +27,12 @@ const Sidebar = () => {
   } = useSidebar();
 
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const { user, accessToken, login, logout } = useAuth();
 
   // useEffect(() => {
   //   console.log(`${BASE_URL}/public${user.user.avatar}`);
   // }, [user]);
-
   const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
 
   const [toggleUserProfile, setToggleUserProfile] = useState(false);
@@ -49,13 +42,7 @@ const Sidebar = () => {
     show: false,
     index: -1,
   });
-  const manualToggleRef = useRef(false);
-  const { isDark, theme } = useTheme();
-  const sidebarRef = useRef(null);
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, [user]);
   const handleDragStart = (e, index) => {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = "move";
@@ -94,84 +81,82 @@ const Sidebar = () => {
   const sidebarVariants = {
     open: {
       width: `${width}px`,
-      transition: { duration: 0, ease: "easeOut" },
+      transition: { duration: 0.1 },
     },
     closed: {
-      width: "60px",
-      transition: { duration: 0.3, ease: "easeOut" },
+      width: contextIsMobile ? "0px" : "60px",
+      transition: { duration: 0.1 },
     },
   };
 
   return (
-    <aside>
-      {!isLocked && isOpen && !contextIsMobile && (
+    <>
+      {/* {!isLocked && isOpen && (
         <div
           className="flex flex-col fixed inset-0 z-40"
           onClick={() => setIsOpen(false)}
         />
-      )}
+      )} */}
       <motion.div
-        ref={sidebarRef}
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container transition-colors ${theme === "dark"
-            ? "bg-black/80 border-white/50 text-white"
-            : "bg-zinc-50/50 border-black/20 text-black"
-          }`}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${
+          isDark
+            ? "bg-white/5 border-gray-200 text-white"
+            : "bg-white border-gray-200 shadow-xl text-black"
+        }`}
         initial={isOpen ? "open" : "closed"}
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
       >
-        {/* Header */}
-        <div className={`p-2 border-b flex items-center h-12 ${!isOpen ? "justify-between" : "justify-center"} w-full`}>
+        <div
+          className={`header px-2 py-4 flex items-center justify-center gap-2 w-full`}
+        >
           <div
-            className={`flex items-center ${isOpen ? "flex-1 min-w-0" : ""}`}>
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center shadow-sm border-1 ml-2`}>
+            className={`flex items-center gap-4 ${
+              isOpen ? "flex-1 min-w-0" : ""
+            }`}
+          >
+            <button
+              className="flex items-center justify-center py-1 cursor-pointer rounded-md gap-2 hover:bg-gray-200 w-full"
+              onClick={handleToggleUserProfile}
+            >
               <img
-                src={user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault}
-                className="w-full h-full object-cover rounded-full border"
-                alt="avatar"
+                className="w-8 aspect-square object-cover rounded-md mx-2"
+                src={
+                  user.avatar ? `${BASE_URL}/public${user.avatar}` : avtDefault
+                }
               />
-            </div>
-            <AnimatePresence>
               {isOpen && (
-                <motion.div
+                <div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="flex-1 min-w-0"
                 >
-                  <div className="font-medium truncate ml-2">John Doe</div>
-                </motion.div>
+                  <div className="text-start username font-medium truncate text-md">
+                    {user.fullname}
+                  </div>
+                </div>
               )}
-            </AnimatePresence>
+            </button>
           </div>
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex items-center"
-              >
 
-                <button
-                  className="p-2 rounded-md"
-                  title="Lock Sidebar"
-                  onClick={toggleLock}
-                >
-                  <Lock
-                    className={`h-4 w-4 cursor-pointer ${`${isLocked
-                        ? theme === "dark"
-                          ? "text-white"
-                          : "text-black"
-                        : theme === "dark"
-                          ? "text-white/50"
-                          : "text-black/50"
-                      }`}`}
-                  />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {toggleUserProfile && (
+            <UserProfile onClose={handleToggleUserProfile} userInfo={user} />
+          )}
+
+          {/* {isOpen && (
+            <div className="flex items-center justify-center gap-2">
+              <button
+                onClick={() => {
+                  navigate("/home");
+                }}
+                className="p-2 hover:bg-gray-200 rounded-md cursor-pointer"
+                title="Home"
+              >
+                <Home className="w-4 h-4" color="black" />
+              </button>
+            </div>
+          )} */}
         </div>
 
         <div className="flex-1 overflow-y-auto p-2">
@@ -197,12 +182,13 @@ const Sidebar = () => {
 
         <div
           className={`
-                        sticky bottom-0 border-t px-3 py-2
+                        sticky bottom-0 border-t border-gray-200 px-3 py-3
                         flex
-                        ${isOpen
-              ? "justify-end" /* mở sidebar: nằm ngang */
-              : "flex-col-reverse items-center "
-            }  
+                        ${
+                          isOpen
+                            ? "justify-between"
+                            : "flex-col-reverse items-center gap-3 "
+                        }  
                     `}
         >
           <button
@@ -219,8 +205,9 @@ const Sidebar = () => {
         </div>
 
         <button
-          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-40 cursor-pointer ${theme === "dark" ? "bg-white/90 text-black" : "bg-white"
-            }`}
+          className={`absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-full p-2 shadow-md z-45 cursor-pointer ${
+            isDark ? "bg-white/90 text-black" : "bg-white"
+          }`}
           onClick={() => {
             setIsOpen(!isOpen);
           }}
@@ -232,7 +219,7 @@ const Sidebar = () => {
           )}
         </button>
       </motion.div>
-    </aside>
+    </>
   );
 };
 export default Sidebar;
