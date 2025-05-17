@@ -25,13 +25,28 @@ const UserProfile = ({ onClose }) => {
   const [newPassword, setNewPassword] = useState("");
   const [toggleChangePassword, setToggleChangePassword] = useState(false);
   const { isDark } = useTheme();
+
   const handleToggleChangePassword = () => {
     setToggleChangePassword(!toggleChangePassword);
   };
 
-  const handleChangePassword = () => {
-    console.log("old password: ", oldPassword);
-    console.log("new password: ", newPassword);
+  const handleChangePassword = async () => {
+    // console.log("old password: ", oldPassword);
+    // console.log("new password: ", newPassword);
+
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/users/${user.id}/profile`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    } catch (error) {
+
+    }
   };
 
   const handleSave = async () => {
