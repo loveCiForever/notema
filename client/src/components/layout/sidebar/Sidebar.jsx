@@ -10,6 +10,7 @@ import UserProfile from "./UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext.jsx";
 import avtDefault from "../../../assets/logo/logo-main.png";
+import { toast } from "react-toastify";
 const Sidebar = () => {
   const {
     isOpen,
@@ -192,8 +193,21 @@ const Sidebar = () => {
                     `}
         >
           <button
-            className="px-4 py-1 rounded-lg font-bold bg-black/90 hover:bg-black/60 text-white "
-            onClick={logout}
+            className="px-4 cursor-pointer py-1 rounded-lg font-bold bg-black/90 hover:bg-black/60 text-white "
+            onClick={() => {
+              logout();
+              navigate("/");
+              toast.success("Logged out successfully", {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }}
+            title="Log out"
           >
             Log out
           </button>

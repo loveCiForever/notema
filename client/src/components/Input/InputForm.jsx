@@ -1,11 +1,20 @@
+import { useTheme } from "../../contexts/ThemeContext";
+
 const InputForm = ({ icon, placeholder, value, name, type, onChange }) => {
+  const { isDark } = useTheme();
   return (
-    <div className="flex w-full border-[1px] border-black/10 items-center justify-center rounded-lg ">
-      <div className="pl-4 text-black">
-        <img src={icon} alt={"input-form-icon"} />
+    <div className={`flex w-full items-center rounded-lg border 
+      ${isDark ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200'}`}>
+      <div className="pl-4">
+        <img src={icon} alt="icon" />
       </div>
       <input
-        className="ml-4 pl-4 outline-none w-full py-3   focus:bg-gray-100"
+        className={`
+          ml-4 pl-4 py-3 w-full outline-none
+          ${isDark
+            ? 'bg-zinc-800 focus:bg-zinc-700 text-zinc-100 placeholder:text-zinc-400'
+            : 'bg-white focus:bg-gray-100 text-zinc-800 placeholder:text-zinc-500'}
+        `}
         type={type}
         name={name}
         placeholder={placeholder}
@@ -15,4 +24,5 @@ const InputForm = ({ icon, placeholder, value, name, type, onChange }) => {
     </div>
   );
 };
+
 export default InputForm;

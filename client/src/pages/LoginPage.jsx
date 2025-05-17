@@ -2,7 +2,7 @@ import video_frame_login from "../assets/images/login.png";
 import InputForm from "../components/Input/InputForm";
 import EmailIcon from "../assets/icons/black/email.svg";
 import LockIcon from "../assets/icons/black/lock.svg";
-
+import chevronLeft from "../assets/icons/black/chevron-left.svg";
 import logo from "../assets/logo/logo.png";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
 import GithubLogo from "../assets/logo/githubLogo.svg";
@@ -29,13 +29,29 @@ const LoginPage = () => {
     const validatePassword = validatePasswordInput(password);
 
     if (!validateEmail.valid) {
-      toast.error(validateEmail.message);
+      toast.error(validateEmail.message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       setEmail("");
       return;
     }
 
     if (!validatePassword.valid) {
-      toast.error(validatePassword.message);
+      toast.error(validatePassword.message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       setPassword("");
       return;
     }
@@ -43,11 +59,27 @@ const LoginPage = () => {
     try {
       await login(email, password);
 
-      toast.success("Login successful!");
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       navigate("/home");
     } catch (err) {
       const msg = err.response?.data?.message || err.message;
-      toast.error(msg);
+      toast.error(msg, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -64,35 +96,49 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//">
-              <div className="flex w-full mb-6 items-center justify-start">
-                <img src={logo} alt="logo" className="w-[150px]" />
-              </div>
-              <InputForm
-                placeholder={"Email"}
-                icon={EmailIcon}
-                type={"email"}
-                name={email}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <InputForm
-                placeholder={"Password"}
-                icon={LockIcon}
-                type={"password"}
-                name={password}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <p className="cursor-pointer text-[14px] w-full text-right text-gray-500 hover:text-blue-600 active:scale-[.98] active:duration-75 transition-all">
-                Forgot password?
-              </p>
-              <button
-                onClick={handleSubmit}
-                className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all"
+            <div className="flex flex-col justify-center items-center lg:px-[60px] gap-3">
+              <div
+                className="flex w-full mb-6 items-center justify-between cursor-pointer"
+                onClick={() => navigate("/")}
               >
-                Log in
-              </button>
+                <img src={logo} alt="logo" className="w-[150px]" />
+
+                <div className="flex items-center opacity-50 hover:opacity-100 transition-all duration-200 cursor-pointer">
+                  <img
+                    src={chevronLeft}
+                    alt="chevron-left"
+                    className="w-4 h-4 mr-2"
+                  />
+                  <span className="text-sm font-medium">Back</span>
+                </div>
+              </div>
+              <form className="w-full flex flex-col gap-3" onSubmit={handleSubmit}>
+                <InputForm
+                  placeholder={"Email"}
+                  icon={EmailIcon}
+                  type={"email"}
+                  name={email}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <InputForm
+                  placeholder={"Password"}
+                  icon={LockIcon}
+                  type={"password"}
+                  name={password}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <p className="cursor-pointer text-[14px] w-full text-right text-gray-500 hover:text-blue-600 active:scale-[.98] active:duration-75 transition-all">
+                  Forgot password?
+                </p>
+                <button
+                  type="submit"
+                  className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all"
+                >
+                  Log in
+                </button>
+              </form>
               {/* <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">
@@ -107,7 +153,6 @@ const LoginPage = () => {
                 </button>
                 <button className="bg-white border-[1px] border-gray-200 w-full py-3 rounded-xl cursor-pointer hover:bg-gray-100 center gap-4 active:scale-[.98] active:duration-75 transition-all">
                   <img className="w-6" src={GithubLogo} alt="github.png" />
-                  Github
                 </button>
               </div> */}
               <div className="flex items-center justify-center mt-4 gap-1 w-full px-1">

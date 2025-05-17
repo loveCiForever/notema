@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import InputForm from "../../Input/InputForm";
-import userIcon from "../../../assets/icons/black/user.svg";
-import emailIcon from "../../../assets/icons/black/email.svg";
-import lockIcon from "../../../assets/icons/black/lock.svg";
+import userBlackIcon from "../../../assets/icons/black/user.svg";
+import emailBlackIcon from "../../../assets/icons/black/email.svg";
+import lockBlackIcon from "../../../assets/icons/black/lock.svg";
+import whiteUserIcon from "../../../assets/icons/white/user.svg";
+import whiteEmailIcon from "../../../assets/icons/white/email.svg";
+import whiteLockIcon from "../../../assets/icons/white/lock.svg";
 import avtDefault from "../../../assets/logo/logo-main.png";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -119,7 +122,7 @@ const UserProfile = ({ onClose }) => {
 
         <div className="flex flex-col gap-4 mb-4">
           <InputForm
-            icon={userIcon}
+            icon={isDark ? whiteUserIcon : userBlackIcon}
             placeholder="Full Name"
             name="name"
             type="text"
@@ -128,7 +131,7 @@ const UserProfile = ({ onClose }) => {
             onChange={(e) => setTempName(e.target.value)}
           />
           <InputForm
-            icon={emailIcon}
+            icon={isDark ? whiteEmailIcon : emailBlackIcon}
             placeholder="Email Address"
             name="email"
             type="email"
@@ -175,9 +178,9 @@ const UserProfile = ({ onClose }) => {
 
         {toggleChangePassword && (
           <>
-            <div className="flex justify-between mt-6">
+            <div className={`flex justify-between mt-6`}>
               <InputForm
-                icon={lockIcon}
+                icon={isDark ? whiteLockIcon : lockBlackIcon}
                 placeholder="Old password"
                 name="password"
                 type="password"
@@ -187,7 +190,7 @@ const UserProfile = ({ onClose }) => {
             </div>
             <div className="flex justify-between mt-2">
               <InputForm
-                icon={lockIcon}
+                icon={isDark ? whiteLockIcon : lockBlackIcon}
                 placeholder="New password"
                 name="password"
                 type="password"
