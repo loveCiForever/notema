@@ -99,10 +99,11 @@ const Sidebar = () => {
         />
       )} */}
       <motion.div
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container ${isDark
-          ? "bg-white/5 border-gray-200 text-white"
-          : "bg-white border-gray-200 shadow-xl text-black"
-          }`}
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col h-full border-r sidebar-container${
+          isDark
+            ? "bg-white/5 border-gray-200 text-white"
+            : "bg-white border-gray-200 shadow-xl text-black"
+        }`}
         initial={isOpen ? "open" : "closed"}
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
@@ -143,7 +144,7 @@ const Sidebar = () => {
             <UserProfile onClose={handleToggleUserProfile} userInfo={user} />
           )}
 
-          {/* {isOpen && (
+          {isOpen && (
             <div className="flex items-center justify-center gap-2">
               <button
                 onClick={() => {
@@ -155,7 +156,7 @@ const Sidebar = () => {
                 <Home className="w-4 h-4" color="black" />
               </button>
             </div>
-          )} */}
+          )}
         </div>
 
         <div className="flex-1 overflow-y-auto p-2">
