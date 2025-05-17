@@ -11,6 +11,8 @@ import GithubLogo from "../assets/logo/githubLogo.svg";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { validateEmailInput, validatePasswordInput } from "../utils/validate";
+
 const RegisterPage = () => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +25,22 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validateEmail = validateEmailInput(email);
+    const validatePassword = validatePasswordInput(password);
+
+    if (!validateEmail.valid) {
+      toast.error(validateEmail.message);
+      setEmail("");
+      return;
+    }
+
+    if (!validatePassword.valid) {
+      toast.error(validatePassword.message);
+      setPassword("");
+      return;
+    }
+
     if (!fullname || !email || !password || !confirmPassword) {
       setError("Please fill in all fields!");
       toast.error("Please fill in all fields!");
