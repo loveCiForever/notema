@@ -2,7 +2,7 @@
 
 import { SidebarProvider, useSidebar } from "../../contexts/SidebarContext";
 import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
-import Sidebar from "./Sidebar/Sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 import React from "react";
 
