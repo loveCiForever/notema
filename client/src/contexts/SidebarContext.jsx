@@ -5,7 +5,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 // Sử dụng dữ liệu mẫu từ file data.js
 import mockNotes from "../components/data/data";
-
+import { noteApi } from "../services/noteApi";
 // Default sidebar menu items (chỉ chứa category, không chứa notes)
 const defaultMenuItems = [
   { id: "search", type: "search", label: "Search", icon: "search", notes: [] },
@@ -37,7 +37,7 @@ const defaultMenuItems = [
 const SidebarContext = createContext();
 export const useSidebar = () => useContext(SidebarContext);
 
-export const SidebarProvider = ({ children }) => {
+export const SidebarProvider = ({ children, userId }) => {
   // collapsed: true = section is collapsed
   const defaultCollapsed = defaultMenuItems.reduce((acc, sec) => {
     acc[sec.id] = sec.id !== "search"; // chỉ search mở, ví dụ
@@ -57,14 +57,26 @@ export const SidebarProvider = ({ children }) => {
 
   // Load mock notes once
   useEffect(() => {
-    setNotes(mockNotes);
-    updateMenuItemsWithNotes(mockNotes);
-    // detect mobile
+    const fetchNotes = async () => {
+      try {
+        const fetched = await noteApi.getNotes(userId);
+        const notesArray = Array.isArray(fetched.data) ? fetched.data : [];
+        setNotes(notesArray);
+        updateMenuItemsWithNotes(notesArray);
+      } catch (err) {
+        console.error("Failed to fetch notes, using mockNotes:", err);
+        setNotes(mockNotes);
+        updateMenuItemsWithNotes(mockNotes);
+      }
+    };
+
+    fetchNotes();
+
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [userId]);
 
   // utility: distribute notes into menuItems
   const updateMenuItemsWithNotes = (allNotes) => {

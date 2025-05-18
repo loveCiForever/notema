@@ -1,5 +1,14 @@
 // Danh sách các màu có thể sử dụng
-const COLORS = ["yellow", "blue", "green", "pink", "purple", "orange", "teal", "indigo"];
+const COLORS = [
+  "yellow",
+  "blue",
+  "green",
+  "pink",
+  "purple",
+  "orange",
+  "teal",
+  "indigo",
+];
 
 // Hàm lấy màu ngẫu nhiên
 export const getRandomColor = () => {
@@ -10,12 +19,12 @@ export const getRandomColor = () => {
 // Hàm lấy màu dựa trên id (để đảm bảo cùng một note luôn có cùng màu) Hàm này đỉnh vcb =))
 export const getColorById = (id) => {
   // Tính tổng mã ASCII của các ký tự trong id
-  const sum = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  // const sum = id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   // Lấy màu dựa trên phần dư khi chia cho số lượng màu
-  return COLORS[sum % COLORS.length];
+  return COLORS[1];
 };
 
 export default {
   getRandomColor,
-  getColorById
+  getColorById,
 };
