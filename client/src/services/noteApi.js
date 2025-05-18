@@ -6,7 +6,7 @@ export const noteApi = {
   getNotes: async (userId) => {
     // console.log(userId);
     const response = await axios.get(`${BASE_URL}/note/get_note/${userId}`);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   },
 };

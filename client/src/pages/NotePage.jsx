@@ -29,13 +29,17 @@ export const noteStruct = {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
-
+import { useAuth } from "../contexts/AuthContext";
 const NotePage = ({}) => {
   const { isDark } = useTheme();
   const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
   const { id } = useParams();
   const ejInstance = useRef(null);
-  const [note, setNote] = useState({ ...noteStruct });
+  const { user } = useAuth();
+  const [note, setNote] = useState({
+    ...noteStruct,
+    author: user.id ?? "",
+  });
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -108,11 +112,13 @@ const NotePage = ({}) => {
     setNote((prev) => {
       const updated = { ...prev, title, updatedAt: now };
       autoSave(updated);
+
       return updated;
     });
   };
 
   const autoSave = async (currentNote) => {
+    console.log(currentNote);
     try {
       if (currentNote.id) {
         await axios.put(
