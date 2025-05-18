@@ -4,6 +4,7 @@ import emailIcon from "../assets/icons/black/email.svg";
 import lockIcon from "../assets/icons/black/lock.svg";
 import userIcon from "../assets/icons/black/user.svg";
 import logo from "../assets/logo/logo.png";
+import chevronLeft from "../assets/icons/black/chevron-left.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import GoogleLogo from "../assets/logo/googleLogo.svg";
@@ -30,24 +31,56 @@ const RegisterPage = () => {
     const validatePassword = validatePasswordInput(password);
 
     if (!validateEmail.valid) {
-      toast.error(validateEmail.message);
+      toast.error(validateEmail.message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       setEmail("");
       return;
     }
 
     if (!validatePassword.valid) {
-      toast.error(validatePassword.message);
+      toast.error(validatePassword.message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       setPassword("");
       return;
     }
 
     if (!fullname || !email || !password || !confirmPassword) {
       setError("Please fill in all fields!");
-      toast.error("Please fill in all fields!");
+      toast.error("Please fill in all fields!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Passwords do not match", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       return;
     }
 
@@ -68,44 +101,61 @@ const RegisterPage = () => {
               />
             </div>
             <div className="flex flex-col justify-center items-center lg:px-[60px] gap-3 bg-red-100//">
-              <div className="flex w-full mb-6 items-center justify-start">
-                <img src={logo} alt="logo" className="w-[150px]" />
-              </div>
-              <InputForm
-                placeholder={"Full Name"}
-                icon={userIcon}
-                type={"text"}
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
-              />
-              <InputForm
-                placeholder={"Email"}
-                icon={emailIcon}
-                type={"email"}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <InputForm
-                placeholder={"Password"}
-                icon={lockIcon}
-                type={"password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <InputForm
-                placeholder={"Confirm password"}
-                icon={lockIcon}
-                type={"password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              {/* {error ? <p className="text-red-600 text-[12px]">{error}</p> : ""} */}
-              <button
-                className="bg-black text-lg font-bold text-white w-full py-2 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all"
-                onClick={handleSubmit}
+              <div
+                className="flex w-full mb-6 items-center justify-between cursor-pointer"
+                onClick={() => navigate("/")}
               >
-                Sign up
-              </button>
+                <img src={logo} alt="logo" className="w-[150px]" />
+
+                <div className="flex items-center opacity-50 hover:opacity-100 transition-all duration-200 cursor-pointer">
+                  <img
+                    src={chevronLeft}
+                    alt="chevron-left"
+                    className="w-4 h-4 mr-2"
+                  />
+                  <span className="text-sm font-medium">Back</span>
+                </div>
+              </div>
+              <form
+                className="w-full flex flex-col gap-3"
+                onSubmit={handleSubmit}
+              >
+                <InputForm
+                  placeholder={"Full Name"}
+                  icon={userIcon}
+                  type={"text"}
+                  value={fullname}
+                  onChange={(e) => setFullname(e.target.value)}
+                />
+                <InputForm
+                  placeholder={"Email"}
+                  icon={emailIcon}
+                  type={"email"}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <InputForm
+                  placeholder={"Password"}
+                  icon={lockIcon}
+                  type={"password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputForm
+                  placeholder={"Confirm password"}
+                  icon={lockIcon}
+                  type={"password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                {/* {error ? <p className="text-red-600 text-[12px]">{error}</p> : ""} */}
+                <button
+                  className="bg-black text-lg font-bold text-white w-full py-2 mt-3 rounded-xl cursor-pointer hover:bg-black/50 active:scale-[.98] active:duration-75 transition-all"
+                  onClick={handleSubmit}
+                >
+                  Sign up
+                </button>
+              </form>
               {/* <div className="flex items-center w-full my-2">
                 <div className="flex-1 h-px bg-gray-400"></div>
                 <p className="px-4 text-[14px] text-gray-500 whitespace-nowrap ">

@@ -1,28 +1,50 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Sidebar from "./sidebar/Sidebar.jsx";
-import { SidebarProvider } from "../../contexts/SidebarContext";
-import { useTheme } from "../../contexts/ThemeContext";
-import { useSidebar } from "../../contexts/SidebarContext";
-import { ThemeProvider } from "../../contexts/ThemeContext";
+"use client";
 
-const MainLayout = () => {
-  const { theme } = useTheme();
+import { SidebarProvider, useSidebar } from "../../contexts/SidebarContext";
+import { ThemeProvider, useTheme } from "../../contexts/ThemeContext";
+import Sidebar from "./sidebar/Sidebar";
+import { Outlet } from "react-router-dom";
+import React from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
+function MainLayout() {
   const { isOpen, width, isMobile } = useSidebar();
+  const { theme, isDark } = useTheme();
   const sidebarWidth = isMobile ? 0 : isOpen ? width : 60;
+  const { user } = useAuth();
+
+  if (!user) {
+    toast.error("You must be logged in first");
+    return <Navigate to="/login" replace />;
+  }
 
   return (
-    <SidebarProvider>
-      <div
-        className={`min-h-screen ${theme == "dark" ? "bg-black" : "bg-white"}`}
-      >
+    <div className={`min-h-screen ${isDark ? "bg-zinc-900" : "bg-zinc-50"}`}>
+      <div className="flex">
         <Sidebar />
-        <main className="flex-1" style={{ marginLeft: `${sidebarWidth}px` }}>
+        <main
+          className={`flex flex-col flex-1 ${
+            !isOpen
+              ? "transition-all duration-300 ease-out"
+              : "transition-property: none;"
+          }`}
+          style={{ marginLeft: `${sidebarWidth}px` }}
+        >
           <Outlet />
         </main>
       </div>
-    </SidebarProvider>
+    </div>
   );
-};
+}
 
-export default MainLayout;
+// This wrapper ensures both contexts are provided
+export default function MainLayoutPage() {
+  return (
+    <ThemeProvider>
+      <SidebarProvider>
+        <MainLayout />
+      </SidebarProvider>
+    </ThemeProvider>
+  );
+}

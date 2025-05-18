@@ -1,0 +1,111 @@
+Folder PATH listing
+Volume serial number is 3894-F214
+C:.
+|   a.txt
+|   App.jsx
+|   index.css
+|   main.jsx
+|   
++---assets
+|   +---icons
+|   |   +---black
+|   |   |       chevron-left.svg
+|   |   |       close.svg
+|   |   |       email.svg
+|   |   |       home.svg
+|   |   |       lock.svg
+|   |   |       menu.svg
+|   |   |       moon.svg
+|   |   |       sun.svg
+|   |   |       user.svg
+|   |   |       
+|   |   \---white
+|   |           email.svg
+|   |           home.svg
+|   |           lock.svg
+|   |           top.svg
+|   |           user.svg
+|   |           
+|   +---images
+|   |       landing_1.png
+|   |       landing_2.png
+|   |       login.png
+|   |       
+|   \---logo
+|           appleLogo.svg
+|           facebookLogo.svg
+|           githubLogo.svg
+|           googleLogo.svg
+|           logo-main.png
+|           logo.png
+|           
++---components
+|   +---button
+|   |       BackToTop.jsx
+|   |       SwitchTheme.jsx
+|   |       
+|   +---card
+|   |       NoteCard.jsx
+|   |       NoteGrid.jsx
+|   |       
+|   +---data
+|   |       data.js
+|   |       
+|   +---editor
+|   |       EditorComponent.jsx
+|   |       
+|   +---Input
+|   |       InputForm.jsx
+|   |       
+|   +---layout
+|   |   |   MainLayout.jsx
+|   |   |   
+|   |   +---footer
+|   |   |       Footer.jsx
+|   |   |       
+|   |   +---header
+|   |   |       Header.jsx
+|   |   |       
+|   |   +---note
+|   |   |       EditorTools.jsx
+|   |   |       
+|   |   \---sidebar
+|   |           Sidebar.jsx
+|   |           SidebarItem.jsx
+|   |           SidebarNoteItem.jsx
+|   |           UserProfile.jsx
+|   |           
+|   \---ui
+|           DragHandle.jsx
+|           ScreenSizePanel.jsx
+|           SearchModal.jsx
+|           
++---contexts
+|       AuthContext.jsx
+|       SidebarContext.jsx
+|       ThemeContext.jsx
+|       
++---hooks
+|       useEditor.js
+|       
++---pages
+|       ConfirmPage.jsx
+|       HomePage.jsx
+|       LandingPage.jsx
+|       LoginPage.jsx
+|       NotePage.jsx
+|       NotFoundPage.jsx
+|       RegisterPage.jsx
+|       
++---services
+|       collabService.js
+|       noteService.js
+|       
++---Style
+|       editor.css
+|       transition.css
+|       
+\---utils
+        colorUtils.jsx
+        validate.jsx
+        

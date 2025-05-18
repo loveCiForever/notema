@@ -11,7 +11,7 @@ const SearchModal = ({ open, onClose }) => {
   const { theme } = useTheme();
 
   // Mock categories for filtering
-  const categories = ["All", "Documents", "Images", "Recent"];
+  const categories = ["All", "Favorite", "Private", "Public"];
   const [activeCategory, setActiveCategory] = useState("All");
 
   // Mock search results
@@ -92,7 +92,7 @@ const SearchModal = ({ open, onClose }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
       {/* Background overlay */}
       <div
-        className={`absolute inset-0 backdrop-blur-sm ${
+        className={`absolute inset-0 backdrop-blur-[2px] ${
           theme === "dark" ? "bg-black/50" : "bg-black/30"
         }`}
         onClick={onClose}
@@ -250,7 +250,7 @@ const SearchModal = ({ open, onClose }) => {
           ) : (
             <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
               <p
-                className={`text-sm max-w-md ${
+                className={`text-sm max-w-md cursor-default ${
                   theme === "dark" ? "text-zinc-400" : "text-zinc-500"
                 }`}
               >
@@ -266,7 +266,7 @@ const SearchModal = ({ open, onClose }) => {
             theme === "dark" ? "border-zinc-800" : "border-zinc-100"
           }`}
         >
-          <div className="flex justify-between text-xs">
+          <div className="flex justify-end text-xs cursor-default">
             <span
               className={`${
                 theme === "dark" ? "text-zinc-400" : "text-zinc-500"

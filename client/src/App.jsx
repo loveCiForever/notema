@@ -5,24 +5,38 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
-import ScreenSizePanel from "./components/ui/ScreenSizePanel";
+// import ScreenSizePanel from "./components/ui/ScreenSizePanel";
+import NotePage from "./pages/NotePage";
 import ConfirmPage from "./pages/ConfirmPage";
+import MainLayout from "./components/layout/MainLayout";
+// eslint-disable-next-line no-unused-vars
 import { ToastContainer, toast } from "react-toastify";
+import MainLayoutPage from "./components/layout/MainLayout";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/verify" element={<ConfirmPage />} />
-      </Routes>
-      {/* <ScreenSizePanel position={"top-left"} /> */}
-      <ToastContainer />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />}></Route>
+          <Route path="/login" element={<LoginPage />}></Route>
+          <Route path="/register" element={<RegisterPage />}></Route>
+          <Route path="*" element={<NotFoundPage />}></Route>
+          <Route path="/verify" element={<ConfirmPage />}></Route>
+          <Route path="/home" element={<MainLayoutPage />}>
+            {/* Khi /home => render trang home */}
+            <Route index element={<HomePage />} />
+            {/* Khi /home/note => render trang note */}
+            <Route path="note" element={<NotePage />} />
+            {/* Khi /home/note/:id => render trang edit hoặc tạo mới */}
+            <Route path="note/:id" element={<NotePage />} />
+          </Route>
+        </Routes>
+        {/* <ScreenSizePanel position={"top-left"} /> */}
+        <ToastContainer />
+      </Router>
+    </ThemeProvider>
   );
 }
 

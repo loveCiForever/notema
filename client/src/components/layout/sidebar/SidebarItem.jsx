@@ -13,10 +13,12 @@ import {
   Trash,
   Settings,
   Search,
+  Home,
 } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import PropTypes from "prop-types";
 import SearchModal from "../../ui/SearchModal";
+import { useNavigate } from "react-router-dom";
 
 const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
   const {
@@ -32,9 +34,10 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
   } = useSidebar();
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showCountDropdown, setShowCountDropdown] = useState(false);
-  const theme = useTheme();
   const isCollapsed = collapsedSections[item.id];
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const navigate = useNavigate();
+
   const handleDragStart = (e) => {
     if (item.type === "search" || item.type === "link") return;
     onDragStart(e, index);
@@ -80,12 +83,30 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
         return null;
     }
   };
+
   const renderContent = () => {
+    if (item.type === "home") {
+      return (
+        <>
+          {!isOpen && (
+            <div
+              className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50 transition-colors`}
+              onClick={() => {
+                navigate("/home");
+              }}
+            >
+              <Home className="h-4 w-4" />
+            </div>
+          )}
+        </>
+      );
+    }
+
     // Nếu đóng sidebar và không phải là search
-    if (!isOpen && item.type !== "search") {
+    if (!isOpen && item.type !== "search" && item.type !== "home") {
       return (
         <div
-          className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50`}
+          className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50 transition-colors`}
           onClick={() => {
             openAndExpand(item.id);
           }}
@@ -94,7 +115,8 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
         </div>
       );
     }
-    // Nếu là search
+    // Nếu là home
+
     if (item.type === "search") {
       return (
         <>
@@ -102,10 +124,9 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
 
           {!isOpen ? (
             <div
-              className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50`}
+              className={`flex justify-center items-center py-3 cursor-pointer rounded-md hover:bg-gray-200/50 transition-colors`}
               onClick={() => {
                 // khi collapse: mở sidebar luôn nếu cần
-                if (!isOpen) setIsOpen(true);
                 setShowSearchModal(true);
               }}
             >
@@ -113,7 +134,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
             </div>
           ) : (
             <div
-              className={`flex justify-round items-center py-3 cursor-pointer rounded-lg hover:bg-gray-200 gap-2 bg-gray-200/70 text-left text-sm  transition-colors`}
+              className={`flex justify-round items-center py-2 cursor-pointer hover:bg-gray-200/70 gap-2 bg-zinc-200/30 text-left rounded-md text-sm  transition-colors`}
               onClick={() => {
                 // khi collapse: mở sidebar luôn nếu cần
                 if (!isOpen) setIsOpen(true);
@@ -132,12 +153,13 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
         </>
       );
     }
+
     // là Note hoặc Trash
     if (item.type === "notes" || item.type === "trash") {
       return (
         <>
           <div
-            className={`group flex items-center px-3 py-2 cursor-pointer rounded-md hover:bg-gray-200/50`}
+            className={`group flex items-center px-3 py-2 cursor-pointer rounded-md hover:bg-gray-200/50 transition-colors`}
             onClick={() => toggleSection(item.id)}
             draggable={item.type !== "search" && item.type !== "link"}
             onDragStart={handleDragStart}
@@ -239,7 +261,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
                   <input
                     type="text"
                     placeholder="Search in trash..."
-                    className="w-full px-3 py-1.5 pl-7 bg-gray-100 text-zinc-400 outline-none rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-black border"
+                    className="w-full px-3 py-1 pl-7 bg-gray-100 text-zinc-400 outline-none rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-black border"
                   />
                   <Search className="absolute left-2 top-1.5 h-3.5 w-3.5 text-gray-400" />
                 </div>
