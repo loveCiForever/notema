@@ -256,16 +256,6 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
           </div>
           {!isCollapsed && (
             <div className="pl-8 pr-3 mt-1 space-y-1 ">
-              {item.id === "trash" && (
-                <div className="relative mb-2">
-                  <input
-                    type="text"
-                    placeholder="Search in trash..."
-                    className="w-full px-3 py-1 pl-7 bg-gray-100 text-zinc-400 outline-none rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-black border"
-                  />
-                  <Search className="absolute left-2 top-1.5 h-3.5 w-3.5 text-gray-400" />
-                </div>
-              )}
               {item.notes && item.notes.length > 0 ? (
                 item.notes
                   .slice(0, showItemCount)
