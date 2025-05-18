@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import { Pin, Globe, Lock } from "lucide-react";
 import { Clock, MoreHorizontal } from "lucide-react";
-import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import NoteGrid from "../components/card/NoteGrid";
 import NewNote from "../components/button/NewNote";
