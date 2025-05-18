@@ -10,6 +10,9 @@ import {
   Smile,
   ImageIcon,
   MessageCircle,
+  Pin,
+  PinOff,
+  AlignJustify
 } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
 import useEditor from "../hooks/useEditor";
@@ -20,6 +23,8 @@ import List from "@editorjs/list";
 import Embed from "@editorjs/embed";
 import SimpleImage from "@editorjs/simple-image";
 import mockNotes from "../components/data/data";
+import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
+import { useSidebar } from "../contexts/SidebarContext";
 
 export const noteStruct = {
   title: "",
@@ -30,7 +35,8 @@ export const noteStruct = {
   updatedAt: new Date().toISOString(),
 };
 import { useAuth } from "../contexts/AuthContext";
-const NotePage = ({}) => {
+import { noteApi } from "../services/noteApi";
+const NotePage = ({ }) => {
   const { isDark } = useTheme();
   const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
   const { id } = useParams();
@@ -40,7 +46,12 @@ const NotePage = ({}) => {
     ...noteStruct,
     author: user.id ?? "",
   });
-
+  const { isMobile, setIsOpen} = useSidebar();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [fontSize, setFontSize] = useState(() => {
+    const saved = localStorage.getItem("note_font_size");
+    return saved ? Number(saved) : 16;
+  });
   useEffect(() => {
     const fetchNote = async () => {
       try {
@@ -106,6 +117,10 @@ const NotePage = ({}) => {
     });
   };
 
+  const handlePin = async () => {
+    
+  };
+
   const handleTitleChange = (e) => {
     const title = e.target.value;
     const now = new Date().toISOString();
@@ -137,89 +152,112 @@ const NotePage = ({}) => {
 
   return (
     <div
-      className={`min-h-screen ${
-        isDark ? "bg-zinc-900" : "bg-white"
-      } flex flex-col`}
+      className={`min-h-screen ${isDark ? "bg-zinc-900" : "bg-white"
+        } flex flex-col`}
     >
       {/* Header */}
       <header
-        className={`flex justify-between items-center px-6 py-2 ${
-          isDark ? "border-b border-zinc-800" : ""
-        }`}
+        className={`flex justify-between items-center px-6 py-2 ${isDark ? "border-b border-zinc-800" : ""
+          }`}
       >
+        <div className={`${isDark ? "text-zinc-400" : "text-zinc-500"
+          } px-2 cursor-default mt-1`}>
+          <button onClick={() => setIsOpen(o => !o)}> <AlignJustify /> </button>
+        </div>
         <div className="flex items-center gap-0">
           <h1
-            className={`text-lg font-medium w-1/2 line-clamp-1 ${
-              isDark ? "text-white" : "text-zinc-800"
-            }`}
+            className={`text-lg font-medium w-1/2 line-clamp-1 ${isDark ? "text-white" : "text-zinc-800"
+              }`}
           >
             {note.title}
           </h1>
           <div
-            className={`flex items-center gap-1 px-2 py-1 rounded ${
-              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-            } cursor-pointer`}
+            className={`flex items-center gap-1 px-2 py-1 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
+              } cursor-pointer`}
           >
             <Lock
-              className={`w-4 h-4 ${
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              }`}
+              className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
+                }`}
             />
             <span
-              className={`${
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              } text-sm`}
+              className={`${isDark ? "text-zinc-500" : "text-zinc-400"
+                } text-sm`}
             >
               Private
             </span>
             <ChevronDown
-              className={`w-4 h-4 ${
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              }`}
+              className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
+                }`}
             />
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            className={`px-3 py-1 rounded ${
-              isDark ? "hover:bg-zinc-800 text-zinc-300" : "hover:bg-zinc-100"
-            } font-medium`}
+          {/* <button
+            className={`px-3 py-1 rounded ${isDark ? "hover:bg-zinc-800 text-zinc-300" : "hover:bg-zinc-100"
+              } font-medium`}
           >
             Share
-          </button>
-          <button
-            className={`p-2 rounded ${
-              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-            }`}
+          </button> */}
+          {/* <button
+            className={`p-2 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
+              }`}
           >
             <MessageSquare
-              className={`w-5 h-5 ${
-                isDark ? "text-zinc-400" : "text-zinc-500"
-              }`}
+              className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"
+                }`}
             />
-          </button>
+          </button> */}
           <button
-            className={`p-2 rounded ${
-              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-            }`}
+            className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
+            onClick={handlePin}
           >
-            <Star
-              className={`w-5 h-5 ${
-                isDark ? "text-zinc-400" : "text-zinc-500"
-              }`}
-            />
+            {note.isPinned ? (
+              <PinOff className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
+            ) : (
+              <Pin className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
+            )}
           </button>
-          <button
-            className={`p-2 rounded ${
-              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-            }`}
-          >
-            <MoreHorizontal
-              className={`w-5 h-5 ${
-                isDark ? "text-zinc-400" : "text-zinc-500"
-              }`}
-            />
-          </button>
+          <div className="relative">
+
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                setShowDropdown(v => !v);
+              }}
+              className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
+            >
+              <MoreHorizontal className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
+            </button>
+
+            {showDropdown && (
+              <>
+                {/* Overlay to close dropdown when clicking outside */}
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowDropdown(false)}
+                  tabIndex={-1}
+                  aria-hidden="true"
+
+                />
+                <NoteOptionsDropdown
+                  show={showDropdown}
+                  onClose={() => setShowDropdown(false)}
+                  note={{
+                    ...note,
+                    // or any appropriate field
+                  }}
+                  fontSize={fontSize}
+                  onFontSizeChange={size => {
+                    setFontSize(size);
+                    localStorage.setItem("note_font_size", size);
+                  }}
+                  onTogglePassword={(id, enabled) => {
+                    console.log({ id, enabled });
+                  }}
+                />
+              </>
+            )}
+          </div>
         </div>
       </header>
       {/* SỬA Ở CHÕ NÀY CÁC FILE noteService, collabService(websocket), useEditor, EditorTools */}
@@ -227,21 +265,24 @@ const NotePage = ({}) => {
                 {content && <EditorComponent data={content} onChange={onChange} />}
             </div>
             <div className={`save-status ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{status}</div> */}
-      <div className="w-full bg-white p-6  pl-10">
-        <div className="mx-20">
+      <div className={`w-full bg-white p-6  pl-10 ${isDark ? "bg-zinc-900 " : "bg-white"}`}>
+        <div className={` ${isMobile ? "mx-2" : "mx-20"}`}>
           <input
             type="text"
             name="title"
             id="title"
             value={note.title}
+            style={{ fontSize: `${fontSize}px` }}
             onChange={handleTitleChange}
             placeholder="Title"
-            className="outline-none text-xl mb-2 w-full"
+            className={`outline-none text-xl mb-2 w-full ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
+              } border-b-2 border-zinc-300 focus:border-blue-500 transition-colors duration-200`}
           />
 
           <div
             id="editorjs"
-            className="flex rounded-md p-4 mb-6 items-center justify-start pl-10 bg-red-0"
+            style={{ fontSize: `${fontSize}px` }}
+            className={`flex rounded-md p-4 mb-6 items-center justify-start bg-red-0 ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
           />
         </div>
       </div>

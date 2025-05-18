@@ -147,9 +147,9 @@ const NoteCard = ({
             )}
 
             {/* Public/Global icon */}
-            {isPublic && (
+            {/* {isPublic && (
               <Globe className="w-4 h-4 text-blue-500" />
-            )}
+            )} */}
           </div>
         </div>
 

@@ -112,7 +112,7 @@ export const mockNotes = [
     updatedAt: "2023-07-19T10:15:00Z",
     authorId: 8,
   },
-  {
+{
     id: "6",
     title: "Learning Resources",
     content: {
