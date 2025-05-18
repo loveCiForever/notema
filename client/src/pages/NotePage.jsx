@@ -25,7 +25,7 @@ import SimpleImage from "@editorjs/simple-image";
 import mockNotes from "../components/data/data";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 import { useSidebar } from "../contexts/SidebarContext";
-import { Globe, ChevronUp } from "lucide-react";
+import { Globe, ChevronUp } from "lucide-react";import PasswordModal from "../components/ui/PasswordModal";
 export const noteStruct = {
   title: "",
   banner: "",
@@ -37,7 +37,7 @@ export const noteStruct = {
 import { useAuth } from "../contexts/AuthContext";
 import { noteApi } from "../services/noteApi";
 
-const NotePage = ({}) => {
+const NotePage = ({ }) => {
   const { isDark } = useTheme();
   const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
   const { id } = useParams();
@@ -49,11 +49,13 @@ const NotePage = ({}) => {
   });
   const [noteId, setNoteId] = useState("");
   const { isMobile, setIsOpen } = useSidebar();
+  const [unlocked, setUnlocked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [fontSize, setFontSize] = useState(() => {
     const saved = localStorage.getItem("note_font_size");
     return saved ? Number(saved) : 16;
   });
+
   const handleToggleFavorite = async (noteId, enable) => {
     try {
       const res = await axios.put(
@@ -133,10 +135,30 @@ const NotePage = ({}) => {
           visibility: data.visibility,
         });
 
-        initEditor(initialData);
+        const savedPassword = localStorage.getItem(`note_pass_${id}`);
+        if (!savedPassword) {
+          setUnlocked(true);
+        } else {
+          const entry = prompt("Enter password to open this note:");
+          if (entry === savedPassword) {
+            setUnlocked(true);
+          } else {
+            alert("Wrong password!");
+          }
+        }
       } catch (err) {
         console.error("Failed to fetch note:", err);
-        initEditor(); // fallback to empty editor
+        const savedPassword = localStorage.getItem(`note_pass_${id}`);
+        if (!savedPassword) {
+          setUnlocked(true);
+        } else {
+          const entry = prompt("Enter password to open this note:");
+          if (entry === savedPassword) {
+            setUnlocked(true);
+          } else {
+            alert("Wrong password!");
+          }
+        }
       }
     };
 
@@ -150,6 +172,12 @@ const NotePage = ({}) => {
     };
   }, [id]);
 
+  useEffect(() => {
+    if (unlocked) {
+      initEditor(note.content);
+    }
+  }, [unlocked, note.content]);
+
   const initEditor = (
     initialData = { blocks: [], time: Date.now(), version: "2.25.0" }
   ) => {
@@ -157,7 +185,7 @@ const NotePage = ({}) => {
       holder: "editorjs",
       autofocus: true,
       placeholder: "Start writing your note...",
-      data: initialData,
+      data: { blocks: initialData },
       tools: { header: Header, list: List, embed: Embed },
       onReady: () => {
         ejInstance.current = editor;
@@ -194,10 +222,19 @@ const NotePage = ({}) => {
     setNote((prev) => {
       const updated = { ...prev, title, updatedAt: now };
       autoSave(updated);
-
       return updated;
     });
   };
+
+  if (!unlocked) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className={`${isDark ? "text-white" : "text-black"}`}>
+          This note is locked. Please enter the password.
+        </p>
+      </div>
+    );
+  }
 
   const autoSave = async (currentNote) => {
     console.log(currentNote);
@@ -219,20 +256,14 @@ const NotePage = ({}) => {
 
   return (
     <div
-      className={`min-h-screen ${
-        isDark ? "bg-zinc-900" : "bg-white"
-      } flex flex-col`}
+      className={`min-h-screen ${isDark ? "bg-zinc-900" : "bg-white"} flex flex-col`}
     >
       {/* Header */}
       <header
-        className={`flex justify-between items-center px-6 py-2 ${
-          isDark ? "border-b border-zinc-800" : ""
-        }`}
+        className={`flex justify-between items-center px-6 py-2 ${isDark ? "border-b border-zinc-800" : ""}`}
       >
         <div
-          className={`${
-            isDark ? "text-zinc-400" : "text-zinc-500"
-          } px-2 cursor-default mt-1 ${isMobile ? "block" : "hidden"}`}
+          className={`${isDark ? "text-zinc-400" : "text-zinc-500"} px-2 cursor-default mt-1 ${isMobile ? "block" : "hidden"}`}
         >
           <button onClick={() => setIsOpen((o) => !o)}>
             {" "}
@@ -248,9 +279,7 @@ const NotePage = ({}) => {
             {note.title}
           </h1>
           <div
-            className={`flex items-center gap-1 px-2 py-1 rounded ${
-              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-            } cursor-pointer`}
+            className={`flex items-center gap-1 px-2 py-1 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"} cursor-pointer`}
           >
             {note.visibility == "private" ? (
               <div className="flex flex-row gap-2 items-center justify-center">
@@ -297,38 +326,17 @@ const NotePage = ({}) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {/* <button
-            className={`px-3 py-1 rounded ${isDark ? "hover:bg-zinc-800 text-zinc-300" : "hover:bg-zinc-100"
-              } font-medium`}
-          >
-            Share
-          </button> */}
-          {/* <button
-            className={`p-2 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-              }`}
-          >
-            <MessageSquare
-              className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"
-                }`}
-            />
-          </button> */}
           <button
-            className={`p-2 rounded-full cursor-pointer ${
-              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-            }`}
+            className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
             onClick={() => handlePin(noteId)}
           >
             {note.isPinned == 1 ? (
               <PinOff
-                className={`w-5 h-5 ${
-                  isDark ? "text-zinc-400" : "text-zinc-500"
-                }`}
+                className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}
               />
             ) : (
               <Pin
-                className={`w-5 h-5 ${
-                  isDark ? "text-zinc-400" : "text-zinc-500"
-                }`}
+                className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}
               />
             )}
           </button>
@@ -338,20 +346,15 @@ const NotePage = ({}) => {
                 e.stopPropagation();
                 setShowDropdown((v) => !v);
               }}
-              className={`p-2 rounded-full cursor-pointer ${
-                isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-              }`}
+              className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
             >
               <MoreHorizontal
-                className={`w-5 h-5 ${
-                  isDark ? "text-zinc-400" : "text-zinc-500"
-                }`}
+                className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}
               />
             </button>
 
             {showDropdown && (
               <>
-                {/* Overlay to close dropdown when clicking outside */}
                 <div
                   className="fixed inset-0 z-10"
                   onClick={() => setShowDropdown(false)}
@@ -363,7 +366,6 @@ const NotePage = ({}) => {
                   onClose={() => setShowDropdown(false)}
                   note={{
                     ...note,
-                    // or any appropriate field
                   }}
                   onToggleFavorite={handleToggleFavorite}
                   onToggleTrash={handleToggleTrash}
@@ -382,15 +384,8 @@ const NotePage = ({}) => {
           </div>
         </div>
       </header>
-      {/* SỬA Ở CHÕ NÀY CÁC FILE noteService, collabService(websocket), useEditor, EditorTools */}
-      {/* <div className={`editor-wrapper ${isDark ? 'bg-zinc-900 text-zinc-100' : ''}`}>
-                {content && <EditorComponent data={content} onChange={onChange} />}
-            </div>
-            <div className={`save-status ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{status}</div> */}
       <div
-        className={`w-full bg-white p-6 pl-10 ${
-          isDark ? "bg-zinc-900 " : "bg-white"
-        }`}
+        className={`w-full bg-white p-6 pl-10 ${isDark ? "bg-zinc-900 " : "bg-white"}`}
       >
         <div
           className={` ${isMobile ? "px-2" : "px-20"} flex flex-col  w-full`}
@@ -403,17 +398,13 @@ const NotePage = ({}) => {
             style={{ fontSize: `${fontSize + 15}px` }}
             onChange={handleTitleChange}
             placeholder="Title"
-            className={`outline-none text-xl mb-2 w-full font-semibold ${
-              isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
-            } border-b-2/ border-zinc-300 focus:border-blue-500 transition-colors duration-200`}
+            className={`outline-none text-xl mb-2 w-full font-semibold ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"} border-b-2/ border-zinc-300 focus:border-blue-500 transition-colors duration-200`}
           />
 
           <div
             id="editorjs"
             style={{ fontSize: `${fontSize}px` }}
-            className={`items-start  flex w-[full] min-h-[300px] rounded-md mb-6 bg-red-0 space-y-0 ${
-              isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
-            }`}
+            className={`items-start flex w-[full] min-h-[300px] rounded-md mb-6 bg-red-0 space-y-0 ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
           />
         </div>
       </div>

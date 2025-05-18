@@ -1,28 +1,11 @@
-import React, { useState } from "react";
-import { useTheme } from "../../contexts/ThemeContext";
-import { useFont } from "../../contexts/FontContext";
-import {
-  MoreHorizontal,
-  Type,
-  Text,
-  Lock,
-  Eye,
-  Info,
-  Trash2,
-  Star,
-  Globe,
-  Trash,
-} from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
-const FONT_FAMILIES = [
-  "sans-serif",
-  "serif",
-  "monospace",
-  "cursive",
-  "fantasy",
-];
+import React, { useState } from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useFont } from '../../contexts/FontContext';
+import { MoreHorizontal, Type, Text, Lock, Eye, Info, Trash2, Star, Globe } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import PasswordModal from '../ui/PasswordModal';
+
+const FONT_FAMILIES = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'];
 
 export default function NoteOptionsDropdown({
   show,
@@ -37,26 +20,39 @@ export default function NoteOptionsDropdown({
 }) {
   const { isDark } = useTheme();
   const { fontFamily, setFontFamily } = useFont();
-  const [passwordEnabled, setPasswordEnabled] = useState(
-    note.isLocked || false
-  );
-  const navigate = useNavigate();
+  const [passwordEnabled, setPasswordEnabled] = useState(!!localStorage.getItem(`note_pass_${note.id}`));
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [modalMode, setModalMode] = useState('create'); // 'create', 'change', 'remove'
 
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  {
-    note.isTrashed == 1 && (
-      <button
-        className={`w-full text-left px-3 py-2 flex items-center gap-2 text-red-500 ${
-          isDark ? "hover:bg-white/10" : "hover:bg-zinc-200"
-        }`}
-        onClick={() => setShowConfirmDelete(true)}
-      >
-        <Trash className="w-4 h-4" />
-        <span>Delete Forever</span>
-      </button>
-    );
-  }
-  console.log(note);
+  const handleSetPassword = (password) => {
+    localStorage.setItem(`note_pass_${note.id}`, password);
+    setPasswordEnabled(true);
+    onTogglePassword(note.id, true);
+    setShowPasswordModal(false);
+  };
+
+  const handleChangePassword = (oldPassword, newPassword) => {
+    const savedPassword = localStorage.getItem(`note_pass_${note.id}`);
+    if (savedPassword !== oldPassword) {
+      alert('Mật khẩu cũ không đúng');
+      return;
+    }
+    localStorage.setItem(`note_pass_${note.id}`, newPassword);
+    setShowPasswordModal(false);
+  };
+
+  const handleRemovePassword = (confirmPassword) => {
+    const savedPassword = localStorage.getItem(`note_pass_${note.id}`);
+    if (savedPassword !== confirmPassword) {
+      alert('Mật khẩu không đúng');
+      return;
+    }
+    localStorage.removeItem(`note_pass_${note.id}`);
+    setPasswordEnabled(false);
+    onTogglePassword(note.id, false);
+    setShowPasswordModal(false);
+  };
+
   const wordCount = (() => {
     const text =
       typeof note.content === "string"
@@ -76,23 +72,17 @@ export default function NoteOptionsDropdown({
       <div className="px-3 py-2 flex items-center gap-2">
         <Type className="w-4 h-4" />
         <select
-          className={`flex-1 bg-transparent outline-none `}
+          className={`flex-1 bg-transparent outline-none`}
           value={fontFamily}
           onChange={(e) => setFontFamily(e.target.value)}
         >
-          {FONT_FAMILIES.map((f) => (
-            <option
-              className={` ${isDark ? "bg-zinc-700" : ""}`}
-              key={f}
-              value={f}
-            >
-              {f}
-            </option>
+          {FONT_FAMILIES.map(f => (
+            <option className={`${isDark ? "bg-zinc-700" : ""}`} key={f} value={f}>{f}</option>
           ))}
         </select>
       </div>
 
-      {/* Font size slider (local) */}
+      {/* Font size slider */}
       <div className="px-3 py-2 border-b flex items-center gap-2">
         <Text className="w-4 h-4" />
         <input
@@ -105,6 +95,7 @@ export default function NoteOptionsDropdown({
         />
         <span className="w-8 text-right">{fontSize}px</span>
       </div>
+
       {/* Favourite */}
       <button
         className={`w-full text-left px-3 py-2 flex items-center gap-2
@@ -135,20 +126,45 @@ export default function NoteOptionsDropdown({
         </span>
       </button>
 
-      {/* Toggle password */}
-      <button
-        className={`w-full text-left px-3 py-2 flex items-center gap-2
-          ${isDark ? "hover:bg-white/20" : "hover:bg-zinc-200"}`}
-        onClick={() => {
-          const next = !passwordEnabled;
-          setPasswordEnabled(next);
-          onTogglePassword(note.id, next);
-          onClose();
-        }}
-      >
-        <Lock className="w-4 h-4" />
-        <span>{passwordEnabled ? "Remove Password" : "Add Password"}</span>
-      </button>
+      {/* Password options */}
+      {!passwordEnabled ? (
+        <button
+          className={`w-full text-left px-3 py-2 flex items-center gap-2
+            ${isDark ? 'hover:bg-white/20' : 'hover:bg-zinc-200'}`}
+          onClick={() => {
+            setModalMode('create');
+            setShowPasswordModal(true);
+          }}
+        >
+          <Lock className="w-4 h-4" />
+          <span>Add Password</span>
+        </button>
+      ) : (
+        <>
+          <button
+            className={`w-full text-left px-3 py-2 flex items-center gap-2
+              ${isDark ? 'hover:bg-white/20' : 'hover:bg-zinc-200'}`}
+            onClick={() => {
+              setModalMode('change');
+              setShowPasswordModal(true);
+            }}
+          >
+            <Lock className="w-4 h-4" />
+            <span>Change Password</span>
+          </button>
+          <button
+            className={`w-full text-left px-3 py-2 flex items-center gap-2
+              ${isDark ? 'hover:bg-white/20' : 'hover:bg-zinc-200'}`}
+            onClick={() => {
+              setModalMode('remove');
+              setShowPasswordModal(true);
+            }}
+          >
+            <Lock className="w-4 h-4" />
+            <span>Remove Password</span>
+          </button>
+        </>
+      )}
 
       {/* Trash / Restore */}
       <button
@@ -179,62 +195,16 @@ export default function NoteOptionsDropdown({
               })}`
             : "Edited unknown"}
         </span>
-      </div> */}
-      {note.isTrashed == 1 && (
-        <button
-          className={`w-full text-left px-3 py-2 flex items-center gap-2 text-red-500 ${
-            isDark ? "hover:bg-white/10" : "hover:bg-zinc-200"
-          }`}
-          onClick={() => setShowConfirmDelete(true)}
-        >
-          <Trash className="w-4 h-4" />
-          <span>Delete Forever</span>
-        </button>
-      )}
+      </div>
 
-      {/* Confirm Delete Modal */}
-      {showConfirmDelete && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div
-            className={`rounded-lg p-6 w-96 shadow-md ${
-              isDark ? "bg-zinc-800 text-white" : "bg-white text-black"
-            }`}
-          >
-            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
-            <p className="mb-4">
-              Are you sure you want to permanently delete this note? This action
-              cannot be undone.
-            </p>
-            <div className="flex justify-end gap-2">
-              <button
-                className="px-4 py-2 rounded bg-gray-400 hover:bg-gray-500 text-white"
-                onClick={() => setShowConfirmDelete(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white"
-                onClick={async () => {
-                  try {
-                    await axios.delete(
-                      `${
-                        import.meta.env.VITE_REMOTE_SERVER_URL
-                      }/note/delete_forever/${note.id}`
-                    );
-                    setShowConfirmDelete(false);
-                    onClose();
-                    navigate("/home");
-                  } catch (err) {
-                    console.error("Failed to delete note forever:", err);
-                  }
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Password Modal */}
+      <PasswordModal
+        open={showPasswordModal}
+        onConfirm={modalMode === 'create' ? handleSetPassword : modalMode === 'change' ? handleChangePassword : handleRemovePassword}
+        onCancel={() => setShowPasswordModal(false)}
+        title={modalMode === 'create' ? "Set a password for this note" : modalMode === 'change' ? "Change password for this note" : "Remove password for this note"}
+        mode={modalMode}
+      />
     </div>
   );
 }
