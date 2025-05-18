@@ -30,7 +30,8 @@ const NoteGrid = ({
           fetchedNotes = mockNotes;
         } else {
           const response = await noteApi.getNotes(userId);
-          fetchedNotes = response.data ?? [];
+          console.log(response.data);
+          setNotes(response.data ?? []);
         }
         // Sắp xếp ghi chú
         const sortedNotes = fetchedNotes.sort((a, b) => {
@@ -89,10 +90,15 @@ const NoteGrid = ({
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
-        <div className={`flex items-center gap-2 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+        <div
+          className={`flex items-center gap-2 ${
+            isDark ? "text-zinc-400" : "text-zinc-500"
+          }`}
+        >
           <Notebook className="w-4 h-4" />
           <h2 className="font-medium">{title}</h2>
         </div>
+
         <button
           onClick={toggleViewMode}
           className={`p-2 rounded-md cursor-pointer ${

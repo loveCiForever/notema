@@ -192,9 +192,63 @@ function toggleBooleanColumn($pdo, $request, $response, $args, $column)
     return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 }
 
+
+$app->put('/note/move_to_trash/{id}', function (Request $request, Response $response, array $args) use ($pdo) {
+    $noteId = (int)$args['id'];
+
+    $stmt = $pdo->prepare('UPDATE notes SET isTrashed = 1 WHERE id = ?');
+    $stmt->execute([$noteId]);
+
+    $response->getBody()->write(json_encode([
+        'success' => true,
+        'message' => 'Note moved to trash',
+    ]));
+
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+});
+
+
+$app->delete('/note/delete_forever/{id}', function (Request $request, Response $response, array $args) use ($pdo) {
+    $noteId = (int)$args['id'];
+
+    // Optional: only allow delete if isTrashed = 1
+    $stmt = $pdo->prepare('SELECT isTrashed FROM notes WHERE id = ?');
+    $stmt->execute([$noteId]);
+    $note = $stmt->fetch();
+
+    if (!$note) {
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Note not found',
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+    }
+
+    if ((int)$note['isTrashed'] !== 1) {
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Note must be moved to trash before deletion',
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+    }
+
+    // Permanently delete
+    $stmt = $pdo->prepare('DELETE FROM notes WHERE id = ?');
+    $stmt->execute([$noteId]);
+
+    $response->getBody()->write(json_encode([
+        'success' => true,
+        'message' => 'Note permanently deleted',
+    ]));
+
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+});
+
 // await axios.put(`${BASE_URL}/note/set_visibility/${noteId}`, {
 //   visibility: "public", // or "private"
 // });
 // await axios.put(`${BASE_URL}/note/toggle_favourite/${noteId}`);
 // await axios.put(`${BASE_URL}/note/toggle_locked/${noteId}`);
 // await axios.put(`${BASE_URL}/note/toggle_pinned/${noteId}`);
+// await axios.put(`${BASE_URL}/note/move_to_trash/${noteId}`); // move to trash
+// await axios.delete(`${BASE_URL}/note/delete_forever/${noteId}`); // delete forever
