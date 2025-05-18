@@ -13,11 +13,31 @@ import MainLayout from "./components/layout/MainLayout";
 import { ToastContainer, toast } from "react-toastify";
 import MainLayoutPage from "./components/layout/MainLayout";
 import { ThemeProvider } from "./contexts/ThemeContext";
-
+import VerifyNoticeModal from "./components/ui/VerifyNoticeModal";
+import { useState, useEffect } from "react";
 function App() {
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) {
+      const user = JSON.parse(stored);
+      if (user.is_verified === "0" && user.verification_token) {
+        setShowVerifyModal(true);
+        setToken(user.verification_token);
+      }
+    }
+  }, []);
+
   return (
     <ThemeProvider>
       <Router>
+        <VerifyNoticeModal
+          isOpen={showVerifyModal}
+          onClose={() => setShowVerifyModal(false)}
+          token={token}
+        />
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>

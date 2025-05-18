@@ -87,12 +87,19 @@ export const SidebarProvider = ({ children, userId }) => {
 
   // utility: distribute notes into menuItems
   const updateMenuItemsWithNotes = (allNotes) => {
-    const favoriteNotes = allNotes.filter((n) => n.favorite && !n.deleted);
-    const privateNotes = allNotes.filter(
-      (n) => !n.public && !n.favorite && !n.deleted
+    const favoriteNotes = allNotes.filter(
+      (n) => n.isFavourite == 1 && n.isTrashed != 1
     );
-    const publicNotes = allNotes.filter((n) => n.public && !n.deleted);
-    const trashNotes = allNotes.filter((n) => n.deleted);
+    const privateNotes = allNotes.filter(
+      (n) =>
+        (n.visibility === null || n.visibility === "private") &&
+        n.isFavourite != 1 &&
+        n.isTrashed != 1
+    );
+    const publicNotes = allNotes.filter(
+      (n) => n.visibility === "public" && n.isTrashed != 1
+    );
+    const trashNotes = allNotes.filter((n) => n.isTrashed == 1);
 
     setMenuItems((mi) =>
       mi.map((item) => {

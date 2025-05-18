@@ -27,10 +27,15 @@ const NoteGrid = ({
       try {
         setLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
-        const raw = useMockData
-          ? mockNotes
-          : (await noteApi.getNotes(userId)).data ?? [];
-        setNotes(raw);
+        if (useMockData) {
+          // Sử dụng dữ liệu mẫu
+          setNotes(mockNotes);
+        } else {
+          // Lấy dữ liệu từ API
+          const response = await noteApi.getNotes(userId);
+          // console.log(response.data);
+          setNotes(response.data ?? []);
+        }
         // setTimeout(() => {
         //   setNotes(mockNotes);
         //   setLoading(false);

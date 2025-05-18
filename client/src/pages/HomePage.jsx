@@ -35,6 +35,7 @@ const HomePage = () => {
     setGreeting(hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening");
   }, []);
 
+
   const handleNewNote = async () => {
     try {
       const payload = {
