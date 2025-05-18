@@ -25,13 +25,13 @@ const defaultMenuItems = [
     icon: "lock",
     notes: [],
   },
-  // {
-  //   id: "public",
-  //   type: "notes",
-  //   label: "Public Notes",
-  //   icon: "globe",
-  //   notes: [],
-  // },
+  {
+    id: "public",
+    type: "notes",
+    label: "Public Notes",
+    icon: "globe",
+    notes: [],
+  },
   { id: "trash", type: "trash", label: "Trash", icon: "trash", notes: [] },
 ];
 

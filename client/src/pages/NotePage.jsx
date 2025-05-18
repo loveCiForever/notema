@@ -161,7 +161,7 @@ const NotePage = ({ }) => {
           }`}
       >
         <div className={`${isDark ? "text-zinc-400" : "text-zinc-500"
-          } px-2 cursor-default mt-1`}>
+          } px-2 cursor-default mt-1 ${isMobile ? "block" : "hidden"}`}>
           <button onClick={() => setIsOpen(o => !o)}> <AlignJustify /> </button>
         </div>
         <div className="flex items-center gap-0">

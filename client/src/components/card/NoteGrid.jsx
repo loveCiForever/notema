@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Clock, LayoutGrid, List, Loader, Notebook } from "lucide-react";
 import NoteCard from "./NoteCard";
 import { useTheme } from "../../contexts/ThemeContext";
-// import { noteService } from "../../services/noteService";
 import { getColorById } from "../../utils/colorUtils";
 import mockNotes from "../data/data";
 import Loading from "../loading/Loading";
@@ -13,11 +12,10 @@ const NoteGrid = ({
   onNoteClick,
   useMockData = false,
   userId,
+  refreshTrigger, // Thêm props để cập nhật
 }) => {
   const { isDark } = useTheme();
-  const [viewMode, setViewMode] = useState(
-    localStorage.getItem("viewMode") || "grid"
-  );
+  const [viewMode, setViewMode] = useState(localStorage.getItem("viewMode") || "grid");
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,25 +25,24 @@ const NoteGrid = ({
       try {
         setLoading(true);
         await new Promise((resolve) => setTimeout(resolve, 500));
+        let fetchedNotes;
         if (useMockData) {
-          // Sử dụng dữ liệu mẫu
-          setNotes(mockNotes);
+          fetchedNotes = mockNotes;
         } else {
-          // Lấy dữ liệu từ API
           const response = await noteApi.getNotes(userId);
-          console.log(response);
-          setNotes(response.data ?? []);
+          fetchedNotes = response.data ?? [];
         }
-        // setTimeout(() => {
-        //   setNotes(mockNotes);
-        //   setLoading(false);
-        // }, 10);
+        // Sắp xếp ghi chú
+        const sortedNotes = fetchedNotes.sort((a, b) => {
+          if (a.isPinned && !b.isPinned) return -1;
+          if (!a.isPinned && b.isPinned) return 1;
+          return new Date(b.lastEdited) - new Date(a.lastEdited);
+        });
+        setNotes(sortedNotes);
         setError(null);
       } catch (err) {
         console.error("Error fetching notes:", err);
         setError("Failed to load notes. Please try again later.");
-
-        // Fallback to mock data if API fails
         if (!useMockData) {
           setNotes(mockNotes);
         }
@@ -55,7 +52,7 @@ const NoteGrid = ({
     };
 
     fetchNotes();
-  }, [useMockData]);
+  }, [useMockData, userId, refreshTrigger]);
 
   const toggleViewMode = () => {
     setViewMode(viewMode === "grid" ? "list" : "grid");
@@ -66,11 +63,7 @@ const NoteGrid = ({
     return (
       <div className="flex flex-col items-center justify-center mt-20 min-h-[200px]">
         <Loading className="w-8 h-8 mb-4" />
-        <div
-          className={`text-center text-base mt-4 ${
-            isDark ? "text-white" : "text-black"
-          }`}
-        >
+        <div className={`text-center text-base mt-4 ${isDark ? "text-white" : "text-black"}`}>
           Hamster is finding your notes...
         </div>
       </div>
@@ -81,59 +74,38 @@ const NoteGrid = ({
     return (
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
-          <div
-            className={`flex items-center gap-2 ${
-              isDark ? "text-zinc-400" : "text-zinc-500"
-            }`}
-          >
+          <div className={`flex items-center gap-2 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
             <Clock className="w-4 h-4" />
             <h2 className="font-medium">{title}</h2>
           </div>
         </div>
-        <div
-          className={`text-center py-10 ${
-            isDark ? "text-zinc-400" : "text-zinc-600"
-          }`}
-        >
+        <div className={`text-center py-10 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
           {error}
         </div>
       </div>
     );
   }
 
-    return (
-        <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-                <div className={`flex items-center gap-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                    <Notebook className="w-4 h-4" />
-                    <h2 className="font-medium">{title}</h2>
-                </div>
-
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-4">
+        <div className={`flex items-center gap-2 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+          <Notebook className="w-4 h-4" />
+          <h2 className="font-medium">{title}</h2>
+        </div>
         <button
           onClick={toggleViewMode}
           className={`p-2 rounded-md cursor-pointer ${
-            isDark
-              ? "hover:bg-zinc-800 text-zinc-400"
-              : "hover:bg-zinc-100 text-zinc-600"
+            isDark ? "hover:bg-zinc-800 text-zinc-400" : "hover:bg-zinc-100 text-zinc-600"
           }`}
-          title={
-            viewMode === "grid" ? "Switch to list view" : "Switch to grid view"
-          }
+          title={viewMode === "grid" ? "Switch to list view" : "Switch to grid view"}
         >
-          {viewMode === "grid" ? (
-            <List className="w-4 h-4" />
-          ) : (
-            <LayoutGrid className="w-4 h-4" />
-          )}
+          {viewMode === "grid" ? <List className="w-4 h-4" /> : <LayoutGrid className="w-4 h-4" />}
         </button>
       </div>
 
       {notes.length === 0 ? (
-        <div
-          className={`text-center py-10 ${
-            isDark ? "text-zinc-400" : "text-zinc-600"
-          }`}
-        >
+        <div className={`text-center py-10 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
           Oops! No notes found. Create your first note!
         </div>
       ) : (

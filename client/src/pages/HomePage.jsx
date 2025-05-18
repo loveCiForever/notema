@@ -70,22 +70,24 @@ const HomePage = () => {
         } w-full min-h-screen transition-colors p-2`}
     >
       {/* Header */}
-      <header className="flex justify-between items-center relative">
-        <div className={`${isDark ? "text-zinc-400" : "text-zinc-500"
-          } px-2 cursor-default mt-1`}>
-          <button onClick={() => setIsOpen(o => !o)}> <AlignJustify /> </button>
+      <header className={`flex items-center relative ${isMobile ? "justify-between" : "justify-end"}`}>
+        <div className={`${isMobile ? "block" : "hidden"}`}>
+          <button
+            className={`${isDark ? "text-zinc-400" : "text-zinc-500"} px-2 mt-1`}
+            onClick={() => setIsOpen(o => !o)}
+          >
+            <AlignJustify />
+          </button>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`${isDark ? "text-zinc-400" : "text-zinc-500"
-              } px-2 cursor-default mt-1`}
+            className={`${isDark ? "text-zinc-400" : "text-zinc-500"} px-2 cursor-default mt-1`}
           >
             {new Date().toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })}
           </span>
-
         </div>
       </header>
       {/* Main content */}
