@@ -26,5 +26,6 @@ require __DIR__ . '/src/configs/database.php';
 require __DIR__ . '/src/routes/BaseRoute.php';
 require __DIR__ . '/src/routes/AuthRoute.php';
 require __DIR__ . '/src/routes/UserRoute.php';
+require __DIR__ . '/src/routes/NoteRoute.php';
 
 $app->run();

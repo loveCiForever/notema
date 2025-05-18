@@ -40,9 +40,10 @@ function MainLayout() {
 
 // This wrapper ensures both contexts are provided
 export default function MainLayoutPage() {
+  const { user } = useAuth();
   return (
     <ThemeProvider>
-      <SidebarProvider>
+      <SidebarProvider userId={user.id}>
         <MainLayout />
       </SidebarProvider>
     </ThemeProvider>
