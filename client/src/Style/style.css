@@ -1,0 +1,12 @@
+/* Thêm vào file CSS hoặc thẻ <style> trong NotePage.jsx */
+#editorjs {
+  width: 100%;
+  display: block;
+}
+
+#editorjs .ce-block {
+  width: 100%;
+  display: block;
+  float: none !important;
+  margin-bottom: 10px; /* Khoảng cách giữa các khối */
+}

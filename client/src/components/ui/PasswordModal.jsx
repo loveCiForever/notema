@@ -32,7 +32,7 @@ export default function PasswordModal({ open, onConfirm, onCancel, title, mode }
       onClick={onCancel}
     >
       <div
-        className={`bg-white dark:bg-zinc-800 p-6 rounded shadow-lg w-80 ${isDark ? 'text-white' : 'text-black'}`}
+        className={`bg-white p-6 rounded shadow-lg w-80 ${isDark ? 'text-white bg-zinc-900' : 'text-black'}`}
         onClick={e => e.stopPropagation()}
       >
         <h2 className="text-lg font-semibold mb-4">{title}</h2>
@@ -42,14 +42,14 @@ export default function PasswordModal({ open, onConfirm, onCancel, title, mode }
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-gray-300 text-black'}`}
+              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-zinc-300 text-black'}`}
               placeholder="Nhập mật khẩu"
             />
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-gray-300 text-black'}`}
+              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-zinc-300 text-black'}`}
               placeholder="Xác nhận mật khẩu"
             />
           </>
@@ -60,14 +60,14 @@ export default function PasswordModal({ open, onConfirm, onCancel, title, mode }
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
-              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-gray-300 text-black'}`}
+              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-zinc-300 text-black'}`}
               placeholder="Mật khẩu cũ"
             />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-gray-300 text-black'}`}
+              className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-zinc-300 text-black'}`}
               placeholder="Mật khẩu mới"
             />
           </>
@@ -77,14 +77,14 @@ export default function PasswordModal({ open, onConfirm, onCancel, title, mode }
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-gray-300 text-black'}`}
+            className={`w-full p-2 border rounded mb-4 ${isDark ? 'bg-zinc-700 border-zinc-600 text-white' : 'bg-white border-zinc-300 text-black'}`}
             placeholder="Nhập mật khẩu để xóa"
           />
         )}
         <div className="flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className={`px-4 py-2 rounded ${isDark ? 'bg-zinc-600 hover:bg-zinc-500' : 'bg-gray-200 hover:bg-gray-300'}`}
+            className={`px-4 py-2 rounded ${isDark ? 'bg-zinc-600 hover:bg-zinc-500' : 'bg-zinc-200 hover:bg-zinc-300'}`}
           >
             Hủy
           </button>
