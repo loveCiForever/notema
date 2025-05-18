@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Clock, LayoutGrid, List, Loader } from 'lucide-react';
+import { Clock, LayoutGrid, List, Loader, Notebook } from 'lucide-react';
 import NoteCard from "./NoteCard";
 import { useTheme } from "../../contexts/ThemeContext";
 // import { noteService } from "../../services/noteService";
@@ -21,7 +21,7 @@ const NoteGrid = ({
         const fetchNotes = async () => {
             try {
                 setLoading(true);
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 if (useMockData) {
                     // Sử dụng dữ liệu mẫu
                     setNotes(mockNotes);
@@ -60,7 +60,7 @@ const NoteGrid = ({
         return (
             <div className="flex flex-col items-center justify-center mt-20 min-h-[200px]">
             <Loading className="w-8 h-8 mb-4" />
-            <div className={`text-center text-base mt-4 ${isDark ? "text-white" : "text-black"}`} >
+            <div className={`text-center text-base mt-4 ${isDark ? "text-gray-400" : "text-gray-400"}`} >
                 Hamster is finding your notes...
             </div>
             </div>
@@ -87,7 +87,7 @@ const NoteGrid = ({
         <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
                 <div className={`flex items-center gap-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                    <Clock className="w-4 h-4" />
+                    <Notebook className="w-4 h-4" />
                     <h2 className="font-medium">{title}</h2>
                 </div>
 

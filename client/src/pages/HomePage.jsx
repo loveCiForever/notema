@@ -9,7 +9,8 @@ import {
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import NoteGrid from "../components/card/NoteGrid";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import NewNote from "../components/button/NewNote";
 
 function HomePage() {
   const { isDark } = useTheme();
@@ -29,18 +30,13 @@ function HomePage() {
   };
 
   const handleNoteClick = (id) => {
-    
+
     navigate(`./note/${id}`);
   };
 
   useEffect(() => {
     handleGreetingChange();
   }, []);
-
-  if (!user) {
-    toast.error("You must be logged in first");
-    return <Navigate to="/login" replace />;
-  }
 
   return (
     <div
@@ -52,24 +48,24 @@ function HomePage() {
         <div className="flex items-center gap-2">
           <span
             className={`${isDark ? "text-zinc-400" : "text-zinc-500"
-              } px-2 cursor-default mt-1`}
+              } p-2 cursor-default`}
           >
             {new Date().toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })}
           </span>
-          <button className={`mr-2 rounded-full `}>
+          <button className={`mr-2 p-2 rounded-full  `}>
             <Clock
               className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"
                 }`}
             />
           </button>
           <button
-            className={`p-2 rounded-lg ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
+            className={`p-2 rounded-full ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
               }`}
           >
-            <MoreHorizontal
+            <MoreHorizontal 
               className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"
                 }`}
             />
@@ -77,24 +73,32 @@ function HomePage() {
         </div>
       </header>
       {/* Main content */}
-      
+
       <main className="mx-auto p-6">
         <h1
           className={`text-3xl p-4 text-center font-medium ${isDark ? "text-white" : "text-zinc-800"
             }`}
         >
-          {greeting}, {user.fullname} 
+          {greeting}, {user.fullname}
           <span className={`${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
             . Welcome back!
           </span>
         </h1>
 
-        <NoteGrid 
-        title="Recently visited"
-        onNoteClick={handleNoteClick}
-        useMockData={true} // Set to false to use real API
-      />
-      </main> 
+        <NoteGrid
+          title="All Notes"
+          onNoteClick={handleNoteClick}
+          useMockData={true} // Set to false to use real API
+        />
+        <div className="absolute fixed right-0  bottom-0 p-4">
+          <NewNote
+            // Add your logic to create a new note here 
+            onClick={() => {
+              navigate("/home");
+            }}
+          />
+        </div>
+      </main>
     </div>
   );
 }
