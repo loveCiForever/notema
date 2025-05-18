@@ -113,27 +113,31 @@ export const mockNotes = [
     contributors: [],
     editCount: 2
   },
-  {
+{
     id: "6",
     title: "Learning Resources",
     content: {
       time: 1689777600000,
       blocks: [
-        { id: "cd34", type: "header", data: { text: "Web Development", level: 2 } },
-        { id: "ef56", type: "paragraph", data: { text: "Bookmarked tutorials and courses for React and TypeScript." } }
+        {
+          id: "cd34",
+          type: "header",
+          data: { text: "Web Development", level: 2 },
+        },
+        {
+          id: "ef56",
+          type: "paragraph",
+          data: {
+            text: "Bookmarked tutorials and courses for React and TypeScript.",
+          },
+        },
       ],
-      version: "2.25.0"
+      version: "2.25.0",
     },
-    isPinned: false,
-    isFavourite: true,
-    visibility: "private",
-    isLocked: false,
     createdAt: "2023-07-20T14:00:00Z",
     updatedAt: "2023-07-20T16:45:00Z",
-    authorId: "user123",
-    contributors: [],
-    editCount: 1
-  }
+    authorId: 5,
+  },
 ];
 
 export default mockNotes;

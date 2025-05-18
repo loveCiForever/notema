@@ -8,6 +8,7 @@ import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
+import { FontProvider } from "../../contexts/FontContext";
 function MainLayout() {
   const { isOpen, width, isMobile } = useSidebar();
   const { theme, isDark } = useTheme();
@@ -38,13 +39,14 @@ function MainLayout() {
   );
 }
 
-// This wrapper ensures both contexts are provided
 export default function MainLayoutPage() {
   return (
     <ThemeProvider>
-      <SidebarProvider>
-        <MainLayout />
-      </SidebarProvider>
+      <FontProvider>
+        <SidebarProvider>
+          <MainLayout />
+        </SidebarProvider>
+      </FontProvider>
     </ThemeProvider>
   );
 }

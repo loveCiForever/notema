@@ -21,6 +21,7 @@
     "@editorjs/simple-image": "^1.6.0",
     "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.8.4",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.11.3",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.503.0",
