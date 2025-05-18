@@ -37,6 +37,7 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
   const isCollapsed = collapsedSections[item.id];
   const [showSearchModal, setShowSearchModal] = useState(false);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleDragStart = (e) => {
     if (item.type === "search" || item.type === "link") return;
@@ -248,16 +249,20 @@ const SidebarItem = ({ item, index, onDragStart, onDragEnd, onDragOver }) => {
                 </>
               )}
               {isCollapsed ? (
-                <ChevronRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+              <ChevronRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
               ) : (
                 <ChevronDown className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
               )}
             </div>
           </div>
+
           {!isCollapsed && (
             <div className="pl-8 pr-3 mt-1 space-y-1 ">
               {item.notes && item.notes.length > 0 ? (
                 item.notes
+                  .filter((note) =>
+                    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
                   .slice(0, showItemCount)
                   .map((note) => (
                     <SidebarNoteItem
