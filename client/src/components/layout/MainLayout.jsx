@@ -40,10 +40,11 @@ function MainLayout() {
 }
 
 export default function MainLayoutPage() {
+  const { user } = useAuth();
   return (
     <ThemeProvider>
       <FontProvider>
-        <SidebarProvider>
+        <SidebarProvider userId={user.id}>
           <MainLayout />
         </SidebarProvider>
       </FontProvider>

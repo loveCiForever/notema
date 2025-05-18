@@ -3,14 +3,16 @@
 
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
+import { Pin, Globe, Lock } from "lucide-react";
 import { Clock, MoreHorizontal } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import NoteGrid from "../components/card/NoteGrid";
 import NewNote from "../components/button/NewNote";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 import { useNavigate, Navigate } from "react-router-dom";
 
-function HomePage() {
+const HomePage = () => {
   const { isDark } = useTheme();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -34,20 +36,39 @@ function HomePage() {
   }
 
   return (
-    <div className={`${isDark ? "bg-zinc-900" : "bg-white"} w-full min-h-screen transition-colors p-2`}>
+    <div
+      className={`${
+        isDark ? "bg-zinc-900" : "bg-white"
+      } w-full min-h-screen transition-colors p-2`}
+    >
       {/* Header */}
       <header className="flex justify-end items-center relative">
         <div className="flex items-center gap-2">
-          <span className={`${isDark ? "text-zinc-400" : "text-zinc-500"} p-2 cursor-default`}>
-            {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          <span
+            className={`${
+              isDark ? "text-zinc-400" : "text-zinc-500"
+            } px-2 cursor-default mt-1`}
+          >
+            {new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </span>
           
         </div>
       </header>
+      {/* Main content */}
+
       <main className="mx-auto p-6">
-        <h1 className={`text-3xl p-4 text-center font-medium ${isDark ? "text-white" : "text-zinc-800"}`}>
+        <h1
+          className={`text-3xl p-4 text-center font-medium ${
+            isDark ? "text-white" : "text-zinc-800"
+          }`}
+        >
           {greeting}, {user.fullname}
-          <span className={`${isDark ? "text-zinc-400" : "text-zinc-500"}`}>. Welcome back!</span>
+          <span className={`${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+            . Welcome back!
+          </span>
         </h1>
 
         <NoteGrid
@@ -62,6 +83,6 @@ function HomePage() {
       </main>
     </div>
   );
-}
+};
 
 export default HomePage;

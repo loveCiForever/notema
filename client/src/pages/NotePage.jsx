@@ -13,12 +13,13 @@ import {
 } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
 import useEditor from "../hooks/useEditor";
-
+import axios from "axios";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import Embed from "@editorjs/embed";
 import SimpleImage from "@editorjs/simple-image";
+import mockNotes from "../components/data/data";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 
 export const noteStruct = {
@@ -29,56 +30,111 @@ export const noteStruct = {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 };
-
-const NotePage = () => {
+import { useAuth } from "../contexts/AuthContext";
+const NotePage = ({}) => {
   const { isDark } = useTheme();
-
+  const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
+  const { id } = useParams();
   const ejInstance = useRef(null);
-  const [note, setNote] = useState({ ...noteStruct });
+  const { user } = useAuth();
+  const [note, setNote] = useState({
+    ...noteStruct,
+    author: user.id ?? "",
+  });
   const [showDropdown, setShowDropdown] = useState(false);
   const [fontSize, setFontSize] = useState(() => {
     const saved = localStorage.getItem("note_font_size");
     return saved ? Number(saved) : 16;
   });
   useEffect(() => {
-    if (!ejInstance.current) initEditor();
+    const fetchNote = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/note/get_single/${id}`);
+        const data = res.data.data;
+
+        const { title, content, author, created_at, updated_at } = data;
+        const initialData =
+          content && content.blocks ? content : { blocks: [] };
+
+        setNote({
+          id: data.id,
+          title,
+          content: initialData.blocks,
+          author,
+          createdAt: created_at,
+          updatedAt: updated_at,
+        });
+
+        initEditor(initialData);
+      } catch (err) {
+        console.error("Failed to fetch note:", err);
+        initEditor(); // fallback to empty editor
+      }
+    };
+
+    fetchNote();
+
     return () => {
       if (ejInstance.current) {
         ejInstance.current.destroy();
         ejInstance.current = null;
       }
     };
-  }, []);
+  }, [id]);
 
-  const initEditor = () => {
+  const initEditor = (
+    initialData = { blocks: [], time: Date.now(), version: "2.25.0" }
+  ) => {
     const editor = new EditorJS({
       holder: "editorjs",
       autofocus: true,
-      placeholder: "Start writing your note...                                ",
+      placeholder: "Start writing your note...",
+      data: initialData,
       tools: { header: Header, list: List, embed: Embed },
-      onReady: () => (ejInstance.current = editor),
+      onReady: () => {
+        ejInstance.current = editor;
+      },
       onChange: async () => {
-        const saved = await ejInstance.current.save();
-        const now = new Date().toISOString();
-        const updatedNote = { ...note, content: saved.blocks, updatedAt: now };
-        setNote(updatedNote);
-        await autoSave(updatedNote);
+        if (!ejInstance.current) return;
+        try {
+          const saved = await ejInstance.current.save();
+          const now = new Date().toISOString();
+          setNote((prev) => {
+            const updated = { ...prev, content: saved.blocks, updatedAt: now };
+            autoSave(updated);
+            return updated;
+          });
+        } catch (err) {
+          console.error("Save failed:", err);
+        }
       },
     });
   };
 
-  const handleTitleChange = async (e) => {
+  const handleTitleChange = (e) => {
     const title = e.target.value;
     const now = new Date().toISOString();
-    const updatedNote = { ...note, title, updatedAt: now };
-    setNote(updatedNote);
-    await autoSave(updatedNote);
+    setNote((prev) => {
+      const updated = { ...prev, title, updatedAt: now };
+      autoSave(updated);
+
+      return updated;
+    });
   };
 
   const autoSave = async (currentNote) => {
+    console.log(currentNote);
     try {
-      //   await axios.post('/api/notes', currentNote);
-      console.log(currentNote);
+      if (currentNote.id) {
+        await axios.put(
+          `${BASE_URL}/note/update_note/${currentNote.id}`,
+          currentNote
+        );
+      } else {
+        const res = await axios.post(`${BASE_URL}/note/new_note`, currentNote);
+        const newId = res.data.id;
+        setNote((prev) => ({ ...prev, id: newId }));
+      }
     } catch (err) {
       console.error("Auto-save error:", err);
     }
