@@ -241,7 +241,7 @@ const NotePage = ({}) => {
         </div>
         <div className="flex items-center justify-between gap-0">
           <h1
-            className={`text-lg font-medium w-1/2 line-clamp-1 ${
+            className={`text-lg font-medium w-2/3 line-clamp-1 ${
               isDark ? "text-white" : "text-zinc-800"
             }`}
           >

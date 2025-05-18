@@ -11,9 +11,11 @@ import {
   Trash2,
   Star,
   Globe,
+  Trash,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-
+import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 const FONT_FAMILIES = [
   "sans-serif",
   "serif",
@@ -38,7 +40,22 @@ export default function NoteOptionsDropdown({
   const [passwordEnabled, setPasswordEnabled] = useState(
     note.isLocked || false
   );
+  const navigate = useNavigate();
 
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  {
+    note.isTrashed == 1 && (
+      <button
+        className={`w-full text-left px-3 py-2 flex items-center gap-2 text-red-500 ${
+          isDark ? "hover:bg-white/10" : "hover:bg-zinc-200"
+        }`}
+        onClick={() => setShowConfirmDelete(true)}
+      >
+        <Trash className="w-4 h-4" />
+        <span>Delete Forever</span>
+      </button>
+    );
+  }
   console.log(note);
   const wordCount = (() => {
     const text =
@@ -149,12 +166,12 @@ export default function NoteOptionsDropdown({
       </button>
 
       {/* Word count */}
-      <div className="px-3 py-1 border-t flex items-center gap-2">
+      {/* <div className="px-3 py-1 border-t flex items-center gap-2">
         <span>Words: {wordCount}</span>
-      </div>
+      </div> */}
 
       {/* Last edited */}
-      <div className="px-3 py-1 flex items-center gap-2">
+      {/* <div className="px-3 py-1 flex items-center gap-2">
         <span>
           {note.lastEdited
             ? `Edited ${formatDistanceToNow(new Date(note.lastEdited), {
@@ -162,7 +179,62 @@ export default function NoteOptionsDropdown({
               })}`
             : "Edited unknown"}
         </span>
-      </div>
+      </div> */}
+      {note.isTrashed == 1 && (
+        <button
+          className={`w-full text-left px-3 py-2 flex items-center gap-2 text-red-500 ${
+            isDark ? "hover:bg-white/10" : "hover:bg-zinc-200"
+          }`}
+          onClick={() => setShowConfirmDelete(true)}
+        >
+          <Trash className="w-4 h-4" />
+          <span>Delete Forever</span>
+        </button>
+      )}
+
+      {/* Confirm Delete Modal */}
+      {showConfirmDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div
+            className={`rounded-lg p-6 w-96 shadow-md ${
+              isDark ? "bg-zinc-800 text-white" : "bg-white text-black"
+            }`}
+          >
+            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
+            <p className="mb-4">
+              Are you sure you want to permanently delete this note? This action
+              cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded bg-gray-400 hover:bg-gray-500 text-white"
+                onClick={() => setShowConfirmDelete(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white"
+                onClick={async () => {
+                  try {
+                    await axios.delete(
+                      `${
+                        import.meta.env.VITE_REMOTE_SERVER_URL
+                      }/note/delete_forever/${note.id}`
+                    );
+                    setShowConfirmDelete(false);
+                    onClose();
+                    navigate("/home");
+                  } catch (err) {
+                    console.error("Failed to delete note forever:", err);
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
