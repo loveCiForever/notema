@@ -33,7 +33,7 @@ const NoteGrid = ({
         } else {
           // Lấy dữ liệu từ API
           const response = await noteApi.getNotes(userId);
-          console.log(response.data);
+          // console.log(response.data);
           setNotes(response.data ?? []);
         }
         // setTimeout(() => {

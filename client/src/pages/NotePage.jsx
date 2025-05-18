@@ -25,7 +25,7 @@ import SimpleImage from "@editorjs/simple-image";
 import mockNotes from "../components/data/data";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 import { useSidebar } from "../contexts/SidebarContext";
-
+import { Globe, ChevronUp } from "lucide-react";
 export const noteStruct = {
   title: "",
   banner: "",
@@ -65,6 +65,46 @@ const NotePage = ({}) => {
       console.error("Failed to toggle favourite:", err);
     }
   };
+  const handleToggleTrash = async (noteId, isCurrentlyTrashed) => {
+    try {
+      if (isCurrentlyTrashed) {
+        // Restore
+        await axios.put(`${BASE_URL}/note/restore_from_trash/${noteId}`);
+      } else {
+        // Move to trash
+        await axios.put(`${BASE_URL}/note/move_to_trash/${noteId}`);
+      }
+
+      setNote((prev) => ({ ...prev, isTrashed: isCurrentlyTrashed ? 0 : 1 }));
+    } catch (err) {
+      console.error("Failed to toggle trash state:", err);
+    }
+  };
+
+  const handleToggleVisibility = async (noteId, makePublic) => {
+    const newVisibility = makePublic ? "public" : "private";
+
+    try {
+      await axios.put(`${BASE_URL}/note/set_visibility/${noteId}`, {
+        visibility: newVisibility,
+      });
+
+      setNote((prev) => ({
+        ...prev,
+        visibility: newVisibility,
+      }));
+    } catch (err) {
+      console.error("Failed to update visibility:", err);
+    }
+  };
+  //   const handleMoveToTrash = async (noteId) => {
+  //     try {
+  //       await axios.put(`${BASE_URL}/note/move_to_trash/${noteId}`);
+  //       setNote((prev) => ({ ...prev, isDeleted: true }));
+  //     } catch (err) {
+  //       console.error("Failed to move note to trash:", err);
+  //     }
+  //   };
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -74,7 +114,7 @@ const NotePage = ({}) => {
 
         setNoteId(res.data.data.id);
 
-        console.log(res);
+        console.log(res.data);
 
         const { title, content, author, created_at, updated_at } = data;
         const initialData =
@@ -87,6 +127,10 @@ const NotePage = ({}) => {
           author,
           createdAt: created_at,
           updatedAt: updated_at,
+          isFavourite: data.isFavourite,
+          isPinned: data.isPinned,
+          isTrashed: data.isTrashed,
+          visibility: data.visibility,
         });
 
         initEditor(initialData);
@@ -208,23 +252,48 @@ const NotePage = ({}) => {
               isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
             } cursor-pointer`}
           >
-            <Lock
-              className={`w-4 h-4 ${
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              }`}
-            />
-            <span
-              className={`${
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              } text-sm`}
-            >
-              Private
-            </span>
-            <ChevronDown
-              className={`w-4 h-4 ${
-                isDark ? "text-zinc-500" : "text-zinc-400"
-              }`}
-            />
+            {note.visibility == "private" ? (
+              <div className="flex flex-row gap-2 items-center justify-center">
+                <Lock
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
+                />
+                <span
+                  className={`${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  } text-sm`}
+                >
+                  Private
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-row gap-2 items-center justify-center">
+                {" "}
+                <Globe
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
+                />
+                <span
+                  className={`${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  } text-sm`}
+                >
+                  Public
+                </span>
+                <ChevronUp
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -249,7 +318,7 @@ const NotePage = ({}) => {
             }`}
             onClick={() => handlePin(noteId)}
           >
-            {note.isPinned ? (
+            {note.isPinned == 1 ? (
               <PinOff
                 className={`w-5 h-5 ${
                   isDark ? "text-zinc-400" : "text-zinc-500"
@@ -297,6 +366,8 @@ const NotePage = ({}) => {
                     // or any appropriate field
                   }}
                   onToggleFavorite={handleToggleFavorite}
+                  onToggleTrash={handleToggleTrash}
+                  onTogglePublic={handleToggleVisibility}
                   fontSize={fontSize}
                   onFontSizeChange={(size) => {
                     setFontSize(size);

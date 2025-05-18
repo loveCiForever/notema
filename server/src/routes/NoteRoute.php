@@ -207,6 +207,33 @@ $app->put('/note/move_to_trash/{id}', function (Request $request, Response $resp
     return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
 });
 
+$app->put('/note/restore_from_trash/{id}', function (Request $request, Response $response, array $args) use ($pdo) {
+    $noteId = (int)$args['id'];
+
+
+    $stmt = $pdo->prepare('SELECT id FROM notes WHERE id = ?');
+    $stmt->execute([$noteId]);
+    $note = $stmt->fetch();
+
+    if (!$note) {
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Note not found',
+        ]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+    }
+
+    $stmt = $pdo->prepare('UPDATE notes SET isTrashed = 0 WHERE id = ?');
+    $stmt->execute([$noteId]);
+
+    $response->getBody()->write(json_encode([
+        'success' => true,
+        'message' => 'Note restored from trash',
+    ]));
+
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+});
+
 
 $app->delete('/note/delete_forever/{id}', function (Request $request, Response $response, array $args) use ($pdo) {
     $noteId = (int)$args['id'];
