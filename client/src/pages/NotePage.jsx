@@ -129,6 +129,10 @@ const NotePage = ({ }) => {
           author,
           createdAt: created_at,
           updatedAt: updated_at,
+          isFavourite: data.isFavourite,
+          isPinned: data.isPinned,
+          isTrashed: data.isTrashed,
+          visibility: data.visibility,
         });
 
         const savedPassword = localStorage.getItem(`note_pass_${id}`);
@@ -271,7 +275,6 @@ const NotePage = ({ }) => {
             className={`text-lg font-medium w-2/3 line-clamp-1 ${
               isDark ? "text-white" : "text-zinc-800"
             }`}
-            className={`text-lg font-medium w-1/2 line-clamp-1 ${isDark ? "text-white" : "text-zinc-800"}`}
           >
             {note.title}
           </h1>
