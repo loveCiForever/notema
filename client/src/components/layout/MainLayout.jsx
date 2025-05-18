@@ -14,7 +14,7 @@ function MainLayout() {
   const { theme, isDark } = useTheme();
   const sidebarWidth = isMobile ? 0 : isOpen ? width : 60;
   const { user } = useAuth();
-
+  // console.log(sidebarWidth);
   if (!user) {
     toast.error("You must be logged in first");
     return <Navigate to="/login" replace />;

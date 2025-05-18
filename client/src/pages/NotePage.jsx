@@ -10,6 +10,9 @@ import {
   Smile,
   ImageIcon,
   MessageCircle,
+  Pin,
+  PinOff,
+  AlignJustify
 } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
 import useEditor from "../hooks/useEditor";
@@ -21,6 +24,7 @@ import Embed from "@editorjs/embed";
 import SimpleImage from "@editorjs/simple-image";
 import mockNotes from "../components/data/data";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
+import { useSidebar } from "../contexts/SidebarContext";
 
 export const noteStruct = {
   title: "",
@@ -31,7 +35,8 @@ export const noteStruct = {
   updatedAt: new Date().toISOString(),
 };
 import { useAuth } from "../contexts/AuthContext";
-const NotePage = ({}) => {
+import { noteApi } from "../services/noteApi";
+const NotePage = ({ }) => {
   const { isDark } = useTheme();
   const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
   const { id } = useParams();
@@ -41,6 +46,7 @@ const NotePage = ({}) => {
     ...noteStruct,
     author: user.id ?? "",
   });
+  const { isMobile, setIsOpen} = useSidebar();
   const [showDropdown, setShowDropdown] = useState(false);
   const [fontSize, setFontSize] = useState(() => {
     const saved = localStorage.getItem("note_font_size");
@@ -111,6 +117,10 @@ const NotePage = ({}) => {
     });
   };
 
+  const handlePin = async () => {
+    
+  };
+
   const handleTitleChange = (e) => {
     const title = e.target.value;
     const now = new Date().toISOString();
@@ -150,6 +160,10 @@ const NotePage = ({}) => {
         className={`flex justify-between items-center px-6 py-2 ${isDark ? "border-b border-zinc-800" : ""
           }`}
       >
+        <div className={`${isDark ? "text-zinc-400" : "text-zinc-500"
+          } px-2 cursor-default mt-1`}>
+          <button onClick={() => setIsOpen(o => !o)}> <AlignJustify /> </button>
+        </div>
         <div className="flex items-center gap-0">
           <h1
             className={`text-lg font-medium w-1/2 line-clamp-1 ${isDark ? "text-white" : "text-zinc-800"
@@ -178,13 +192,13 @@ const NotePage = ({}) => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button
+          {/* <button
             className={`px-3 py-1 rounded ${isDark ? "hover:bg-zinc-800 text-zinc-300" : "hover:bg-zinc-100"
               } font-medium`}
           >
             Share
-          </button>
-          <button
+          </button> */}
+          {/* <button
             className={`p-2 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
               }`}
           >
@@ -192,15 +206,16 @@ const NotePage = ({}) => {
               className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"
                 }`}
             />
-          </button>
+          </button> */}
           <button
-            className={`p-2 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
-              }`}
+            className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
+            onClick={handlePin}
           >
-            <Star
-              className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"
-                }`}
-            />
+            {note.isPinned ? (
+              <PinOff className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
+            ) : (
+              <Pin className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
+            )}
           </button>
           <div className="relative">
 
@@ -209,7 +224,7 @@ const NotePage = ({}) => {
                 e.stopPropagation();
                 setShowDropdown(v => !v);
               }}
-              className={`p-2 rounded-full ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
+              className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
             >
               <MoreHorizontal className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
             </button>
@@ -251,7 +266,7 @@ const NotePage = ({}) => {
             </div>
             <div className={`save-status ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{status}</div> */}
       <div className={`w-full bg-white p-6  pl-10 ${isDark ? "bg-zinc-900 " : "bg-white"}`}>
-        <div className="mx-20">
+        <div className={` ${isMobile ? "mx-2" : "mx-20"}`}>
           <input
             type="text"
             name="title"
@@ -267,7 +282,7 @@ const NotePage = ({}) => {
           <div
             id="editorjs"
             style={{ fontSize: `${fontSize}px` }}
-            className={`flex rounded-md p-4 mb-6 items-center justify-start pl-10 bg-red-0 ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
+            className={`flex rounded-md p-4 mb-6 items-center justify-start bg-red-0 ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
           />
         </div>
       </div>
