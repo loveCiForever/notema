@@ -8,12 +8,13 @@ import React from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
+import { FontProvider } from "../../contexts/FontContext";
 function MainLayout() {
   const { isOpen, width, isMobile } = useSidebar();
   const { theme, isDark } = useTheme();
   const sidebarWidth = isMobile ? 0 : isOpen ? width : 60;
   const { user } = useAuth();
-
+  // console.log(sidebarWidth);
   if (!user) {
     toast.error("You must be logged in first");
     return <Navigate to="/login" replace />;
@@ -38,14 +39,15 @@ function MainLayout() {
   );
 }
 
-// This wrapper ensures both contexts are provided
 export default function MainLayoutPage() {
   const { user } = useAuth();
   return (
     <ThemeProvider>
-      <SidebarProvider userId={user.id}>
-        <MainLayout />
-      </SidebarProvider>
+      <FontProvider>
+        <SidebarProvider userId={user.id}>
+          <MainLayout />
+        </SidebarProvider>
+      </FontProvider>
     </ThemeProvider>
   );
 }

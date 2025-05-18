@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Clock, LayoutGrid, List, Loader } from "lucide-react";
+import { Clock, LayoutGrid, List, Loader, Notebook } from "lucide-react";
 import NoteCard from "./NoteCard";
 import { useTheme } from "../../contexts/ThemeContext";
 // import { noteService } from "../../services/noteService";
@@ -33,7 +33,7 @@ const NoteGrid = ({
         } else {
           // Lấy dữ liệu từ API
           const response = await noteApi.getNotes(userId);
-          console.log(response);
+          // console.log(response.data);
           setNotes(response.data ?? []);
         }
         // setTimeout(() => {
@@ -56,7 +56,17 @@ const NoteGrid = ({
 
     fetchNotes();
   }, [useMockData]);
-
+  const sortedNotes = React.useMemo(() => {
+    return [...notes].sort((a, b) => {
+      // 1. Pinned lên trước
+      const pinA = a.isPinned ? 1 : 0;
+      const pinB = b.isPinned ? 1 : 0;
+      if (pinB !== pinA) return pinB - pinA;
+      // 2. Trong cùng nhóm: sort theo updatedAt giảm dần
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
+    });
+  }, [notes]);
+  
   const toggleViewMode = () => {
     setViewMode(viewMode === "grid" ? "list" : "grid");
     localStorage.setItem("viewMode", viewMode === "grid" ? "list" : "grid");
@@ -67,9 +77,8 @@ const NoteGrid = ({
       <div className="flex flex-col items-center justify-center mt-20 min-h-[200px]">
         <Loading className="w-8 h-8 mb-4" />
         <div
-          className={`text-center text-base mt-4 ${
-            isDark ? "text-white" : "text-black"
-          }`}
+          className={`text-center text-base mt-4 ${isDark ? "text-white" : "text-black"
+            }`}
         >
           Hamster is finding your notes...
         </div>
@@ -82,18 +91,16 @@ const NoteGrid = ({
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div
-            className={`flex items-center gap-2 ${
-              isDark ? "text-zinc-400" : "text-zinc-500"
-            }`}
+            className={`flex items-center gap-2 ${isDark ? "text-zinc-400" : "text-zinc-500"
+              }`}
           >
             <Clock className="w-4 h-4" />
             <h2 className="font-medium">{title}</h2>
           </div>
         </div>
         <div
-          className={`text-center py-10 ${
-            isDark ? "text-zinc-400" : "text-zinc-600"
-          }`}
+          className={`text-center py-10 ${isDark ? "text-zinc-400" : "text-zinc-600"
+            }`}
         >
           {error}
         </div>
@@ -104,22 +111,17 @@ const NoteGrid = ({
   return (
     <div className="mb-8">
       <div className="flex items-center justify-between mb-4">
-        <div
-          className={`flex items-center gap-2 ${
-            isDark ? "text-zinc-400" : "text-zinc-500"
-          }`}
-        >
-          <Clock className="w-4 h-4" />
+        <div className={`flex items-center gap-2 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+          <Notebook className="w-4 h-4" />
           <h2 className="font-medium">{title}</h2>
         </div>
 
         <button
           onClick={toggleViewMode}
-          className={`p-2 rounded-md cursor-pointer ${
-            isDark
-              ? "hover:bg-zinc-800 text-zinc-400"
-              : "hover:bg-zinc-100 text-zinc-600"
-          }`}
+          className={`p-2 rounded-md cursor-pointer ${isDark
+            ? "hover:bg-zinc-800 text-zinc-400"
+            : "hover:bg-zinc-100 text-zinc-600"
+            }`}
           title={
             viewMode === "grid" ? "Switch to list view" : "Switch to grid view"
           }
@@ -134,9 +136,8 @@ const NoteGrid = ({
 
       {notes.length === 0 ? (
         <div
-          className={`text-center py-10 ${
-            isDark ? "text-zinc-400" : "text-zinc-600"
-          }`}
+          className={`text-center py-10 ${isDark ? "text-zinc-400" : "text-zinc-600"
+            }`}
         >
           Oops! No notes found. Create your first note!
         </div>
@@ -148,7 +149,7 @@ const NoteGrid = ({
               : "flex flex-col space-y-3"
           }
         >
-          {notes.map((note, index) => (
+          {sortedNotes.map((note, index) => (
             <NoteCard
               key={note.id}
               id={note.id}

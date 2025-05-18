@@ -1,10 +1,20 @@
 import top from "../../assets/icons/white/top.svg";
 const BackToTop = () => {
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const duration = 200;
+    const start = window.scrollY;
+    const startTime = performance.now();
+
+    const scrollStep = (timestamp) => {
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      window.scrollTo(0, start * (1 - progress));
+      if (progress < 1) {
+      requestAnimationFrame(scrollStep);
+      }
+    };
+
+    requestAnimationFrame(scrollStep);
   };
   return (
     <button

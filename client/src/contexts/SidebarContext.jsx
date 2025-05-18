@@ -6,6 +6,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 // Sử dụng dữ liệu mẫu từ file data.js
 import mockNotes from "../components/data/data";
 import { noteApi } from "../services/noteApi";
+import { toast } from "react-toastify";
 // Default sidebar menu items (chỉ chứa category, không chứa notes)
 const defaultMenuItems = [
   { id: "search", type: "search", label: "Search", icon: "search", notes: [] },
@@ -78,14 +79,27 @@ export const SidebarProvider = ({ children, userId }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [userId]);
 
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [isMobile]);
+
   // utility: distribute notes into menuItems
   const updateMenuItemsWithNotes = (allNotes) => {
-    const favoriteNotes = allNotes.filter((n) => n.favorite && !n.deleted);
-    const privateNotes = allNotes.filter(
-      (n) => !n.public && !n.favorite && !n.deleted
+    const favoriteNotes = allNotes.filter(
+      (n) => n.isFavourite == 1 && n.isTrashed != 1
     );
-    const publicNotes = allNotes.filter((n) => n.public && !n.deleted);
-    const trashNotes = allNotes.filter((n) => n.deleted);
+    const privateNotes = allNotes.filter(
+      (n) =>
+        (n.visibility === null || n.visibility === "private") &&
+        n.isFavourite != 1 &&
+        n.isTrashed != 1
+    );
+    const publicNotes = allNotes.filter(
+      (n) => n.visibility === "public" && n.isTrashed != 1
+    );
+    const trashNotes = allNotes.filter((n) => n.isTrashed == 1);
 
     setMenuItems((mi) =>
       mi.map((item) => {
@@ -106,7 +120,16 @@ export const SidebarProvider = ({ children, userId }) => {
   };
 
   // toggle favorite flag
-  const toggleFavorite = (noteId) => {
+  const toggleFavorite = async (noteId) => {
+    try {
+      const res = await noteApi.toggleFavourite(noteId);
+      if (!res.success) {
+        throw new Error(res.message);
+      }
+    } catch (error) {
+      toast.error(error);
+    }
+
     const updated = notes.map((n) =>
       n.id === noteId ? { ...n, favorite: !n.favorite } : n
     );
