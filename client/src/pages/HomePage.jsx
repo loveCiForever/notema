@@ -99,5 +99,4 @@ function HomePage() {
   );
 }
 
-// This wrapper ensures both contexts are provided
 export default HomePage;

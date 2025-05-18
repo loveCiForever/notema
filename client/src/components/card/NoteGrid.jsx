@@ -106,7 +106,7 @@ const NoteGrid = ({
 
             {notes.length === 0 ? (
                 <div className={`text-center py-10 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                    No notes found. Create your first note!
+                    Oops! No notes found. Create your first note!
                 </div>
             ) : (
                 <div className={
