@@ -16,6 +16,7 @@ Notema is a web application that allows users to manage their notes efficiently.
     - [Frontend Setup](#frontend-setup)
     - [Access the Application](#access-the-application)
   - [Technologies Used](#technologies-used)
+  - [Live demo](#live-demo)
 
 ## Requirements
 
@@ -131,3 +132,7 @@ cd note-mana
 
 - **Backend**: Slim Framework, PHP, MySQL 
 - **Frontend**: React, Tailwind CSS, Axios
+
+
+## Live demo
+- 

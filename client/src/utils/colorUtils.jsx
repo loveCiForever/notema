@@ -21,7 +21,7 @@ export const getColorById = (id) => {
   // Tính tổng mã ASCII của các ký tự trong id
   // const sum = id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
   // Lấy màu dựa trên phần dư khi chia cho số lượng màu
-  return COLORS[1];
+  return getRandomColor();
 };
 
 export default {
