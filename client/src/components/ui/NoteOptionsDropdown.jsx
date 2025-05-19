@@ -87,13 +87,13 @@ export default function NoteOptionsDropdown({
     setShowPasswordModal(false);
   };
 
-  const wordCount = (() => {
-    const text =
-      typeof note.content === "string"
-        ? note.content
-        : (note.content.blocks || []).map((b) => b.data.text).join(" ");
-    return text.trim().split(/\s/).filter(Boolean).length;
-  })();
+  // const wordCount = (() => {
+  //   const text =
+  //     typeof note.content === "string"
+  //       ? note.content
+  //       : (note.content.blocks || []).map((b) => b.data.text).join(" ");
+  //   return text.trim().split(/\s/).filter(Boolean).length;
+  // })();
 
   if (!show) return null;
   return (

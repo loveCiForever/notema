@@ -23,3 +23,8 @@
     @apply object-cover w-full h-full;
   }
 }
+
+.codex-editor__redactor {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}

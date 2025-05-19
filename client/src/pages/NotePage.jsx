@@ -16,7 +16,6 @@ import {
   AlignJustify,
 } from "lucide-react";
 import React, { useRef, useEffect, useState } from "react";
-import useEditor from "../hooks/useEditor";
 import axios from "axios";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
@@ -28,6 +27,7 @@ import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 import { useSidebar } from "../contexts/SidebarContext";
 import { Globe, ChevronUp } from "lucide-react";
 import PasswordModal from "../components/ui/PasswordModal";
+
 export const noteStruct = {
   title: "",
   banner: "",
@@ -200,7 +200,7 @@ const NotePage = ({}) => {
       ejInstance.current = null;
     }
     const editor = new EditorJS({
-      holder: document.getElementById("editorjs") || "editorjs",
+      holder: "editorjs",
       autofocus: true,
       placeholder: "Start writing your note...",
       data: initialData,
@@ -303,7 +303,7 @@ const NotePage = ({}) => {
         </div>
         <div className="flex items-center justify-between gap-0">
           <h1
-            className={`text-lg font-medium w-[400px] line-clamp-1 ${
+            className={`text-lg font-medium w-auto max-w-[400px] line-clamp-1 ${
               isDark ? "text-white" : "text-zinc-800"
             }`}
           >
@@ -428,12 +428,14 @@ const NotePage = ({}) => {
         </div>
       </header>
       <div
-        className={`w-full bg-white p-6 pl-10 ${
+        className={`flex items-center justify-center w-full bg-white p-6 ${
           isDark ? "bg-zinc-900 " : "bg-white"
         }`}
       >
         <div
-          className={` ${isMobile ? "px-2" : "px-20"} flex flex-col  w-full`}
+          className={` ${
+            isMobile ? "px-2" : "px-4"
+          } flex flex-col items-center justify-center w-full`}
         >
           <input
             type="text"
@@ -443,7 +445,7 @@ const NotePage = ({}) => {
             style={{ fontSize: `${fontSize + 15}px` }}
             onChange={handleTitleChange}
             placeholder="Title"
-            className={`outline-none text-xl mb-2 w-full font-semibold ${
+            className={`text-center outline-none text-xl mb-2 w-full font-semibold ${
               isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
             } border-b-2/ border-zinc-300 focus:border-blue-500 transition-colors duration-200`}
           />
@@ -451,7 +453,7 @@ const NotePage = ({}) => {
           <div
             id="editorjs"
             style={{ fontSize: `${fontSize}px` }}
-            className={`items-start flex w-[full] min-h-[300px] rounded-md mb-6 bg-red-0 space-y-0 ${
+            className={`mb-6 ${
               isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
             }`}
           />
