@@ -1,6 +1,7 @@
 "use client";
 import { useTheme } from "../contexts/ThemeContext";
 import { Outlet, useParams } from "react-router-dom";
+import "../Style/style.css"
 import {
   ChevronDown,
   Lock,
@@ -25,7 +26,7 @@ import SimpleImage from "@editorjs/simple-image";
 import mockNotes from "../components/data/data";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 import { useSidebar } from "../contexts/SidebarContext";
-import { Globe, ChevronUp } from "lucide-react";import PasswordModal from "../components/ui/PasswordModal";
+import { Globe, ChevronUp } from "lucide-react"; import PasswordModal from "../components/ui/PasswordModal";
 export const noteStruct = {
   title: "",
   banner: "",
@@ -36,6 +37,7 @@ export const noteStruct = {
 };
 import { useAuth } from "../contexts/AuthContext";
 import { noteApi } from "../services/noteApi";
+import { debounce } from "lodash";
 
 const NotePage = ({ }) => {
   const { isDark } = useTheme();
@@ -125,7 +127,7 @@ const NotePage = ({ }) => {
         setNote({
           id: data.id,
           title,
-          content: initialData.blocks,
+          content: data.content,
           author,
           createdAt: created_at,
           updatedAt: updated_at,
@@ -174,23 +176,45 @@ const NotePage = ({ }) => {
 
   useEffect(() => {
     if (unlocked) {
-      initEditor(note.content);
+      let blocks = [];
+      if (Array.isArray(note.content)) {
+        blocks = note.content;
+      } else if (note.content && Array.isArray(note.content.blocks)) {
+        blocks = note.content.blocks;
+      }
+      initEditor({
+        blocks,
+        time: Date.now(),
+        version: "2.25.0"
+      });
     }
   }, [unlocked, note.content]);
 
   const initEditor = (
     initialData = { blocks: [], time: Date.now(), version: "2.25.0" }
   ) => {
+    // Destroy previous instance if exists
+    if (ejInstance.current) {
+      ejInstance.current.destroy();
+      ejInstance.current = null;
+    }
     const editor = new EditorJS({
-      holder: "editorjs",
+      holder: document.getElementById("editorjs") || "editorjs",
       autofocus: true,
       placeholder: "Start writing your note...",
-      data: { blocks: initialData },
+      data: initialData,
       tools: { header: Header, list: List, embed: Embed },
-      onReady: () => {
+      onReady: async () => {
         ejInstance.current = editor;
+        const saved = await editor.save();
+        const lastIndex = saved.blocks.length - 1;
+        if (lastIndex >= 0) {
+          editor.caret.setToBlock(lastIndex, 'end');
+        } else {
+          editor.caret.focus(true);
+        }
       },
-      onChange: async () => {
+      onChange: debounce(async () => {
         if (!ejInstance.current) return;
         try {
           const saved = await ejInstance.current.save();
@@ -203,7 +227,7 @@ const NotePage = ({ }) => {
         } catch (err) {
           console.error("Save failed:", err);
         }
-      },
+      }, 1000), // Đợi 1 giây sau khi ngừng gõ
     });
   };
 
@@ -272,9 +296,8 @@ const NotePage = ({ }) => {
         </div>
         <div className="flex items-center justify-between gap-0">
           <h1
-            className={`text-lg font-medium w-2/3 line-clamp-1 ${
-              isDark ? "text-white" : "text-zinc-800"
-            }`}
+            className={`text-lg font-medium w-2/3 line-clamp-1 ${isDark ? "text-white" : "text-zinc-800"
+              }`}
           >
             {note.title}
           </h1>
@@ -284,42 +307,36 @@ const NotePage = ({ }) => {
             {note.visibility == "private" ? (
               <div className="flex flex-row gap-2 items-center justify-center">
                 <Lock
-                  className={`w-4 h-4 ${
-                    isDark ? "text-zinc-500" : "text-zinc-400"
-                  }`}
+                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
+                    }`}
                 />
                 <span
-                  className={`${
-                    isDark ? "text-zinc-500" : "text-zinc-400"
-                  } text-sm`}
+                  className={`${isDark ? "text-zinc-500" : "text-zinc-400"
+                    } text-sm`}
                 >
                   Private
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 ${
-                    isDark ? "text-zinc-500" : "text-zinc-400"
-                  }`}
+                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
+                    }`}
                 />
               </div>
             ) : (
               <div className="flex flex-row gap-2 items-center justify-center">
                 {" "}
                 <Globe
-                  className={`w-4 h-4 ${
-                    isDark ? "text-zinc-500" : "text-zinc-400"
-                  }`}
+                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
+                    }`}
                 />
                 <span
-                  className={`${
-                    isDark ? "text-zinc-500" : "text-zinc-400"
-                  } text-sm`}
+                  className={`${isDark ? "text-zinc-500" : "text-zinc-400"
+                    } text-sm`}
                 >
                   Public
                 </span>
                 <ChevronUp
-                  className={`w-4 h-4 ${
-                    isDark ? "text-zinc-500" : "text-zinc-400"
-                  }`}
+                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
+                    }`}
                 />
               </div>
             )}

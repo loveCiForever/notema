@@ -64,6 +64,20 @@ const NoteCard = ({
 }) => {
   const { isDark } = useTheme();
 
+  // Define extractText before using it
+  const extractText = (content) => {
+    if (!Array.isArray(content)) return "";
+    return content
+      .filter(block => block.type === "paragraph" || block.type === "header")
+      .map(block => block.data.text)
+      .join(" ");
+  };
+
+  // Use the content prop (not note.content)
+  const textPreview = extractText(content);
+  const truncated = textPreview.length > 30 ? textPreview.slice(0, 30) + "..." : textPreview;
+  const isPublic = visibility === "public";
+
   // Rotation classes
   const getRotationClass = () => {
     if (viewMode === "list") return "";
@@ -87,31 +101,15 @@ const NoteCard = ({
     GRADIENT_CLASSES[color]?.[isDark ? "dark" : "light"] ||
     GRADIENT_CLASSES.yellow[isDark ? "dark" : "light"];
 
-  // Extract and truncate content
-  const extractText = () => {
-    if (typeof content === "string") return content;
-    if (content?.blocks) {
-      return content.blocks
-        .filter((b) => ["paragraph", "header"].includes(b.type))
-        .map((b) => b.data.text)
-        .join(" ");
-    }
-    return "";
-  };
-  const text = extractText();
-  const truncated = text.length > 30 ? text.slice(0, 30) + "..." : text;
-  const isPublic = visibility === "public";
-
   return (
     <div
       className={`
         ${bgClass}
         rounded-lg p-4 cursor-pointer transition-all duration-200
         relative overflow-hidden shadow-lg
-        ${
-          viewMode === "grid"
-            ? `transform hover:-translate-y-1 ${getRotationClass()}`
-            : "flex items-center"
+        ${viewMode === "grid"
+          ? `transform hover:-translate-y-1 ${getRotationClass()}`
+          : "flex items-center"
         }
         ${isLocked ? "blur-[1px]" : ""}
       `}
@@ -122,7 +120,7 @@ const NoteCard = ({
         <div className="flex-shrink-0 mr-4">
           <div className="w-10 h-10 flex items-center justify-center">
             {isPinned && <Pin className="w-5 h-5 text-red-500" />}
-            {!isPinned && isFavourite == 1 && (
+            {!isPinned && isFavourite && (
               <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
             )}
           </div>
@@ -130,18 +128,16 @@ const NoteCard = ({
       )}
 
       {/* Grid view pin icon */}
-      {viewMode === "grid" && isPinned == 1 && (
+      {viewMode === "grid" && isPinned && (
         <div className="absolute -top-1 -right-1 rotate-12">
           <Pin className="w-8 h-8 text-red-500 opacity-70" />
         </div>
       )}
 
       {/* Lock icon */}
-      {isLocked == 1 && (
+      {isLocked && (
         <div
-          className={`absolute ${
-            viewMode === "grid" ? "top-2 right-2" : "top-4 right-4"
-          }`}
+          className={`absolute ${viewMode === "grid" ? "top-2 right-2" : "top-4 right-4"}`}
         >
           <Lock className="w-4 h-4 text-zinc-500" />
         </div>
@@ -151,41 +147,30 @@ const NoteCard = ({
       <div className={viewMode === "list" ? "flex-grow" : ""}>
         <div className="mb-2 flex justify-between items-start">
           <h3
-            className={`font-medium ${
-              viewMode === "grid" ? "text-lg" : "text-base"
-            } ${isDark ? "text-zinc-200" : "text-zinc-800"} ${
-              isLocked ? "text-zinc-400" : ""
-            }`}
+            className={`font-medium ${viewMode === "grid" ? "text-lg" : "text-base"} ${isDark ? "text-zinc-200" : "text-zinc-800"} ${isLocked ? "text-zinc-400" : ""}`}
           >
             {title}
           </h3>
 
           <div className="flex gap-1 mt-1">
             {/* Favorite icon in grid view */}
-            {viewMode === "grid" && isFavourite == 1 && !isPinned == 1 && (
+            {viewMode === "grid" && isFavourite && !isPinned && (
               <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
             )}
-
-            {/* Public/Global icon */}
-            {/* {isPublic && (
-              <Globe className="w-4 h-4 text-blue-500" />
-            )} */}
           </div>
         </div>
 
         <div
           className={`
-          ${isDark ? "text-zinc-300" : "text-zinc-700"} 
-          ${isLocked ? "text-zinc-400 opacity-70" : ""} 
-          text-sm
-        `}
+            ${isDark ? "text-zinc-300" : "text-zinc-700"} 
+            ${isLocked ? "text-zinc-400 opacity-70" : ""} 
+            text-sm
+          `}
         >
           <p className="relative">
             {truncated}
             <span
-              className={`absolute inset-0 bg-gradient-to-r from-transparent ${gradientClass} opacity-${
-                isLocked ? "60" : "0"
-              }`}
+              className={`absolute inset-0 bg-gradient-to-r from-transparent ${gradientClass} opacity-${isLocked ? "60" : "0"}`}
             />
           </p>
         </div>
