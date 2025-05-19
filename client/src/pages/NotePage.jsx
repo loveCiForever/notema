@@ -1,7 +1,7 @@
 "use client";
 import { useTheme } from "../contexts/ThemeContext";
 import { Outlet, useParams } from "react-router-dom";
-import "../Style/style.css"
+import "../Style/style.css";
 import {
   ChevronDown,
   Lock,
@@ -26,7 +26,8 @@ import SimpleImage from "@editorjs/simple-image";
 import mockNotes from "../components/data/data";
 import NoteOptionsDropdown from "../components/ui/NoteOptionsDropdown";
 import { useSidebar } from "../contexts/SidebarContext";
-import { Globe, ChevronUp } from "lucide-react"; import PasswordModal from "../components/ui/PasswordModal";
+import { Globe, ChevronUp } from "lucide-react";
+import PasswordModal from "../components/ui/PasswordModal";
 export const noteStruct = {
   title: "",
   banner: "",
@@ -39,7 +40,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { noteApi } from "../services/noteApi";
 import { debounce } from "lodash";
 
-const NotePage = ({ }) => {
+const NotePage = ({}) => {
   const { isDark } = useTheme();
   const BASE_URL = import.meta.env.VITE_REMOTE_SERVER_URL;
   const { id } = useParams();
@@ -185,7 +186,7 @@ const NotePage = ({ }) => {
       initEditor({
         blocks,
         time: Date.now(),
-        version: "2.25.0"
+        version: "2.25.0",
       });
     }
   }, [unlocked, note.content]);
@@ -209,7 +210,7 @@ const NotePage = ({ }) => {
         const saved = await editor.save();
         const lastIndex = saved.blocks.length - 1;
         if (lastIndex >= 0) {
-          editor.caret.setToBlock(lastIndex, 'end');
+          editor.caret.setToBlock(lastIndex, "end");
         } else {
           editor.caret.focus(true);
         }
@@ -280,14 +281,20 @@ const NotePage = ({ }) => {
 
   return (
     <div
-      className={`min-h-screen ${isDark ? "bg-zinc-900" : "bg-white"} flex flex-col`}
+      className={`min-h-screen ${
+        isDark ? "bg-zinc-900" : "bg-white"
+      } flex flex-col`}
     >
       {/* Header */}
       <header
-        className={`flex justify-between items-center px-6 py-2 ${isDark ? "border-b border-zinc-800" : ""}`}
+        className={`flex justify-between items-center px-6 py-2 ${
+          isDark ? "border-b border-zinc-800" : ""
+        }`}
       >
         <div
-          className={`${isDark ? "text-zinc-400" : "text-zinc-500"} px-2 cursor-default mt-1 ${isMobile ? "block" : "hidden"}`}
+          className={`${
+            isDark ? "text-zinc-400" : "text-zinc-500"
+          } px-2 cursor-default mt-1 ${isMobile ? "block" : "hidden"}`}
         >
           <button onClick={() => setIsOpen((o) => !o)}>
             {" "}
@@ -296,47 +303,56 @@ const NotePage = ({ }) => {
         </div>
         <div className="flex items-center justify-between gap-0">
           <h1
-            className={`text-lg font-medium w-2/3 line-clamp-1 ${isDark ? "text-white" : "text-zinc-800"
-              }`}
+            className={`text-lg font-medium w-[400px] line-clamp-1 ${
+              isDark ? "text-white" : "text-zinc-800"
+            }`}
           >
             {note.title}
           </h1>
           <div
-            className={`flex items-center gap-1 px-2 py-1 rounded ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"} cursor-pointer`}
+            className={`flex items-center gap-1 px-2 py-1 rounded ${
+              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
+            } cursor-pointer`}
           >
             {note.visibility == "private" ? (
               <div className="flex flex-row gap-2 items-center justify-center">
                 <Lock
-                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
-                    }`}
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
                 />
                 <span
-                  className={`${isDark ? "text-zinc-500" : "text-zinc-400"
-                    } text-sm`}
+                  className={`${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  } text-sm`}
                 >
                   Private
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
-                    }`}
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
                 />
               </div>
             ) : (
               <div className="flex flex-row gap-2 items-center justify-center">
                 {" "}
                 <Globe
-                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
-                    }`}
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
                 />
                 <span
-                  className={`${isDark ? "text-zinc-500" : "text-zinc-400"
-                    } text-sm`}
+                  className={`${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  } text-sm`}
                 >
                   Public
                 </span>
                 <ChevronUp
-                  className={`w-4 h-4 ${isDark ? "text-zinc-500" : "text-zinc-400"
-                    }`}
+                  className={`w-4 h-4 ${
+                    isDark ? "text-zinc-500" : "text-zinc-400"
+                  }`}
                 />
               </div>
             )}
@@ -344,16 +360,22 @@ const NotePage = ({ }) => {
         </div>
         <div className="flex items-center gap-2">
           <button
-            className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
+            className={`p-2 rounded-full cursor-pointer ${
+              isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
+            }`}
             onClick={() => handlePin(noteId)}
           >
             {note.isPinned == 1 ? (
               <PinOff
-                className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}
+                className={`w-5 h-5 ${
+                  isDark ? "text-zinc-400" : "text-zinc-500"
+                }`}
               />
             ) : (
               <Pin
-                className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}
+                className={`w-5 h-5 ${
+                  isDark ? "text-zinc-400" : "text-zinc-500"
+                }`}
               />
             )}
           </button>
@@ -363,10 +385,14 @@ const NotePage = ({ }) => {
                 e.stopPropagation();
                 setShowDropdown((v) => !v);
               }}
-              className={`p-2 rounded-full cursor-pointer ${isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"}`}
+              className={`p-2 rounded-full cursor-pointer ${
+                isDark ? "hover:bg-zinc-800" : "hover:bg-zinc-100"
+              }`}
             >
               <MoreHorizontal
-                className={`w-5 h-5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}
+                className={`w-5 h-5 ${
+                  isDark ? "text-zinc-400" : "text-zinc-500"
+                }`}
               />
             </button>
 
@@ -402,7 +428,9 @@ const NotePage = ({ }) => {
         </div>
       </header>
       <div
-        className={`w-full bg-white p-6 pl-10 ${isDark ? "bg-zinc-900 " : "bg-white"}`}
+        className={`w-full bg-white p-6 pl-10 ${
+          isDark ? "bg-zinc-900 " : "bg-white"
+        }`}
       >
         <div
           className={` ${isMobile ? "px-2" : "px-20"} flex flex-col  w-full`}
@@ -415,13 +443,17 @@ const NotePage = ({ }) => {
             style={{ fontSize: `${fontSize + 15}px` }}
             onChange={handleTitleChange}
             placeholder="Title"
-            className={`outline-none text-xl mb-2 w-full font-semibold ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"} border-b-2/ border-zinc-300 focus:border-blue-500 transition-colors duration-200`}
+            className={`outline-none text-xl mb-2 w-full font-semibold ${
+              isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
+            } border-b-2/ border-zinc-300 focus:border-blue-500 transition-colors duration-200`}
           />
 
           <div
             id="editorjs"
             style={{ fontSize: `${fontSize}px` }}
-            className={`items-start flex w-[full] min-h-[300px] rounded-md mb-6 bg-red-0 space-y-0 ${isDark ? "bg-zinc-900 text-white" : "bg-white text-black"}`}
+            className={`items-start flex w-[full] min-h-[300px] rounded-md mb-6 bg-red-0 space-y-0 ${
+              isDark ? "bg-zinc-900 text-white" : "bg-white text-black"
+            }`}
           />
         </div>
       </div>

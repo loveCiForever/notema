@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useFont } from '../../contexts/FontContext';
-import { MoreHorizontal, Type, Text, Lock, Eye, Info, Trash2, Star, Globe } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import PasswordModal from '../ui/PasswordModal';
-
-const FONT_FAMILIES = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'];
+import React, { useState } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import { useFont } from "../../contexts/FontContext";
+import {
+  MoreHorizontal,
+  Type,
+  Text,
+  Lock,
+  Eye,
+  Info,
+  Trash2,
+  Star,
+  Globe,
+  Trash,
+} from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import PasswordModal from "../ui/PasswordModal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+const FONT_FAMILIES = [
+  "sans-serif",
+  "serif",
+  "monospace",
+  "cursive",
+  "fantasy",
+];
 
 export default function NoteOptionsDropdown({
   show,
@@ -20,10 +38,26 @@ export default function NoteOptionsDropdown({
 }) {
   const { isDark } = useTheme();
   const { fontFamily, setFontFamily } = useFont();
-  const [passwordEnabled, setPasswordEnabled] = useState(!!localStorage.getItem(`note_pass_${note.id}`));
+  const [passwordEnabled, setPasswordEnabled] = useState(
+    !!localStorage.getItem(`note_pass_${note.id}`)
+  );
+  const navigate = useNavigate();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [modalMode, setModalMode] = useState('create'); // 'create', 'change', 'remove'
-
+  const [modalMode, setModalMode] = useState("create"); // 'create', 'change', 'remove'
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  {
+    note.isTrashed == 1 && (
+      <button
+        className={`w-full text-left px-3 py-2 flex items-center gap-2 text-red-500 ${
+          isDark ? "hover:bg-white/10" : "hover:bg-zinc-200"
+        }`}
+        onClick={() => setShowConfirmDelete(true)}
+      >
+        <Trash className="w-4 h-4" />
+        <span>Delete Forever</span>
+      </button>
+    );
+  }
   const handleSetPassword = (password) => {
     localStorage.setItem(`note_pass_${note.id}`, password);
     setPasswordEnabled(true);
@@ -34,7 +68,7 @@ export default function NoteOptionsDropdown({
   const handleChangePassword = (oldPassword, newPassword) => {
     const savedPassword = localStorage.getItem(`note_pass_${note.id}`);
     if (savedPassword !== oldPassword) {
-      alert('Mật khẩu cũ không đúng');
+      alert("Mật khẩu cũ không đúng");
       return;
     }
     localStorage.setItem(`note_pass_${note.id}`, newPassword);
@@ -44,7 +78,7 @@ export default function NoteOptionsDropdown({
   const handleRemovePassword = (confirmPassword) => {
     const savedPassword = localStorage.getItem(`note_pass_${note.id}`);
     if (savedPassword !== confirmPassword) {
-      alert('Mật khẩu không đúng');
+      alert("Mật khẩu không đúng");
       return;
     }
     localStorage.removeItem(`note_pass_${note.id}`);
@@ -76,8 +110,14 @@ export default function NoteOptionsDropdown({
           value={fontFamily}
           onChange={(e) => setFontFamily(e.target.value)}
         >
-          {FONT_FAMILIES.map(f => (
-            <option className={`${isDark ? "bg-zinc-700" : ""}`} key={f} value={f}>{f}</option>
+          {FONT_FAMILIES.map((f) => (
+            <option
+              className={`${isDark ? "bg-zinc-700" : ""}`}
+              key={f}
+              value={f}
+            >
+              {f}
+            </option>
           ))}
         </select>
       </div>
@@ -130,9 +170,9 @@ export default function NoteOptionsDropdown({
       {!passwordEnabled ? (
         <button
           className={`w-full text-left px-3 py-2 flex items-center gap-2
-            ${isDark ? 'hover:bg-white/20' : 'hover:bg-zinc-200'}`}
+            ${isDark ? "hover:bg-white/20" : "hover:bg-zinc-200"}`}
           onClick={() => {
-            setModalMode('create');
+            setModalMode("create");
             setShowPasswordModal(true);
           }}
         >
@@ -143,9 +183,9 @@ export default function NoteOptionsDropdown({
         <>
           <button
             className={`w-full text-left px-3 py-2 flex items-center gap-2
-              ${isDark ? 'hover:bg-white/20' : 'hover:bg-zinc-200'}`}
+              ${isDark ? "hover:bg-white/20" : "hover:bg-zinc-200"}`}
             onClick={() => {
-              setModalMode('change');
+              setModalMode("change");
               setShowPasswordModal(true);
             }}
           >
@@ -154,9 +194,9 @@ export default function NoteOptionsDropdown({
           </button>
           <button
             className={`w-full text-left px-3 py-2 flex items-center gap-2
-              ${isDark ? 'hover:bg-white/20' : 'hover:bg-zinc-200'}`}
+              ${isDark ? "hover:bg-white/20" : "hover:bg-zinc-200"}`}
             onClick={() => {
-              setModalMode('remove');
+              setModalMode("remove");
               setShowPasswordModal(true);
             }}
           >
@@ -200,11 +240,76 @@ export default function NoteOptionsDropdown({
       {/* Password Modal */}
       <PasswordModal
         open={showPasswordModal}
-        onConfirm={modalMode === 'create' ? handleSetPassword : modalMode === 'change' ? handleChangePassword : handleRemovePassword}
+        onConfirm={
+          modalMode === "create"
+            ? handleSetPassword
+            : modalMode === "change"
+            ? handleChangePassword
+            : handleRemovePassword
+        }
         onCancel={() => setShowPasswordModal(false)}
-        title={modalMode === 'create' ? "Set a password for this note" : modalMode === 'change' ? "Change password for this note" : "Remove password for this note"}
+        title={
+          modalMode === "create"
+            ? "Set a password for this note"
+            : modalMode === "change"
+            ? "Change password for this note"
+            : "Remove password for this note"
+        }
         mode={modalMode}
       />
+      {note.isTrashed == 1 && (
+        <button
+          className={`w-full text-left px-3 py-2 flex items-center gap-2 text-red-500 ${
+            isDark ? "hover:bg-white/10" : "hover:bg-zinc-200"
+          }`}
+          onClick={() => setShowConfirmDelete(true)}
+        >
+          <Trash className="w-4 h-4" />
+          <span>Delete Forever</span>
+        </button>
+      )}
+      {showConfirmDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div
+            className={`rounded-lg p-6 w-96 shadow-md ${
+              isDark ? "bg-zinc-800 text-white" : "bg-white text-black"
+            }`}
+          >
+            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
+            <p className="mb-4">
+              Are you sure you want to permanently delete this note? This action
+              cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 rounded bg-gray-400 hover:bg-gray-500 text-white"
+                onClick={() => setShowConfirmDelete(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white"
+                onClick={async () => {
+                  try {
+                    await axios.delete(
+                      `${
+                        import.meta.env.VITE_REMOTE_SERVER_URL
+                      }/note/delete_forever/${note.id}`
+                    );
+                    setShowConfirmDelete(false);
+                    onClose();
+                    navigate("/home");
+                  } catch (err) {
+                    console.error("Failed to delete note forever:", err);
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
