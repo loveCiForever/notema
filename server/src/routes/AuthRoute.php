@@ -185,7 +185,7 @@ function sendVerificationEmail($toEmail, $token)
         $mail->isHTML(true);
         $mail->Subject = 'Verify your account';
 
-        $verification_link = "http://localhost:5173/verify?token=$token";
+        $verification_link = "https://notema.io.vn/verify?token=$token";
 
         $mail->Body = '
             <table align="center" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 40px 0;">
